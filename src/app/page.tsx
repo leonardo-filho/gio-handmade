@@ -1,15 +1,21 @@
 import Hero from "@/components/Hero";
-import CollectionHighlights from "@/components/CollectionHighlights"; // Agora são as Categorias
-import ProcessSection from "@/components/ProcessSection"; // <--- Novo import
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import CollectionHighlights from "@/components/CollectionHighlights";
+import ProcessSection from "@/components/ProcessSection";
 import ProductGrid from "@/components/ProductGrid";
+import AboutSection from "@/components/AboutSection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white">
+      <Header />
       <Hero />
-      <ProcessSection /> {/* Explica como comprar antes de mostrar os produtos */}
       <CollectionHighlights />
+      <AboutSection />
+      <ProcessSection />
       <ProductGrid />
+      <Footer />
     </main>
   );
 }
