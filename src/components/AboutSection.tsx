@@ -25,7 +25,7 @@ export default function AboutSection() {
                         </h2>
                         <div className="space-y-4 text-gray-600 font-light leading-relaxed">
                             <p>
-                                Olá! Eu sou a Giovanna (ou o nome que ela preferir), a mente e as mãos por trás de cada peça da Gio Handmade.
+                                Olá! Eu sou a Giovanna, a mente e as mãos por trás de cada peça da Gio Handmade.
                             </p>
                             <p>
                                 Este não é um processo industrial. É um trabalho de paciência, arte e dedicação. Cada top, cada saia e cada acessório é tecido miçanga por miçanga, exclusivamente por mim.
