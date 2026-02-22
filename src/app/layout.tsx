@@ -2,22 +2,25 @@ import type { Metadata } from "next";
 import { Playfair_Display, Lato } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({ 
-  subsets: ["latin"], 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
   variable: "--font-serif",
   display: 'swap',
 });
 
-const lato = Lato({ 
+const lato = Lato({
   weight: ['300', '400', '700'],
-  subsets: ["latin"], 
+  subsets: ["latin"],
   variable: "--font-sans",
   display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "@gio.handmade__ | Exclusividade Artesanal",
+  title: "Gio Handmade",
   description: "Tops, conjuntos e vestidos feitos à mão com pedrarias e cristais.",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({

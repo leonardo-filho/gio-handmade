@@ -13,7 +13,7 @@ export default function Footer() {
                         Gio Handmade
                     </h3>
                     <p className="text-xs text-gray-500">
-                        Arte em miçangas • Feito à mão com amor
+                        Feito à mão com amor
                     </p>
                 </div>
 
