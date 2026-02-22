@@ -1,37 +1,57 @@
 import Link from "next/link";
+import Image from "next/image";
 
-const categories = [
+type CategoryItem = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  src?: string;
+};
+
+const categories: CategoryItem[] = [
   {
     id: "tops",
     title: "Tops & Croppeds",
     description: "Modelos exclusivos feitos sob medida para o seu corpo.",
     color: "bg-stone-200", // Cinza claro
+    src: "/tops.jpeg",
   },
   {
-    id: "saias",
-    title: "Saias",
-    description: "Do curto ao longo, com o caimento perfeito das miçangas.",
+    id: "Vestido",
+    title: "Vestido",
+    description: "Do curto ao longo, com o caimento perfeito.",
     color: "bg-zinc-200", // Cinza médio
+    src: "/vestido.jpg",
   },
   {
     id: "conjuntos",
     title: "Conjuntos",
     description: "A combinação completa para festivais e ocasiões especiais.",
     color: "bg-stone-300", // Bege acinzentado
+    src: "/conjuntos.jpeg",
+  },
+  {
+    id: "saia-cinto",
+    title: "Saia & Cinto",
+    description: "Saias e cintos feitos sob medida para o seu corpo.",
+    color: "bg-orange-100", // Destaque sutil
+    src: "/saias.jpeg",
   },
   {
     id: "pronta-entrega",
     title: "Pronta Entrega",
     description: "Peças únicas disponíveis para envio imediato.",
     color: "bg-orange-100", // Destaque sutil
+    src: "/pronta.jpeg",
   }
 ];
 
 export default function CollectionHighlights() {
   return (
-    <section className="py-20 bg-white">
+    <section id="categorias" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4">
-        
+
         <div className="text-center mb-12">
           <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">
             O que você procura?
@@ -41,17 +61,26 @@ export default function CollectionHighlights() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {categories.map((item) => (
             <Link key={item.id} href="https://wa.me/SEUNUMERO" className="group">
               <div className="flex flex-col h-full">
-                {/* Placeholder da Imagem */}
+                {/* Imagem ou Placeholder */}
                 <div className={`relative w-full aspect-[3/4] ${item.color} mb-4 overflow-hidden`}>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity">
-                    <span className="uppercase tracking-widest text-xs font-bold text-gray-600">
-                      {item.title}
-                    </span>
-                  </div>
+                  {item.src ? (
+                    <Image
+                      src={item.src}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity">
+                      <span className="uppercase tracking-widest text-xs font-bold text-gray-600">
+                        {item.title}
+                      </span>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
                 </div>
 

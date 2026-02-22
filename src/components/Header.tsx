@@ -18,16 +18,16 @@ export default function Header() {
 
   const navLinks = [
     { name: "Início", href: "#" },
-    { name: "Coleção", href: "#colecao" },
+    { name: "Categorias", href: "#categorias" },
     { name: "Processo", href: "#processo" },
+    { name: "Coleção", href: "#colecao" },
     { name: "Sobre", href: "#sobre" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"
+        }`}
     >
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
         {/* Logo */}

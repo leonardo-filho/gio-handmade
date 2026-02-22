@@ -15,26 +15,28 @@ export default function Hero() {
         <h2 className="mb-4 text-xs md:text-sm uppercase tracking-[0.3em] font-sans text-gray-500">
           Gio Handmade
         </h2>
-        
+
         <h1 className="text-5xl md:text-7xl font-serif font-medium leading-tight mb-6 text-gray-900">
-          Arte manual, <br />
+          Peças feitas à mão,<br />
           <span className="italic text-gray-700">ponto a ponto.</span>
         </h1>
 
         <p className="text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto text-gray-600">
-          Muito mais que acessórios. Roupas e peças autênticas feitas de miçanga, 
-          criadas com talento e dedicação.
+          Muito mais que acessórios...
+          <br />
+          cada peça é feita para vestir você e fazer você se sentir incrível.
         </p>
 
+
         <div className="flex flex-col md:flex-row gap-4 justify-center">
-          <Link 
-            href="#colecao" 
+          <Link
+            href="#categorias"
             className="px-8 py-3 bg-gray-900 text-white uppercase tracking-widest text-xs font-bold hover:bg-gray-700 transition-colors duration-300"
           >
             Ver Minhas Criações
           </Link>
-          <Link 
-            href="https://wa.me/5591992342017" 
+          <Link
+            href="https://wa.me/5591992342017"
             className="px-8 py-3 border border-gray-900 text-gray-900 uppercase tracking-widest text-xs font-bold hover:bg-gray-900 hover:text-white transition-colors duration-300"
           >
             Encomendar

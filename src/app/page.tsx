@@ -12,9 +12,9 @@ export default function Home() {
       <Header />
       <Hero />
       <CollectionHighlights />
-      <AboutSection />
       <ProcessSection />
       <ProductGrid />
+      <AboutSection />
       <Footer />
     </main>
   );

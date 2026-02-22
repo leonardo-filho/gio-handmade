@@ -1,16 +1,20 @@
+import Image from "next/image";
+
 export default function AboutSection() {
     return (
         <section id="sobre" className="py-20 bg-stone-50">
             <div className="max-w-5xl mx-auto px-4">
                 <div className="flex flex-col md:flex-row items-center gap-12">
 
-                    {/* Image Placeholder */}
+                    {/* Image */}
                     <div className="w-full md:w-1/2 aspect-[3/4] bg-stone-200 relative overflow-hidden rounded-sm shadow-md">
-                        {/* Replace with actual image of the artisan */}
-                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                            <span className="uppercase tracking-widest text-xs">Foto da Artesã</span>
-                        </div>
-                        {/* Optional: Overlay/Texture */}
+                        <Image
+                            src="/eu.jpeg"
+                            alt="Giovanna, artesã da Gio Handmade"
+                            fill
+                            className="object-cover"
+                        />
+                        {/* Overlay/Texture */}
                         <div className="absolute inset-0 bg-stone-500/10 mix-blend-multiply" />
                     </div>
 

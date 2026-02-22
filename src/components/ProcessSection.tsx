@@ -13,7 +13,7 @@ export default function ProcessSection() {
     {
       num: "02",
       title: "Orçamento & Sinal",
-      text: "Definimos o valor. A confecção é iniciada após o pagamento de 50% do valor.",
+      text: "Definimos o orçamento. A confecção é iniciada após o pagamento de 50% do valor.",
       highlight: "Regra Importante",
       icon: (
         <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -91,9 +91,9 @@ export default function ProcessSection() {
           <div className="flex gap-4 items-center">
             <div className="flex flex-col items-center">
               <span className="text-xs font-bold uppercase text-gray-500 mb-1">Pix</span>
-              <div className="w-16 h-10 bg-white rounded border border-gray-200 flex items-center justify-center">
+              {/* <div className="w-16 h-10 bg-white rounded border border-gray-200 flex items-center justify-center">
                 <span className="text-xs text-emerald-600 font-bold">5% OFF</span>
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col items-center">
               <span className="text-xs font-bold uppercase text-gray-500 mb-1">Cartão</span>
