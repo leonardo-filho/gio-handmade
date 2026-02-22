@@ -10,7 +10,7 @@ export default function AboutSection() {
                     <div className="w-full md:w-1/2 aspect-[3/4] bg-stone-200 relative overflow-hidden rounded-sm shadow-md">
                         <Image
                             src="/eu.jpeg"
-                            alt="Giovanna, artesã da Gio Handmade"
+                            alt="Giovanna Alves, artesã da Gio Handmade"
                             fill
                             className="object-cover"
                         />
@@ -29,10 +29,10 @@ export default function AboutSection() {
                         </h2>
                         <div className="space-y-4 text-gray-600 font-light leading-relaxed">
                             <p>
-                                Olá! Eu sou a Giovanna, a mente e as mãos por trás de cada peça da Gio Handmade.
+                                Olá! Eu sou a Giovanna Alves, a mente e as mãos por trás de cada peça da Gio Handmade.
                             </p>
                             <p>
-                                Este não é um processo industrial. É um trabalho de paciência, arte e dedicação. Cada top, cada saia e cada acessório é tecido miçanga por miçanga, exclusivamente por mim.
+                                Este não é um processo industrial. É um trabalho de paciência, arte e dedicação. Cada top, cada saia e cada acessório é feito exclusivamente por mim.
                             </p>
                             <p>
                                 Quando você encomenda uma peça, você não está apenas comprando uma roupa; está levando para casa horas de trabalho manual, carinho e um design pensado para valorizar a sua essência.

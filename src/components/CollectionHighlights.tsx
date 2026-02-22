@@ -63,7 +63,7 @@ export default function CollectionHighlights() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {categories.map((item) => (
-            <Link key={item.id} href="https://wa.me/SEUNUMERO" className="group">
+            <Link key={item.id} href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento." className="group">
               <div className="flex flex-col h-full">
                 {/* Imagem ou Placeholder */}
                 <div className={`relative w-full aspect-[3/4] ${item.color} mb-4 overflow-hidden`}>

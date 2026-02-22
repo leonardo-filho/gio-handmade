@@ -36,7 +36,7 @@ export default function Hero() {
             Ver Minhas Criações
           </Link>
           <Link
-            href="https://wa.me/5591992342017"
+            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
             className="px-8 py-3 border border-gray-900 text-gray-900 uppercase tracking-widest text-xs font-bold hover:bg-gray-900 hover:text-white transition-colors duration-300"
           >
             Encomendar

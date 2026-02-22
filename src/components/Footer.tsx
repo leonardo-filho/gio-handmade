@@ -27,7 +27,7 @@ export default function Footer() {
                         Instagram
                     </Link>
                     <Link
-                        href="https://wa.me/5591992342017"
+                        href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
                         target="_blank"
                         className="text-sm uppercase tracking-widest hover:text-gray-900 transition-colors"
                     >

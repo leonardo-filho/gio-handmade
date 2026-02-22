@@ -47,7 +47,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="https://wa.me/5591992342017"
+            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
             className="text-sm uppercase tracking-widest font-bold text-gray-900 border-b border-gray-900 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-all"
           >
             Contato
@@ -99,7 +99,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="https://wa.me/5591992342017"
+            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-sm uppercase tracking-widest font-bold text-gray-900"
           >
