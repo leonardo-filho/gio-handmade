@@ -46,35 +46,35 @@ export default function ProcessSection() {
 
   return (
     <section id="processo" className="py-20 bg-white">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center">
 
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 w-full">
           <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">
             Como funciona
           </span>
           <h2 className="mt-2 text-3xl font-serif text-gray-900 mb-4">
             Do pedido à entrega
           </h2>
-          <p className="text-gray-600 font-light max-w-xl mx-auto text-sm md:text-base">
+          <p className="text-gray-600 font-light w-full text-sm md:text-base px-4">
             Cada detalhe importa. Veja como é simples ter sua peça exclusiva.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 w-full">
           {steps.map((step) => (
-            <div key={step.num} className="group relative flex flex-col items-center text-center p-6 border border-stone-100 rounded-lg hover:shadow-lg transition-all duration-300 bg-stone-50/50 hover:bg-white">
+            <div key={step.num} className="group relative flex flex-col items-center text-center p-6 border border-stone-100 rounded-lg hover:shadow-lg transition-all duration-300 bg-stone-50/50 hover:bg-white w-full">
               <div className="w-14 h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-6 border border-gray-200 group-hover:border-gray-900 group-hover:bg-gray-900 group-hover:text-white transition-all duration-300 shadow-sm">
                 {step.icon}
               </div>
 
               <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
 
-              <p className="text-sm text-gray-600 leading-relaxed min-h-[4rem]">
+              <p className="text-sm text-gray-600 leading-relaxed min-h-[4rem] w-full">
                 {step.text}
               </p>
 
               {step.highlight && (
-                <span className="mt-4 inline-block px-3 py-1 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                <span className="mt-4 inline-block px-3 py-1 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-widest rounded-full whitespace-nowrap">
                   {step.highlight}
                 </span>
               )}
@@ -82,23 +82,30 @@ export default function ProcessSection() {
           ))}
         </div>
 
-        <div className="mt-16 bg-stone-100 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto">
-          <div className="text-center md:text-left">
-            <h4 className="text-lg font-serif font-bold text-gray-900 mb-1">Formas de Pagamento</h4>
-            <p className="text-sm text-gray-600">Para facilitar sua compra, aceitamos diversas formas.</p>
+        <div className="mt-16 bg-stone-100 p-8 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-8 mx-auto w-full overflow-hidden">
+          <div className="text-center lg:text-left w-full lg:w-1/2">
+            <h4 className="text-lg font-serif font-bold text-gray-900 mb-2">Formas de Pagamento</h4>
+            <p className="text-sm text-gray-600 w-full">Para facilitar sua compra, aceitamos diversas formas de pagamento na hora de fechar seu pedido.</p>
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-row flex-wrap justify-center lg:justify-end gap-4 items-center w-full lg:w-1/2">
             <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase text-gray-500 mb-1">Pix</span>
-              {/* <div className="w-16 h-10 bg-white rounded border border-gray-200 flex items-center justify-center">
-                <span className="text-xs text-emerald-600 font-bold">5% OFF</span>
-              </div> */}
+              <span className="text-xs font-bold uppercase text-gray-500 mb-2">Pix</span>
+              <div className="w-16 h-12 bg-white rounded border border-gray-200 flex items-center justify-center shadow-sm">
+                <svg className="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H8l4-7v4h3l-4 7z" />
+                </svg>
+              </div>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase text-gray-500 mb-1">Cartão</span>
-              <div className="w-32 h-10 bg-white rounded border border-gray-200 flex items-center justify-center px-2 text-center">
-                <span className="text-[10px] text-gray-600 font-medium">Até 2x sem juros (acima de R$600)</span>
+              <span className="text-xs font-bold uppercase text-gray-500 mb-2">Cartão</span>
+              <div className="h-12 bg-white rounded border border-gray-200 flex items-center justify-center px-4 shadow-sm min-w-max">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                  </svg>
+                  <span className="text-[10px] md:text-xs text-gray-600 font-medium tracking-wide">Até 2x sem juros (pedidos &gt; R$600)</span>
+                </div>
               </div>
             </div>
           </div>
