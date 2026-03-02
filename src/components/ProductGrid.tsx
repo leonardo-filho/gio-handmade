@@ -28,7 +28,7 @@ export default function ProductGrid() {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-transparent via-amber-600 to-transparent mx-auto mt-6 mb-6" />
           <p className="text-stone-600 font-light w-full mx-auto text-sm md:text-base px-4">
-            Veja mais das nossas criações no Instagram
+            Acompanhe nossas produções e confira os <span className="font-semibold text-stone-800">Destaques</span> para ver depoimentos super especiais e clientes reais brilhando com nossas peças!
           </p>
         </div>
 

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <title>3K Seguidores - Gio Handmade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      font-family: 'Lato', sans-serif;
+      background: #F5F5F4;
+      position: relative;
+    }
+
+    .canvas {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Organic shapes - refined and elegant */
+    .shape-top {
+      position: absolute;
+      top: -80px;
+      left: -100px;
+      width: 520px;
+      height: 580px;
+      background: #2C2C2C;
+      border-radius: 0 0 65% 0;
+      transform: rotate(-5deg);
+      z-index: 1;
+    }
+
+    .shape-top::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: -10px;
+      bottom: -10px;
+      border: 1px solid #D4A574;
+      border-radius: 0 0 65% 0;
+      opacity: 0.3;
+    }
+
+    .shape-bottom {
+      position: absolute;
+      bottom: -60px;
+      right: -80px;
+      width: 480px;
+      height: 540px;
+      background: #2C2C2C;
+      border-radius: 65% 0 0 0;
+      transform: rotate(-5deg);
+      z-index: 1;
+    }
+
+    .shape-bottom::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: 20px;
+      bottom: 20px;
+      border: 1px solid #D4A574;
+      border-radius: 65% 0 0 0;
+      opacity: 0.3;
+    }
+
+    /* Golden accent lines */
+    .accent-line-top {
+      position: absolute;
+      top: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #D4A574, transparent);
+      z-index: 5;
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 0 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .handle {
+      position: absolute;
+      top: 60px;
+      right: 70px;
+      font-family: 'Lato', sans-serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: #78716C;
+      letter-spacing: 0.05em;
+      z-index: 20;
+    }
+
+    /* Sparkle decoration around 3k */
+    .sparkles {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #D4A574;
+      font-size: 28px;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    .sparkle:nth-child(1) { top: -30px; left: -60px; animation-delay: 0s; }
+    .sparkle:nth-child(2) { top: -50px; right: -50px; animation-delay: 0.3s; }
+    .sparkle:nth-child(3) { top: 20px; right: -80px; animation-delay: 0.6s; }
+    .sparkle:nth-child(4) { bottom: 0; left: -70px; animation-delay: 0.9s; }
+    .sparkle:nth-child(5) { top: -10px; right: -30px; animation-delay: 0.2s; font-size: 16px; }
+    .sparkle:nth-child(6) { bottom: -20px; right: -60px; animation-delay: 0.7s; font-size: 18px; }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 260px;
+      font-weight: 700;
+      line-height: 0.85;
+      background: linear-gradient(180deg, #1C1917 30%, #3d3530 60%, #D4A574 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -5px;
+    }
+
+    .label {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 400;
+      color: #1C1917;
+      margin-top: 10px;
+      letter-spacing: 8px;
+    }
+
+    .divider {
+      width: 160px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4A574, transparent);
+      margin: 60px 0 50px;
+    }
+
+    .subtitle {
+      font-family: 'Lato', sans-serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: #44403C;
+      margin-bottom: 40px;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle .emoji {
+      font-size: 28px;
+    }
+
+    .paragraph {
+      font-family: 'Lato', sans-serif;
+      font-size: 30px;
+      font-weight: 300;
+      color: #57534E;
+      line-height: 1.7;
+      max-width: 750px;
+    }
+
+    .paragraph .heart {
+      color: #2C2C2C;
+      font-size: 28px;
+    }
+
+    /* Logo */
+    .logo {
+      position: absolute;
+      bottom: 70px;
+      right: 70px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: #2C2C2C;
+      padding: 18px 30px;
+      border-radius: 6px;
+    }
+
+    .logo-handmade {
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      margin-right: 10px;
+    }
+
+    .logo-divider {
+      width: 2px;
+      height: 50px;
+      background: #D4A574;
+      margin-right: 12px;
+    }
+
+    .logo-gio {
+      font-family: 'Lato', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 4px;
+    }
+
+    /* Gold dust particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #D4A574;
+      border-radius: 50%;
+      opacity: 0.4;
+    }
+
+    .particle:nth-child(1) { top: 15%; left: 75%; width: 5px; height: 5px; opacity: 0.5; }
+    .particle:nth-child(2) { top: 25%; left: 20%; width: 3px; height: 3px; }
+    .particle:nth-child(3) { top: 35%; right: 18%; width: 6px; height: 6px; opacity: 0.3; }
+    .particle:nth-child(4) { top: 60%; left: 12%; }
+    .particle:nth-child(5) { top: 70%; right: 25%; width: 5px; height: 5px; opacity: 0.35; }
+    .particle:nth-child(6) { top: 45%; left: 85%; width: 3px; height: 3px; opacity: 0.5; }
+    .particle:nth-child(7) { top: 80%; left: 30%; width: 4px; height: 4px; opacity: 0.3; }
+    .particle:nth-child(8) { top: 20%; right: 35%; width: 3px; height: 3px; opacity: 0.45; }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <!-- Organic shapes -->
+    <div class="shape-top"></div>
+    <div class="shape-bottom"></div>
+
+    <!-- Gold particles -->
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <!-- Handle -->
+    <span class="handle">@gio.handmade__</span>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="sparkles">
+        <span class="sparkle">✦</span>
+        <span class="sparkle">✧</span>
+        <span class="sparkle">✦</span>
+        <span class="sparkle">✧</span>
+        <span class="sparkle">·</span>
+        <span class="sparkle">✦</span>
+        <span class="number">3k</span>
+      </div>
+
+      <span class="label">seguidores</span>
+
+      <div class="divider"></div>
+
+      <p class="subtitle">3.000 pessoas por aqui <span class="emoji">✨</span></p>
+
+      <p class="paragraph">
+        Cada pessoa, cada pedido e cada mensagem<br>
+        constrói meu sonho todos os dias.<br>
+        Obrigada por apoiarem o feito à mão,<br>
+        o feito com amor e o feito por mim <span class="heart">🤎</span>
+      </p>
+    </div>
+
+    <!-- Logo -->
+    <div class="logo">
+      <span class="logo-handmade">HANDMADE</span>
+      <span class="logo-divider"></span>
+      <span class="logo-gio">GIO</span>
+    </div>
+  </div>
+</body>
+</html>

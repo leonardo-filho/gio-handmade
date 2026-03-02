@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080">
+    <title>Cupom 10% - Gio Handmade</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            background: #F5F5F4;
+            position: relative;
+        }
+
+        .canvas {
+            width: 1080px;
+            height: 1920px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Organic shapes */
+        .shape-top {
+            position: absolute;
+            top: -80px;
+            left: -100px;
+            width: 520px;
+            height: 580px;
+            background: #2C2C2C;
+            border-radius: 0 0 65% 0;
+            transform: rotate(-5deg);
+            z-index: 1;
+        }
+
+        .shape-top::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -10px;
+            bottom: -10px;
+            border: 1px solid #D4A574;
+            border-radius: 0 0 65% 0;
+            opacity: 0.3;
+        }
+
+        .shape-bottom {
+            position: absolute;
+            bottom: -60px;
+            right: -80px;
+            width: 480px;
+            height: 540px;
+            background: #2C2C2C;
+            border-radius: 65% 0 0 0;
+            transform: rotate(-5deg);
+            z-index: 1;
+        }
+
+        .shape-bottom::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid #D4A574;
+            border-radius: 65% 0 0 0;
+            opacity: 0.3;
+        }
+
+        .handle {
+            position: absolute;
+            top: 60px;
+            right: 70px;
+            font-family: 'Lato', sans-serif;
+            font-size: 22px;
+            font-weight: 300;
+            color: #78716C;
+            letter-spacing: 0.05em;
+            z-index: 20;
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .intro-text {
+            font-family: 'Lato', sans-serif;
+            font-size: 28px;
+            font-weight: 300;
+            color: #57534E;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .discount-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .discount-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 220px;
+            font-weight: 700;
+            line-height: 0.85;
+            background: linear-gradient(180deg, #1C1917 30%, #3d3530 60%, #D4A574 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -3px;
+        }
+
+        .discount-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 400;
+            color: #1C1917;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .divider {
+            width: 160px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #D4A574, transparent);
+            margin: 50px 0 45px;
+        }
+
+        .description {
+            font-family: 'Lato', sans-serif;
+            font-size: 32px;
+            font-weight: 300;
+            color: #57534E;
+            line-height: 1.7;
+            max-width: 780px;
+            margin-bottom: 60px;
+        }
+
+        .description .emoji {
+            font-size: 28px;
+        }
+
+        /* Coupon code */
+        .coupon-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+
+        .coupon-label {
+            font-family: 'Lato', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #A8A29E;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+        }
+
+        .coupon-box {
+            position: relative;
+            padding: 28px 80px;
+            border: 2px solid #D4A574;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 20px rgba(212, 165, 116, 0.15);
+        }
+
+        .coupon-box::before,
+        .coupon-box::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #F5F5F4;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 2px solid #D4A574;
+        }
+
+        .coupon-box::before {
+            left: -14px;
+            border-right: none;
+        }
+
+        .coupon-box::after {
+            right: -14px;
+            border-left: none;
+        }
+
+        .coupon-code {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 700;
+            color: #1C1917;
+            letter-spacing: 10px;
+        }
+
+        /* Sparkles around coupon */
+        .coupon-sparkle {
+            position: absolute;
+            color: #D4A574;
+            font-size: 22px;
+            opacity: 0.6;
+        }
+
+        .coupon-sparkle:nth-child(1) {
+            top: -25px;
+            left: -30px;
+        }
+
+        .coupon-sparkle:nth-child(2) {
+            top: -20px;
+            right: -25px;
+            font-size: 16px;
+        }
+
+        .coupon-sparkle:nth-child(3) {
+            bottom: -20px;
+            left: 20px;
+            font-size: 18px;
+        }
+
+        .coupon-sparkle:nth-child(4) {
+            bottom: -25px;
+            right: -30px;
+        }
+
+        .validity {
+            font-family: 'Lato', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #A8A29E;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+        }
+
+        /* Gold particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #D4A574;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .particle:nth-child(1) {
+            top: 15%;
+            left: 75%;
+            width: 5px;
+            height: 5px;
+            opacity: 0.5;
+        }
+
+        .particle:nth-child(2) {
+            top: 25%;
+            left: 20%;
+            width: 3px;
+            height: 3px;
+        }
+
+        .particle:nth-child(3) {
+            top: 35%;
+            right: 18%;
+            width: 6px;
+            height: 6px;
+            opacity: 0.3;
+        }
+
+        .particle:nth-child(4) {
+            top: 60%;
+            left: 12%;
+        }
+
+        .particle:nth-child(5) {
+            top: 70%;
+            right: 25%;
+            width: 5px;
+            height: 5px;
+            opacity: 0.35;
+        }
+
+        .particle:nth-child(6) {
+            top: 45%;
+            left: 85%;
+            width: 3px;
+            height: 3px;
+            opacity: 0.5;
+        }
+
+        .particle:nth-child(7) {
+            top: 80%;
+            left: 30%;
+            width: 4px;
+            height: 4px;
+            opacity: 0.3;
+        }
+
+        .particle:nth-child(8) {
+            top: 20%;
+            right: 35%;
+            width: 3px;
+            height: 3px;
+            opacity: 0.45;
+        }
+
+        /* Logo */
+        .logo {
+            position: absolute;
+            bottom: 70px;
+            right: 70px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: #2C2C2C;
+            padding: 18px 30px;
+            border-radius: 6px;
+        }
+
+        .logo-handmade {
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            margin-right: 10px;
+        }
+
+        .logo-divider {
+            width: 2px;
+            height: 50px;
+            background: #D4A574;
+            margin-right: 12px;
+        }
+
+        .logo-gio {
+            font-family: 'Lato', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="canvas">
+        <!-- Shapes -->
+        <div class="shape-top"></div>
+        <div class="shape-bottom"></div>
+
+        <!-- Particles -->
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Handle -->
+        <span class="handle">@gio.handmade__</span>
+
+        <!-- Content -->
+        <div class="content">
+            <p class="intro-text">Para celebrar essa conquista</p>
+
+            <div class="discount-container">
+                <span class="discount-number">10%</span>
+                <p class="discount-label">de desconto</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="description">
+                em qualquer encomenda realizada<br>
+                no mês de março, aproveitem <span class="emoji">✨</span>
+            </p>
+
+            <!-- Coupon -->
+            <div class="coupon-wrapper">
+                <span class="coupon-label">Use o código</span>
+                <div class="coupon-box">
+                    <span class="coupon-sparkle">✦</span>
+                    <span class="coupon-sparkle">✧</span>
+                    <span class="coupon-sparkle">✦</span>
+                    <span class="coupon-sparkle">✧</span>
+                    <span class="coupon-code">GIO10</span>
+                </div>
+                <span class="validity">Válido em março · Via WhatsApp</span>
+            </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-handmade">HANDMADE</span>
+            <span class="logo-divider"></span>
+            <span class="logo-gio">GIO</span>
+        </div>
+    </div>
+</body>
+
+</html>
