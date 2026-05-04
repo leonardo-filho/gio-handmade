@@ -28,7 +28,7 @@ const produtos: Produto[] = [
     preco: 1000,
     parcelamento: "até 3x sem juros",
     tamanho: "36–40",
-    src: "/conjunto-pronta.jpeg",
+    src: "/conjunto-pronta.png",
     mensagem: "Olá! Vi o Conjunto Cristal & Correntes no site e tenho interesse. Ainda está disponível?",
   },
   // Adicione mais peças aqui
