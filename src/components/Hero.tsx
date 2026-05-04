@@ -16,7 +16,7 @@ export default function Hero() {
           Gio Handmade
         </h2>
 
-        <h1 className="text-5xl md:text-7xl font-serif font-medium leading-tight mb-6 text-gray-900">
+        <h1 className="text-4xl md:text-7xl font-serif font-medium leading-tight mb-6 text-gray-900">
           Peças feitas à mão,<br />
           <span className="italic text-gray-700">ponto a ponto.</span>
         </h1>
@@ -27,7 +27,6 @@ export default function Hero() {
           cada peça é feita para vestir você e fazer você se sentir incrível.
         </p>
 
-
         <div className="flex flex-col md:flex-row gap-4 justify-center">
           <Link
             href="#categorias"
@@ -36,7 +35,7 @@ export default function Hero() {
             Ver Minhas Criações
           </Link>
           <Link
-            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
+            href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
             className="px-8 py-3 border border-gray-900 text-gray-900 uppercase tracking-widest text-xs font-bold hover:bg-gray-900 hover:text-white transition-colors duration-300"
           >
             Encomendar

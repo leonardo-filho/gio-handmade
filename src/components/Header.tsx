@@ -26,8 +26,11 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"
-        }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-md shadow-sm py-3 border-b border-gray-100"
+          : "bg-white/75 backdrop-blur-sm py-5 border-b border-white/40"
+      }`}
     >
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
@@ -47,7 +50,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
+            href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
             className="text-sm uppercase tracking-widest font-bold text-gray-900 border-b border-gray-900 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-all"
           >
             Contato
@@ -87,7 +90,7 @@ export default function Header() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-lg py-4 px-4 flex flex-col gap-4 md:hidden border-t border-gray-100">
+        <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-md py-4 px-4 flex flex-col gap-4 md:hidden border-t border-gray-100">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -99,7 +102,7 @@ export default function Header() {
             </Link>
           ))}
           <Link
-            href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento."
+            href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-sm uppercase tracking-widest font-bold text-gray-900"
           >

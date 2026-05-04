@@ -14,37 +14,37 @@ const categories: CategoryItem[] = [
     id: "tops",
     title: "Tops & Croppeds",
     description: "Modelos exclusivos feitos sob medida para o seu corpo.",
-    color: "bg-stone-200", // Cinza claro
+    color: "bg-stone-200",
     src: "/tops.jpeg",
   },
   {
     id: "Vestido",
     title: "Vestido",
     description: "Do curto ao longo, com o caimento perfeito.",
-    color: "bg-zinc-200", // Cinza médio
+    color: "bg-zinc-200",
     src: "/vestido.jpg",
   },
   {
     id: "conjuntos",
     title: "Conjuntos",
     description: "A combinação completa para festivais e ocasiões especiais.",
-    color: "bg-stone-300", // Bege acinzentado
+    color: "bg-stone-300",
     src: "/conjuntos.jpeg",
   },
   {
     id: "saia-cinto",
     title: "Saia & Cinto",
     description: "Saias e cintos feitos sob medida para o seu corpo.",
-    color: "bg-orange-100", // Destaque sutil
+    color: "bg-orange-100",
     src: "/saias.jpeg",
   },
   {
-    id: "pronta-entrega",
-    title: "Pronta Entrega",
-    description: "Peças únicas disponíveis para envio imediato.",
-    color: "bg-orange-100", // Destaque sutil
-    src: "/pronta.jpeg",
-  }
+    id: "headpiece",
+    title: "Headpiece",
+    description: "Acessórios para cabeça feitos à mão com correntes e cristais.",
+    color: "bg-stone-200",
+    src: "/headpiece.jpeg",
+  },
 ];
 
 export default function CollectionHighlights() {
@@ -61,9 +61,9 @@ export default function CollectionHighlights() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-5xl mx-auto">
           {categories.map((item) => (
-            <Link key={item.id} href="https://wa.me/5591992342017?text=Ol%C3%A1!%20Gostaria%20de%20realizar%20um%20or%C3%A7amento." className="group">
+            <Link key={item.id} href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento." className="group w-[calc(50%-8px)] md:w-[calc(20%-20px)]">
               <div className="flex flex-col h-full">
                 {/* Imagem ou Placeholder */}
                 <div className={`relative w-full aspect-[3/4] ${item.color} mb-4 overflow-hidden`}>

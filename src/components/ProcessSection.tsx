@@ -13,7 +13,7 @@ export default function ProcessSection() {
     {
       num: "02",
       title: "Orçamento & Sinal",
-      text: "Definimos o orçamento. A confecção é iniciada após o pagamento de 50% do valor.",
+      text: "Definimos o orçamento. A confecção é iniciada após o pagamento de 50% do valor. O sinal não é reembolsável.",
       highlight: "Regra Importante",
       icon: (
         <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -60,16 +60,16 @@ export default function ProcessSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {steps.map((step) => (
-            <div key={step.num} className="group relative flex flex-col items-center text-center p-6 border border-stone-100 rounded-lg hover:shadow-lg transition-all duration-300 bg-stone-50/50 hover:bg-white">
-              <div className="w-14 h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-6 border border-gray-200 group-hover:border-gray-900 group-hover:bg-gray-900 group-hover:text-white transition-all duration-300 shadow-sm">
+            <div key={step.num} className="group relative flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg hover:shadow-lg transition-all duration-300 bg-stone-50/50 hover:bg-white">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 group-hover:border-gray-900 group-hover:bg-gray-900 group-hover:text-white transition-all duration-300 shadow-sm">
                 {step.icon}
               </div>
 
-              <h3 className="text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
+              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
 
-              <p className="text-sm text-gray-600 leading-relaxed min-h-[4rem]">
+              <p className="text-xs md:text-sm text-gray-600 leading-relaxed md:min-h-[4rem]">
                 {step.text}
               </p>
 
@@ -82,26 +82,47 @@ export default function ProcessSection() {
           ))}
         </div>
 
-        <div className="mt-16 bg-stone-100 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto">
-          <div className="text-center md:text-left">
-            <h4 className="text-lg font-serif font-bold text-gray-900 mb-1">Formas de Pagamento</h4>
-            <p className="text-sm text-gray-600">Para facilitar sua compra, aceitamos diversas formas.</p>
+        {/* Bloco unificado: Aviso + Pagamento */}
+        <div className="mt-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* Aviso de prazo */}
+          <div className="border-l-4 border-amber-400 bg-amber-50 rounded-r-xl px-5 py-5 flex flex-col justify-center gap-2">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-serif font-bold text-amber-600 leading-none">72h</span>
+              <p className="text-xs font-bold text-amber-700 uppercase tracking-widest">Prazo de pagamento do saldo</p>
+            </div>
+            <p className="text-sm text-amber-900/80 leading-relaxed">
+              O saldo restante (50%) deve ser quitado em até <strong>72 horas</strong> após a data combinada para envio ou retirada. O sinal não é reembolsável. Após o prazo, a peça será colocada à venda.
+            </p>
           </div>
 
-          <div className="flex gap-4 items-center">
-            <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase text-gray-500 mb-1">Pix</span>
-              {/* <div className="w-16 h-10 bg-white rounded border border-gray-200 flex items-center justify-center">
-                <span className="text-xs text-emerald-600 font-bold">5% OFF</span>
-              </div> */}
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-xs font-bold uppercase text-gray-500 mb-1">Cartão</span>
-              <div className="w-32 h-10 bg-white rounded border border-gray-200 flex items-center justify-center px-2 text-center">
-                <span className="text-[10px] text-gray-600 font-medium">Até 2x sem juros (acima de R$600)</span>
+          {/* Formas de Pagamento */}
+          <div className="bg-stone-50 border border-stone-100 rounded-xl px-5 py-5 flex flex-col justify-center gap-4">
+            <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase text-center">Formas de Pagamento</p>
+            <div className="flex justify-center gap-3">
+              {/* PIX */}
+              <div className="flex flex-col items-center text-center p-4 border border-stone-200 rounded-lg bg-white flex-1">
+                <div className="w-10 h-10 bg-stone-50 text-gray-700 flex items-center justify-center rounded-full mb-3 border border-gray-200 shadow-sm">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Pix</h3>
+                <p className="text-xs text-gray-500">Sem acréscimos</p>
+              </div>
+              {/* Cartão */}
+              <div className="flex flex-col items-center text-center p-4 border border-stone-200 rounded-lg bg-white flex-1">
+                <div className="w-10 h-10 bg-stone-50 text-gray-700 flex items-center justify-center rounded-full mb-3 border border-gray-200 shadow-sm">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Cartão</h3>
+                <p className="text-xs text-gray-500">2x sem juros<br/><span className="text-gray-400">(acima de R$600)</span></p>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>

@@ -29,7 +29,7 @@ export default function ProductGrid() {
         </div>
 
         {/* Grid de Fotos 3x3 */}
-        <div className="grid grid-cols-3 gap-1 md:gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-3 gap-[3px] md:gap-4 max-w-4xl mx-auto">
           {instagramImages.map((image, index) => (
             <div
               key={index}
