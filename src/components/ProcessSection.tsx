@@ -13,7 +13,7 @@ export default function ProcessSection() {
     {
       num: "02",
       title: "Orçamento & Sinal",
-      text: "Definimos o orçamento. A confecção é iniciada após o pagamento de 50% do valor. O sinal não é reembolsável.",
+      text: "A confecção é iniciada após o pagamento de 50% do valor, esse sinal não é reembolsável em caso de desistência. O saldo restante deve ser quitado em até 72hs após a data combinada para envio ou retirada, após o prazo, a peça será colocada à venda.",
       highlight: "Regra Importante",
       icon: (
         <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -82,47 +82,33 @@ export default function ProcessSection() {
           ))}
         </div>
 
-        {/* Bloco unificado: Aviso + Pagamento */}
-        <div className="mt-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          {/* Aviso de prazo */}
-          <div className="border-l-4 border-amber-400 bg-amber-50 rounded-r-xl px-5 py-5 flex flex-col justify-center gap-2">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl font-serif font-bold text-amber-600 leading-none">72h</span>
-              <p className="text-xs font-bold text-amber-700 uppercase tracking-widest">Prazo de pagamento do saldo</p>
-            </div>
-            <p className="text-sm text-amber-900/80 leading-relaxed">
-              O saldo restante (50%) deve ser quitado em até <strong>72 horas</strong> após a data combinada para envio ou retirada. O sinal não é reembolsável. Após o prazo, a peça será colocada à venda.
-            </p>
+        {/* Formas de Pagamento */}
+        <div className="mt-12">
+          <div className="text-center mb-6">
+            <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">Formas de Pagamento</span>
           </div>
-
-          {/* Formas de Pagamento */}
-          <div className="bg-stone-50 border border-stone-100 rounded-xl px-5 py-5 flex flex-col justify-center gap-4">
-            <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase text-center">Formas de Pagamento</p>
-            <div className="flex justify-center gap-3">
-              {/* PIX */}
-              <div className="flex flex-col items-center text-center p-4 border border-stone-200 rounded-lg bg-white flex-1">
-                <div className="w-10 h-10 bg-stone-50 text-gray-700 flex items-center justify-center rounded-full mb-3 border border-gray-200 shadow-sm">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">Pix</h3>
-                <p className="text-xs text-gray-500">Sem acréscimos</p>
+          <div className="flex justify-center gap-4 md:gap-8">
+            {/* PIX */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg bg-stone-50/50 w-[calc(50%-8px)] md:w-48">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 shadow-sm">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
               </div>
-              {/* Cartão */}
-              <div className="flex flex-col items-center text-center p-4 border border-stone-200 rounded-lg bg-white flex-1">
-                <div className="w-10 h-10 bg-stone-50 text-gray-700 flex items-center justify-center rounded-full mb-3 border border-gray-200 shadow-sm">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                  </svg>
-                </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">Cartão</h3>
-                <p className="text-xs text-gray-500">2x sem juros<br/><span className="text-gray-400">(acima de R$600)</span></p>
+              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">Pix</h3>
+              <p className="text-xs md:text-sm text-gray-600">Sem acréscimos</p>
+            </div>
+            {/* Cartão */}
+            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg bg-stone-50/50 w-[calc(50%-8px)] md:w-48">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 shadow-sm">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                </svg>
               </div>
+              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">Cartão</h3>
+              <p className="text-xs md:text-sm text-gray-600">2x sem juros <span className="text-gray-400">(acima de R$600)</span></p>
             </div>
           </div>
-
         </div>
 
       </div>
