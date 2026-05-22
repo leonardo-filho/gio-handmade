@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "skills": {
+    "autoresearch": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/autoresearch/SKILL.md",
+      "computedHash": "1c5c9728642fc1667d3237ed6b766e62fd853db7320c993aefc31373e021a2e7"
+    },
+    "build": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/build/SKILL.md",
+      "computedHash": "53df11a79fa35db8fccc68ba444b113d1eb4b0ff00f6d12f24e5717dd4c9807c"
+    },
+    "cc": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/cc/SKILL.md",
+      "computedHash": "7eefdd7dc57a6c6e3c6619eaca62322939b9cf0312a319284f9232457373cf7d"
+    },
+    "checkpoint": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/checkpoint/SKILL.md",
+      "computedHash": "70c2c3356c7c042e7fb021a690f4f4124f084472584e429a33474aac127c2de4"
+    },
+    "component": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/component/SKILL.md",
+      "computedHash": "a1557ea567aeb28f1df0fdf1891bb31a72de7f460a8f75af9bf291b57e557d00"
+    },
+    "consolidate": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/consolidate/SKILL.md",
+      "computedHash": "d7d3b235df282905e801f6122af302828fcc5b33ef9a5ca6e6941e2aef7e16d3"
+    },
+    "context-doc": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/context-doc/SKILL.md",
+      "computedHash": "a62df1f94a5528040b9f802389d572a532561b0eadcc0e650797d2bed0be13ed"
+    },
+    "design-tokens": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/design-tokens/SKILL.md",
+      "computedHash": "fa394bf95032972b5ac609328192dd46bd8d6b64633d9e3551eaf14e116e99b2"
+    },
+    "dr-init": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/dr-init/SKILL.md",
+      "computedHash": "f91a37a838c7b3d2e06eb8e437644873dcf5eb26328b669cfb364400a25f545b"
+    },
+    "explore": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/explore/SKILL.md",
+      "computedHash": "cb70d8d72f08741691be5935ca9b893c12008bba1fa72ebfa08d672af8d49dde"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+    },
+    "fix": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/fix/SKILL.md",
+      "computedHash": "43e2c3b088d7324500169e86a3764403f6b3188fcb3d81fbddbba425e7815794"
+    },
+    "framer-motion-animator": {
+      "source": "patricio0312rev/skills",
+      "sourceType": "github",
+      "skillPath": "frontend/framer-motion-animator/SKILL.md",
+      "computedHash": "d0137ba04049bf8926bc80f6a5e2b82d94b5633b6445a85dbfb26ab4f1b104c6"
+    },
+    "handoff": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/handoff/SKILL.md",
+      "computedHash": "a4edfda335b8944383740893c1b8ca329313cc036d660c2091865c98a0399f27"
+    },
+    "hook": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/hook/SKILL.md",
+      "computedHash": "1d2d21380627e69a98d62780df10c4f882b1f09faaf0895c26359a648206690f"
+    },
+    "lighthouse": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/lighthouse/SKILL.md",
+      "computedHash": "f2e255258a0f747456b57bcea98691099e3d52b2edf1b3d43ab5c29cc1bca2a7"
+    },
+    "oracle": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/oracle/SKILL.md",
+      "computedHash": "144da3abd8898a2a3b5954c73d097ef0bbe52f1e324b4d8858a13b62b5f79406"
+    },
+    "orchestrate": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/orchestrate/SKILL.md",
+      "computedHash": "8dcf3d3afb99ee785f81fb822dd3e1fa9041c869fa35c13e111773f90de2561a"
+    },
+    "plan-feature": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/plan-feature/SKILL.md",
+      "computedHash": "3886a0d23cddf2f0aac36233d57e9005c620a1406d6f2f23d3ab0edc9628ac6c"
+    },
+    "project": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/project/SKILL.md",
+      "computedHash": "3d79f2521f82c6e4f067088c4a74600303919cc53c3cfe68c5888070f8be32b1"
+    },
+    "qa": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/qa/SKILL.md",
+      "computedHash": "ec67e9202d0869f08d529457b3b4703deb407be33b4990bf86ab483073137d27"
+    },
+    "refactor": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/refactor/SKILL.md",
+      "computedHash": "66ef38b931ed931babd12e8598de290f3bf70ca76f458209252b45bcc635a8e5"
+    },
+    "review": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/review/SKILL.md",
+      "computedHash": "9c3c0997a04ce711a32899d01c0bacc2eb7c62954020d23893bce9c951d58f55"
+    },
+    "ship": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/ship/SKILL.md",
+      "computedHash": "1d1d0258cb3a22c58ffb6bc85f514df1d1a23c1b2d0fd4c61012dbeb3f5fd6e5"
+    },
+    "test": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/test/SKILL.md",
+      "computedHash": "4cf662c70615959fbf4f78462d5840e69f3674eb03e845efafd0c17084fe3991"
+    },
+    "tldr": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/tldr/SKILL.md",
+      "computedHash": "ebbec405d8691305c2a9da62e3b23f8120314cb0bf92fddc3c1a842ab63dd461"
+    },
+    "verify": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/verify/SKILL.md",
+      "computedHash": "8633387249ea6c0500d5d4d0bcb7202974826961381e6d79b6c380bf9eb21d2b"
+    },
+    "zero-tech-debt": {
+      "source": "darkroomengineering/cc-settings",
+      "sourceType": "github",
+      "skillPath": "skills/zero-tech-debt/SKILL.md",
+      "computedHash": "e8d5a9146d06afaf85e52809a048b044e018fb5ef41f052e1372a5b045644e81"
+    }
+  }
+}

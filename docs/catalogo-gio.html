@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Gio Handmade · Catálogo 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F1EA;
+    --ink: #1A1A1A;
+    --gold: #B8935A;
+    --soft: #E8E2D5;
+    --mute: #8A8377;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page {
+    size: 210mm 210mm;
+    margin: 0;
+  }
+
+  html, body {
+    background: #ddd;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 210mm;
+    background: var(--bg);
+    margin: 8mm auto;
+    box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* última página sem quebra extra */
+  .page:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  @media print {
+    html, body { background: var(--bg); }
+    .page { margin: 0; box-shadow: none; }
+    .instructions { display: none !important; }
+  }
+
+  /* ---------- TIPOGRAFIA ---------- */
+  h1, h2, h3, .serif {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: .02em;
+  }
+
+  .eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9pt;
+    font-weight: 500;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .body-text {
+    font-size: 10pt;
+    line-height: 1.7;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .small {
+    font-size: 8.5pt;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  hr.gold {
+    border: none;
+    border-top: 1px solid var(--gold);
+    width: 40mm;
+    margin: 8mm 0;
+  }
+
+  /* ---------- PHOTO PLACEHOLDER ---------- */
+  .photo {
+    background: var(--soft);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mute);
+    font-size: 9pt;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 8mm;
+  }
+
+  .photo::after {
+    content: attr(data-hint);
+  }
+
+  .photo.has-image::after { content: ''; }
+
+  /* ---------- 1. CAPA ---------- */
+  .cover {
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  .cover .photo {
+    margin: 10mm 10mm 0;
+  }
+  .cover .footer {
+    padding: 8mm 14mm 12mm;
+    text-align: center;
+  }
+  .cover h1 {
+    font-size: 40pt;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4mm;
+  }
+  .cover .subtitle {
+    font-style: italic;
+    font-size: 11pt;
+    color: var(--mute);
+    margin-top: 3mm;
+  }
+
+  /* ---------- 2. SOBRE ---------- */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .about .photo { margin: 0; }
+  .about .text {
+    padding: 14mm 14mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .about h2 {
+    font-size: 22pt;
+    margin: 3mm 0 5mm;
+    line-height: 1.2;
+  }
+  .about p {
+    font-size: 9.5pt;
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 3mm;
+  }
+
+  /* ---------- 3. COMO FUNCIONA ---------- */
+  .process {
+    padding: 14mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .process h2 {
+    font-size: 24pt;
+    margin: 3mm 0 6mm;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 12mm 1fr;
+    margin-bottom: 5mm;
+    align-items: start;
+  }
+  .step .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18pt;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .step .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12pt;
+    margin-bottom: 1.5mm;
+  }
+  .step .desc {
+    font-size: 9pt;
+    line-height: 1.5;
+    font-weight: 300;
+    color: var(--ink);
+  }
+  .process .note {
+    font-style: italic;
+    font-size: 9pt;
+    color: var(--mute);
+    margin-top: 5mm;
+    padding-top: 4mm;
+    border-top: 1px solid var(--gold);
+  }
+
+  /* ---------- 4. DIVISOR ---------- */
+  .divider {
+    position: relative;
+  }
+  .divider .photo {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+  }
+  .divider .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26,26,26,.35);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--bg);
+    text-align: center;
+  }
+  .divider h2 {
+    font-size: 44pt;
+    font-weight: 300;
+    color: var(--bg);
+  }
+  .divider .small {
+    color: var(--bg);
+    margin-top: 6mm;
+  }
+
+  /* ---------- 5. PEÇA ---------- */
+  .product {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+  }
+  .product .photo { margin: 0; }
+  .product .info {
+    padding: 14mm 12mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .product .info .eyebrow { margin-bottom: 4mm; font-size: 8pt; }
+  .product h2 {
+    font-size: 22pt;
+    line-height: 1.05;
+    margin-bottom: 3mm;
+  }
+  .product .desc {
+    font-size: 9pt;
+    line-height: 1.55;
+    font-weight: 300;
+    margin-bottom: 5mm;
+  }
+  .product .meta {
+    font-size: 8.5pt;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .product .meta strong {
+    font-weight: 500;
+    letter-spacing: .05em;
+  }
+  .product .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18pt;
+    color: var(--gold);
+    margin-top: 5mm;
+    padding-top: 4mm;
+    border-top: 1px solid var(--gold);
+  }
+  .product .custom {
+    font-style: italic;
+    font-size: 8pt;
+    color: var(--mute);
+    margin-top: 3mm;
+  }
+
+  /* ---------- 6. PEÇA-ÂNCORA ---------- */
+  .anchor {
+    background: var(--ink);
+    color: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .anchor .photo {
+    background-color: #2a2a2a;
+    color: #555;
+    margin: 0;
+  }
+  .anchor .coming-soon {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(184,147,90,.18), transparent 60%),
+      radial-gradient(circle at 70% 75%, rgba(184,147,90,.10), transparent 55%),
+      #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0;
+    margin: 10mm;
+    border: 1px solid rgba(184,147,90,.25);
+  }
+  .anchor .coming-soon::after { content: ''; }
+  .cs-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26pt;
+    font-weight: 300;
+    letter-spacing: .35em;
+    color: var(--gold);
+    padding-left: .35em;
+  }
+  .cs-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 8pt;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: #d8d2c4;
+    margin-top: 5mm;
+    padding-top: 4mm;
+    border-top: 1px solid rgba(184,147,90,.4);
+    width: 40mm;
+  }
+  .anchor .info {
+    padding: 14mm 12mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .anchor .eyebrow { color: var(--gold); font-size: 8pt; }
+  .anchor h2 {
+    font-size: 24pt;
+    color: var(--bg);
+    line-height: 1.05;
+    margin: 4mm 0;
+  }
+  .anchor p {
+    font-size: 9pt;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #d8d2c4;
+  }
+  .anchor .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18pt;
+    color: var(--gold);
+    margin-top: 6mm;
+    padding-top: 4mm;
+    border-top: 1px solid var(--gold);
+  }
+
+  /* ---------- 7. TABELA ---------- */
+  .pricing {
+    padding: 14mm 20mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pricing h2 {
+    font-size: 24pt;
+    margin: 3mm 0 3mm;
+  }
+  .pricing .intro {
+    font-style: italic;
+    font-size: 9pt;
+    color: var(--mute);
+    margin-bottom: 6mm;
+  }
+  .pricing table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .pricing tr {
+    border-bottom: 1px solid var(--soft);
+  }
+  .pricing td {
+    padding: 3.5mm 0;
+    font-size: 10pt;
+    font-weight: 300;
+  }
+  .pricing td:last-child {
+    text-align: right;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12pt;
+    color: var(--gold);
+  }
+
+  /* ---------- 8. CUIDADOS ---------- */
+  .care {
+    padding: 12mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .care h2 {
+    font-size: 22pt;
+    margin: 2mm 0 5mm;
+  }
+  .care ul {
+    list-style: none;
+    padding: 0;
+  }
+  .care li {
+    font-size: 9pt;
+    font-weight: 300;
+    line-height: 1.45;
+    padding: 2.6mm 0;
+    border-bottom: 1px solid var(--soft);
+    display: grid;
+    grid-template-columns: 6mm 1fr;
+  }
+  .care li::before {
+    content: '·';
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12pt;
+    line-height: 1;
+  }
+  .care .closing {
+    font-style: italic;
+    color: var(--mute);
+    margin-top: 5mm;
+    font-size: 9pt;
+  }
+
+  /* ---------- 9. CONTATO ---------- */
+  .contact {
+    padding: 18mm 18mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .contact h2 {
+    font-size: 32pt;
+    line-height: 1.1;
+    margin-bottom: 6mm;
+  }
+  .contact .channels {
+    font-size: 11pt;
+    font-weight: 300;
+    line-height: 1.9;
+    margin: 5mm 0;
+  }
+  .contact .channels strong {
+    font-weight: 500;
+    letter-spacing: .05em;
+  }
+  .contact .vagas {
+    font-style: italic;
+    color: var(--mute);
+    font-size: 9pt;
+    margin-top: 8mm;
+    padding-top: 4mm;
+    border-top: 1px solid var(--gold);
+    width: 50mm;
+  }
+
+  /* ---------- INSTRUCTIONS BANNER (only on screen) ---------- */
+  .instructions {
+    max-width: 210mm;
+    margin: 16mm auto 8mm;
+    padding: 12mm;
+    background: white;
+    border-left: 4px solid var(--gold);
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+  .instructions h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18pt;
+    margin-bottom: 4mm;
+  }
+  .instructions ol { margin-left: 6mm; margin-top: 4mm; }
+  .instructions li { margin: 2mm 0; }
+  .instructions code {
+    background: var(--soft);
+    padding: 1mm 2mm;
+    font-size: 10pt;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Instruções (não aparecem no PDF) -->
+<div class="instructions">
+  <h3>Como usar este arquivo</h3>
+  <p><strong>Pra ver na tela:</strong> abre este arquivo HTML no Chrome. Cada folha A4 aparece centralizada.</p>
+  <p><strong>Pra exportar PDF:</strong> Ctrl/Cmd + P → Destino: <em>Salvar como PDF</em> → Margens: <em>Nenhuma</em> → <strong>Marca "Gráficos do plano de fundo" (CRÍTICO!)</strong> → Salvar.</p>
+  <p><strong>Pra trocar uma foto:</strong> abre o arquivo num editor de texto, procura o <code>div class="photo"</code> que você quer trocar e adiciona o estilo:</p>
+  <p><code>style="background-image: url('caminho/da/foto.jpg');" class="photo has-image"</code></p>
+  <p><strong>Pra trocar textos (preço, descrição):</strong> mesma coisa, só editar o conteúdo dentro das tags HTML.</p>
+</div>
+
+<!-- ============================================ -->
+<!-- 1. CAPA -->
+<!-- ============================================ -->
+<div class="page cover">
+  <div class="photo has-image" style="background-image: url('../public/conjuntos.png');"></div>
+  <div class="footer">
+    <div class="eyebrow">Coleção 2026</div>
+    <h1 class="serif">Gio Handmade</h1>
+    <div class="subtitle">Peças únicas, feitas à mão em Belém do Pará</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 2. SOBRE -->
+<!-- ============================================ -->
+<div class="page about">
+  <div class="photo has-image" style="background-image: url('../public/eu.jpeg');"></div>
+  <div class="text">
+    <div class="eyebrow">A Marca</div>
+    <h2>Pra você que se sente bem quando a roupa traduz quem você é.</h2>
+    <hr class="gold">
+    <p>Cada peça nasce pensando em uma mulher só. Não trabalho com coleção em massa, então a peça que chega na sua mão não vai estar em mais ninguém.</p>
+    <p>É essa a sensação que eu quero entregar pra você: vestir, se olhar no espelho e saber que aquilo ali é seu, feito à mão, no meu tempo, no meu ateliê em Belém do Pará.</p>
+    <p>Cristais, pedrarias, correntes e missangas, aplicados um a um, com calma e cuidado. Roupa pra ocasião especial, mas também pra você se sentir bem antes de qualquer elogio.</p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 3. COMO FUNCIONA -->
+<!-- ============================================ -->
+<div class="page process">
+  <div class="eyebrow">Processo</div>
+  <h2>Como encomendar.</h2>
+  <hr class="gold">
+
+  <div class="step">
+    <div class="num">01</div>
+    <div>
+      <div class="title">Escolha o modelo</div>
+      <div class="desc">Selecione uma peça-base deste catálogo ou converse comigo sobre uma criação exclusiva.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">02</div>
+    <div>
+      <div class="title">Personalize</div>
+      <div class="desc">Cor, tamanho, tipo de pedraria e detalhes são definidos junto com você.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">03</div>
+    <div>
+      <div class="title">Sinal de 50%</div>
+      <div class="desc">Reserva sua vaga e dá início à produção.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">04</div>
+    <div>
+      <div class="title">Confecção (7 a 30 dias úteis)</div>
+      <div class="desc">Sua peça começa a nascer. O prazo varia com a complexidade: peças menores ficam prontas mais rápido, peças mais elaboradas pedem mais tempo de mão.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">05</div>
+    <div>
+      <div class="title">Saldo + entrega</div>
+      <div class="desc">Restante pago em até 72h antes do envio. Peça numerada e única.</div>
+    </div>
+  </div>
+
+  <div class="note">Cada peça leva sua numeração de série e é feita pensando só em você.</div>
+</div>
+
+<!-- ============================================ -->
+<!-- 4. DIVISOR -->
+<!-- ============================================ -->
+<div class="page divider">
+  <div class="photo has-image" style="background-image: url('../public/peca-preta-correntes.png');"></div>
+  <div class="overlay">
+    <div class="eyebrow" style="color: var(--bg);">Modelos-base</div>
+    <h2 class="serif">Catálogo</h2>
+    <div class="small">Cada peça é personalizada para a cliente</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 5-12. PEÇAS -->
+<!-- ============================================ -->
+
+<!-- 01 — TOP BEADED (imagem tops.png) -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/tops.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Top · 01</div>
+    <h2 class="serif">Top Beaded</h2>
+    <div class="desc">Top em camadas de missangas e pedrarias que descem do busto até a cintura formando uma cortina brilhante. Decote em V e amarração no pescoço. Combina com saia preta básica, jeans ou calça de alfaiataria pra quebrar o brilho.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: missangas, contas e pedrarias aplicadas à mão<br>
+      <strong>Produção</strong>: 10 a 15 dias úteis
+    </div>
+    <div class="price">A partir de R$ 550</div>
+    <div class="custom">Personalizável em cor, tamanho e tipo de pedraria.</div>
+  </div>
+</div>
+
+<!-- 02 — CONJUNTO CRISTAIS (imagem peca-cristal.png) -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/peca-cristal.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Conjunto · 02</div>
+    <h2 class="serif">Conjunto Cristais</h2>
+    <div class="desc">Top e saia totalmente cobertos de cristais e correntes prateadas, com gotas que se movem ao caminhar. É a peça mais elaborada da coleção, pensada pra noite, festa e ocasião grande. Brilha sem precisar de holofote.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: cristais facetados, correntes prateadas, pedrarias<br>
+      <strong>Produção</strong>: 25 a 30 dias úteis
+    </div>
+    <div class="price">A partir de R$ 1.000</div>
+    <div class="custom">Personalizável em cor, tamanho e densidade da pedraria.</div>
+  </div>
+</div>
+
+<!-- 03 — SAIA CONCHAS (imagem saias.png) -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/saias.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Saia · 03</div>
+    <h2 class="serif">Saia Conchas</h2>
+    <div class="desc">Saia curta em cristais e conchas naturais, com franjas longas que dançam com o corpo. Acompanha choker e detalhes no busto que fecham o look. Tem cara de praia, mas funciona em qualquer festa que pede algo diferente.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: cristais, conchas naturais, correntes<br>
+      <strong>Produção</strong>: 15 a 20 dias úteis
+    </div>
+    <div class="price">A partir de R$ 600</div>
+    <div class="custom">Personalizável em cor, comprimento e tipo de aplicação.</div>
+  </div>
+</div>
+
+<!-- 04 — TOP CRISTAIS (imagem peca-preta-correntes.png) -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/peca-preta-correntes.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Top · 04</div>
+    <h2 class="serif">Top Cristais</h2>
+    <div class="desc">Top em correntes prateadas com pedrarias pretas e cristais em fileiras horizontais. Decote em V profundo, costas livres e ponta na cintura. Combina fácil com saia ou calça preta pra um look mais editorial.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: correntes prateadas, cristais facetados, pedrarias pretas<br>
+      <strong>Produção</strong>: 10 a 15 dias úteis
+    </div>
+    <div class="price">A partir de R$ 500</div>
+    <div class="custom">Personalizável em cor, tamanho e tipo de pedraria.</div>
+  </div>
+</div>
+
+<!-- 05 — CONJUNTO PEDRARIAS -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/conjunto-pronta.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Conjunto · 05</div>
+    <h2 class="serif">Conjunto Pedrarias</h2>
+    <div class="desc">Conjunto de top e saia em correntes prateadas com pedrarias pretas e cristais formando padrão geométrico. A saia termina em desenho escamado que dá movimento ao caminhar. Peça de muito brilho, perfeita pra festas, festivais e ensaios.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: correntes prateadas, pedrarias pretas, cristais<br>
+      <strong>Produção</strong>: 7 dias úteis
+    </div>
+    <div class="price">A partir de R$ 1.300</div>
+    <div class="custom">Personalizável em cor da pedraria, tamanho e densidade da malha.</div>
+  </div>
+</div>
+
+<!-- 06 — VESTIDO CRISTAIS -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/vestido.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Vestido · 06</div>
+    <h2 class="serif">Vestido Cristais</h2>
+    <div class="desc">Vestido inteiro em correntes e cristais facetados, em tons de verde, vinho e preto. As fileiras descem em curvas pelo corpo, criando um drapeado natural que veste bem qualquer formato. Pensado pra ocasiões em que a peça é o look todo.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: cristais facetados, correntes prateadas<br>
+      <strong>Produção</strong>: 25 a 30 dias úteis
+    </div>
+    <div class="price">A partir de R$ 1.000</div>
+    <div class="custom">Personalizável em cor, comprimento e densidade da pedraria.</div>
+  </div>
+</div>
+
+<!-- 07 — HEADPIECE -->
+<div class="page product">
+  <div class="photo has-image" style="background-image: url('../public/headpiece.png');"></div>
+  <div class="info">
+    <div class="eyebrow">Acessório · 07</div>
+    <h2 class="serif">Headpiece</h2>
+    <div class="desc">Tiara delicada em correntes finas, pedrarias pretas e cristais que caem na testa. Combina com qualquer peça da coleção e transforma um look básico em algo memorável. Ótima como primeira Gio Handmade.</div>
+    <div class="meta">
+      <strong>Materiais</strong>: correntes finas, cristais, pedrarias<br>
+      <strong>Produção</strong>: 5 a 7 dias úteis
+    </div>
+    <div class="price">A partir de R$ 150</div>
+    <div class="custom">Personalizável em cor, formato e tipo de aplicação.</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 13. PEÇA-ÂNCORA — COPA DO MUNDO 2026 -->
+<!-- ============================================ -->
+<div class="page anchor">
+  <div class="photo coming-soon">
+    <div class="cs-mark">EM BREVE</div>
+    <div class="cs-sub">Coleção Copa 2026</div>
+  </div>
+  <div class="info">
+    <div class="eyebrow">Em breve · Edição Copa do Mundo</div>
+    <h2 class="serif">Coleção Copa 2026</h2>
+    <hr class="gold">
+    <p>Uma coleção especial inspirada nas cores da bandeira do Brasil, pensada para a Copa do Mundo de 2026.</p>
+    <p style="margin-top: 4mm;">Serão <strong>3 opções de roupa</strong>, cada uma em uma combinação de cores da bandeira.</p>
+    <p style="margin-top: 4mm;"><em>Lançamento em breve. Lista de interesse aberta no WhatsApp.</em></p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 14. FAIXAS DE PREÇO -->
+<!-- ============================================ -->
+<div class="page pricing">
+  <div class="eyebrow">Investimento</div>
+  <h2>Faixas de preço.</h2>
+  <hr class="gold">
+  <div class="intro">Valores iniciais. Personalização e pedrarias premium podem alterar o preço final.</div>
+  <table>
+    <tr><td>Headpiece</td><td>R$ 150</td></tr>
+    <tr><td>Top Cristais</td><td>R$ 500</td></tr>
+    <tr><td>Top Beaded</td><td>R$ 550</td></tr>
+    <tr><td>Saia bordada</td><td>R$ 600</td></tr>
+    <tr><td>Conjunto Cristais</td><td>R$ 1.000</td></tr>
+    <tr><td>Vestido Cristais</td><td>R$ 1.000</td></tr>
+    <tr><td>Conjunto Pedrarias</td><td>R$ 1.300</td></tr>
+    <tr><td>Coleção Copa 2026</td><td>Em breve</td></tr>
+  </table>
+</div>
+
+<!-- ============================================ -->
+<!-- 15. CUIDADOS -->
+<!-- ============================================ -->
+<div class="page care">
+  <div class="eyebrow">Cuidados</div>
+  <h2>Pra sua peça durar.</h2>
+  <hr class="gold">
+  <ul>
+    <li>Antes de vestir, aplique perfume, hidratante e maquiagem e espere secar. Álcool e óleos podem oxidar correntes e opacar cristais.</li>
+    <li>Não molhe nem lave em máquina. Pra limpar cristais e pedrarias, passe um pano macio levemente úmido e seque com pano seco.</li>
+    <li>Em peças com conchas naturais (Saia Conchas), use só pano seco. Conchas não gostam de umidade.</li>
+    <li>Guarde a peça plana, dentro do saquinho que acompanha. Correntes pesadas desalinham se ficam penduradas por muito tempo.</li>
+    <li>Headpiece: guarde sempre apoiado, nunca enrolado, pra manter o desenho original.</li>
+    <li>Não passe ferro em nenhuma parte da peça. Cuidado com fivelas, anéis e zíperes que podem enroscar nas correntes.</li>
+    <li>Tire a peça pra dormir e evite sentar em estofado de couro liso, que pode marcar a corrente.</li>
+  </ul>
+  <div class="closing">Cada peça é única. Tratada com carinho, vai te acompanhar por muitos eventos.</div>
+</div>
+
+<!-- ============================================ -->
+<!-- 16. CONTATO -->
+<!-- ============================================ -->
+<div class="page contact">
+  <div class="eyebrow">Vamos criar juntas?</div>
+  <h2 class="serif">Gio Handmade</h2>
+  <hr class="gold">
+  <div class="channels">
+    <strong>Instagram</strong> @gio.handmade__<br>
+    <strong>WhatsApp</strong> (91) 9298-2017<br>
+    <strong>Atendimento</strong> Belém, Pará, Brasil
+  </div>
+  <div class="vagas">Cada peça é feita pensando só em você.</div>
+</div>
+
+</body>
+</html>
