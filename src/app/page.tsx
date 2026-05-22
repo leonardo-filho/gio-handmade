@@ -6,10 +6,12 @@ import ProntaEntrega from "@/components/ProntaEntrega";
 import ProcessSection from "@/components/ProcessSection";
 import ProductGrid from "@/components/ProductGrid";
 import AboutSection from "@/components/AboutSection";
+import SmoothScroll from "@/components/SmoothScroll";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
+      <SmoothScroll />
       <Header />
       <Hero />
       <CollectionHighlights />

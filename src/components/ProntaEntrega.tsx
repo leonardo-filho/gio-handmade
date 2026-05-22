@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
 
 type Produto = {
   id: number;
@@ -9,7 +10,7 @@ type Produto = {
   parcelamento?: string;
   tamanho?: string;
   src: string;
-  mensagem?: string; // mensagem personalizada no WhatsApp; se omitida, usa o padrão
+  mensagem?: string;
 };
 
 const WA = "559192982017";
@@ -31,67 +32,66 @@ const produtos: Produto[] = [
     src: "/conjunto-pronta.png",
     mensagem: "Olá! Vi o Conjunto Cristal & Correntes no site e tenho interesse. Ainda está disponível?",
   },
-  // Adicione mais peças aqui
 ];
 
 export default function ProntaEntrega() {
   if (produtos.length === 0) return null;
 
   return (
-    <section id="pronta-entrega" className="py-20 bg-stone-50">
+    <section id="pronta-entrega" className="py-20 bg-[#EDE7D9]">
       <div className="max-w-6xl mx-auto px-4">
 
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">
+        <Reveal className="text-center mb-12">
+          <span className="text-[10px] font-bold tracking-[0.3em] text-[#1B4965]/60 uppercase">
             Disponível agora
           </span>
-          <h2 className="mt-2 text-3xl md:text-4xl font-serif text-gray-900">
+          <h2 className="mt-3 text-3xl md:text-4xl font-[family-name:var(--font-serif)] text-[#1B4965]">
             Pronta Entrega
           </h2>
-          <p className="mt-3 text-sm text-gray-500 font-light max-w-md mx-auto">
+          <div className="mt-4 mx-auto w-12 h-px bg-[#1B4965]/30" />
+          <p className="mt-4 text-sm text-[#1B4965]/70 font-light max-w-md mx-auto">
             Peças únicas já finalizadas, prontas para envio imediato.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <StaggerGroup className="flex flex-wrap justify-center gap-6">
           {produtos.map((produto) => (
+            <StaggerItem key={produto.id} className="w-full sm:w-[calc(50%-12px)] md:w-[260px]">
             <Link
-              key={produto.id}
               href={waLink(produto)}
-              className="group w-full sm:w-[calc(50%-12px)] md:w-[220px]"
+              className="group block"
             >
-              {/* Foto */}
-              <div className="relative w-full aspect-[3/4] bg-stone-200 overflow-hidden mb-3">
+              <div className="relative w-full aspect-[3/4] bg-white overflow-hidden mb-3">
                 <Image
                   src={produto.src}
                   alt={produto.nome}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-[#1B4965]/0 group-hover:bg-[#1B4965]/10 transition-colors duration-500" />
                 {produto.tamanho && (
-                  <span className="absolute top-2 left-2 bg-white/90 text-gray-700 text-[10px] font-bold uppercase tracking-widest px-2 py-1">
+                  <span className="absolute top-2 left-2 bg-[#EDE7D9] text-[#1B4965] text-[10px] font-bold uppercase tracking-widest px-2 py-1">
                     {produto.tamanho}
                   </span>
                 )}
               </div>
 
-              {/* Info */}
               <div className="text-center">
-                <h3 className="font-serif text-base text-gray-900 group-hover:underline underline-offset-4 decoration-1">
+                <h3 className="font-[family-name:var(--font-serif)] text-lg text-[#1B4965] group-hover:underline underline-offset-4 decoration-1">
                   {produto.nome}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 mb-2 leading-relaxed">{produto.descricao}</p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-xs text-[#1B4965]/60 mt-1 mb-2 leading-relaxed">{produto.descricao}</p>
+                <p className="text-sm font-bold text-[#1B4965]">
                   R$ {produto.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </p>
                 {produto.parcelamento && (
-                  <p className="text-xs text-gray-400 mt-0.5">{produto.parcelamento}</p>
+                  <p className="text-xs text-[#1B4965]/50 mt-0.5">{produto.parcelamento}</p>
                 )}
               </div>
             </Link>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
 
       </div>
     </section>

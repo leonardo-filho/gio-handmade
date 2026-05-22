@@ -1,3 +1,5 @@
+import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
+
 export default function ProcessSection() {
   const steps = [
     {
@@ -48,68 +50,67 @@ export default function ProcessSection() {
     <section id="processo" className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4">
 
-        <div className="text-center mb-16">
-          <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">
+        <Reveal className="text-center mb-16">
+          <span className="text-[10px] font-bold tracking-[0.3em] text-[#1B4965]/60 uppercase">
             Como funciona
           </span>
-          <h2 className="mt-2 text-3xl font-serif text-gray-900 mb-4">
+          <h2 className="mt-3 text-3xl md:text-4xl font-[family-name:var(--font-serif)] text-[#1B4965] mb-4">
             Do pedido à entrega
           </h2>
-          <p className="text-gray-600 font-light max-w-xl mx-auto text-sm md:text-base">
-            Cada detalhe importa. Veja como é simples ter sua peça exclusiva.
+          <div className="mt-2 mb-6 mx-auto w-12 h-px bg-[#1B4965]/30" />
+          <p className="text-[#1B4965]/70 font-light max-w-xl mx-auto text-sm md:text-base">
+            Cada detalhe importa. Feito para quem entende detalhes.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        <StaggerGroup className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {steps.map((step) => (
-            <div key={step.num} className="group relative flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg hover:shadow-lg transition-all duration-300 bg-stone-50/50 hover:bg-white">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 group-hover:border-gray-900 group-hover:bg-gray-900 group-hover:text-white transition-all duration-300 shadow-sm">
+            <StaggerItem key={step.num} className="group relative flex flex-col items-center text-center p-4 md:p-6 border border-[#1B4965]/10 rounded-lg hover:shadow-lg transition-all duration-300 bg-[#EDE7D9]/40 hover:bg-white">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#C8E1E4] text-[#1B4965] flex items-center justify-center rounded-full mb-4 md:mb-6 border border-[#1B4965]/10 group-hover:bg-[#1B4965] group-hover:text-[#EDE7D9] transition-all duration-300 shadow-sm">
                 {step.icon}
               </div>
 
-              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">{step.title}</h3>
+              <h3 className="text-sm md:text-lg font-bold text-[#1B4965] mb-2 font-[family-name:var(--font-serif)]">{step.title}</h3>
 
-              <p className="text-xs md:text-sm text-gray-600 leading-relaxed md:min-h-[4rem]">
+              <p className="text-xs md:text-sm text-[#1B4965]/70 leading-relaxed md:min-h-[4rem]">
                 {step.text}
               </p>
 
               {step.highlight && (
-                <span className="mt-4 inline-block px-3 py-1 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                <span className="mt-4 inline-block px-3 py-1 bg-[#1B4965] text-[#EDE7D9] text-[10px] font-bold uppercase tracking-widest rounded-full">
                   {step.highlight}
                 </span>
               )}
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
 
         {/* Formas de Pagamento */}
-        <div className="mt-12">
+        <Reveal className="mt-12">
           <div className="text-center mb-6">
-            <span className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">Formas de Pagamento</span>
+            <span className="text-[10px] font-bold tracking-[0.3em] text-[#1B4965]/60 uppercase">Formas de Pagamento</span>
           </div>
           <div className="flex justify-center gap-4 md:gap-8">
-            {/* PIX */}
-            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg bg-stone-50/50 w-[calc(50%-8px)] md:w-48">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 shadow-sm">
+            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-[#1B4965]/10 rounded-lg bg-[#EDE7D9]/40 w-[calc(50%-8px)] md:w-48">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#C8E1E4] text-[#1B4965] flex items-center justify-center rounded-full mb-4 md:mb-6 border border-[#1B4965]/10 shadow-sm">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
-              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">Pix</h3>
-              <p className="text-xs md:text-sm text-gray-600">Sem acréscimos</p>
+              <h3 className="text-sm md:text-lg font-bold text-[#1B4965] mb-2 font-[family-name:var(--font-serif)]">Pix</h3>
+              <p className="text-xs md:text-sm text-[#1B4965]/70">Sem acréscimos</p>
             </div>
-            {/* Cartão */}
-            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-stone-100 rounded-lg bg-stone-50/50 w-[calc(50%-8px)] md:w-48">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-white text-gray-800 flex items-center justify-center rounded-full mb-4 md:mb-6 border border-gray-200 shadow-sm">
+            <div className="flex flex-col items-center text-center p-4 md:p-6 border border-[#1B4965]/10 rounded-lg bg-[#EDE7D9]/40 w-[calc(50%-8px)] md:w-48">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-[#C8E1E4] text-[#1B4965] flex items-center justify-center rounded-full mb-4 md:mb-6 border border-[#1B4965]/10 shadow-sm">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                 </svg>
               </div>
-              <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-2">Cartão</h3>
-              <p className="text-xs md:text-sm text-gray-600">2x sem juros <span className="text-gray-400">(acima de R$600)</span></p>
+              <h3 className="text-sm md:text-lg font-bold text-[#1B4965] mb-2 font-[family-name:var(--font-serif)]">Cartão</h3>
+              <p className="text-xs md:text-sm text-[#1B4965]/70">2x sem juros <span className="text-[#1B4965]/40">(acima de R$600)</span></p>
             </div>
           </div>
-        </div>
+        </Reveal>
 
       </div>
     </section>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
 
 const instagramImages = [
   { src: "/foto1.jpeg", alt: "Look 1" },
@@ -18,20 +19,19 @@ export default function ProductGrid() {
     <section id="colecao" className="py-20 px-4 md:px-0 bg-white">
       <div className="max-w-6xl mx-auto">
 
-        {/* Cabeçalho */}
-        <div className="text-center mb-12">
-          <h3 className="text-sm uppercase tracking-widest text-gray-500 mb-2">
+        <Reveal className="text-center mb-12">
+          <span className="text-[10px] font-bold tracking-[0.3em] text-[#1B4965]/60 uppercase">
             Shop The Look
-          </h3>
-          <h2 className="text-3xl md:text-4xl font-serif text-gray-900">
-            Instagram @gio.handmade__
+          </span>
+          <h2 className="mt-3 text-3xl md:text-4xl font-[family-name:var(--font-serif)] text-[#1B4965]">
+            Instagram <span className="italic">@gio.handmade__</span>
           </h2>
-        </div>
+          <div className="mt-4 mx-auto w-12 h-px bg-[#1B4965]/30" />
+        </Reveal>
 
-        {/* Grid de Fotos 3x3 */}
-        <div className="grid grid-cols-3 gap-[3px] md:gap-4 max-w-4xl mx-auto">
+        <StaggerGroup className="grid grid-cols-3 gap-[3px] md:gap-4 max-w-4xl mx-auto">
           {instagramImages.map((image, index) => (
-            <div
+            <StaggerItem
               key={index}
               className="relative aspect-square overflow-hidden group cursor-pointer"
             >
@@ -41,22 +41,20 @@ export default function ProductGrid() {
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              {/* Overlay suave no hover */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
-            </div>
+              <div className="absolute inset-0 bg-[#1B4965]/0 group-hover:bg-[#1B4965]/20 transition-colors duration-500" />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
 
-        {/* Botão Final */}
-        <div className="text-center mt-12">
+        <Reveal className="text-center mt-12">
           <Link
             href="https://instagram.com/gio.handmade__"
             target="_blank"
-            className="inline-block border-b border-gray-800 pb-1 text-gray-800 uppercase text-xs tracking-widest hover:text-gray-500 transition-colors"
+            className="inline-block border-b border-[#1B4965] pb-1 text-[#1B4965] uppercase text-xs tracking-[0.25em] hover:text-[#1B4965]/60 hover:border-[#1B4965]/60 transition-colors"
           >
             Seguir no Instagram
           </Link>
-        </div>
+        </Reveal>
 
       </div>
     </section>

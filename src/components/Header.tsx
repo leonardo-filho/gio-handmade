@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,30 +29,39 @@ export default function Header() {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-3 border-b border-gray-100"
-          : "bg-white/75 backdrop-blur-sm py-5 border-b border-white/40"
+          ? "bg-[#EDE7D9]/95 backdrop-blur-md shadow-sm py-2 border-b border-[#1B4965]/10"
+          : "bg-[#EDE7D9]/70 backdrop-blur-sm py-3 border-b border-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="text-xl font-serif font-bold text-gray-900 tracking-wider">
-          GIO HANDMADE
+        <Link href="/" aria-label="Gio Handmade" className="flex items-center">
+          <Image
+            src="/logo-navy.png"
+            alt="Gio Handmade"
+            width={1200}
+            height={856}
+            priority
+            className={`w-auto transition-all duration-500 ${
+              isScrolled ? "h-10 md:h-12" : "h-12 md:h-14"
+            }`}
+          />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-8">
+        <nav className="hidden md:flex gap-8 items-center">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="text-sm uppercase tracking-widest text-gray-600 hover:text-gray-900 transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-[#1B4965]/80 hover:text-[#1B4965] transition-colors"
             >
               {link.name}
             </Link>
           ))}
           <Link
             href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
-            className="text-sm uppercase tracking-widest font-bold text-gray-900 border-b border-gray-900 pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-all"
+            className="text-xs uppercase tracking-[0.2em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-2 hover:bg-[#130209] transition-colors"
           >
             Contato
           </Link>
@@ -59,7 +69,8 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-900 focus:outline-none"
+          aria-label="Abrir menu"
+          className="md:hidden text-[#1B4965] focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <svg
@@ -90,13 +101,13 @@ export default function Header() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-md py-4 px-4 flex flex-col gap-4 md:hidden border-t border-gray-100">
+        <div className="absolute top-full left-0 w-full bg-[#EDE7D9]/98 backdrop-blur-md shadow-md py-6 px-6 flex flex-col gap-5 md:hidden border-t border-[#1B4965]/10">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm uppercase tracking-widest text-gray-600 hover:text-gray-900"
+              className="text-sm uppercase tracking-[0.25em] text-[#1B4965]/80 hover:text-[#1B4965]"
             >
               {link.name}
             </Link>
@@ -104,7 +115,7 @@ export default function Header() {
           <Link
             href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm uppercase tracking-widest font-bold text-gray-900"
+            className="text-sm uppercase tracking-[0.25em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-3 text-center"
           >
             Contato
           </Link>
