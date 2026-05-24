@@ -29,6 +29,15 @@ export default function Hero() {
           />
         </motion.div>
 
+        <motion.p
+          className="font-[family-name:var(--font-serif)] italic text-sm md:text-base tracking-[0.25em] text-[#1B4965]/60 mb-6"
+          initial={{ opacity: 0, y: reduce ? 0 : 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 * base, ease: EASE_OUT_EXPO, delay: 0.4 * base }}
+        >
+          atemporal por natureza
+        </motion.p>
+
         <motion.h1
           className="font-[family-name:var(--font-serif)] text-4xl md:text-7xl font-medium leading-tight mb-6 text-[#1B4965]"
           initial={{ opacity: 0, y: reduce ? 0 : 20 }}

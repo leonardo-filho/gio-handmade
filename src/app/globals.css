@@ -21,6 +21,8 @@
   --color-brand-ink: var(--brand-ink);
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-script: var(--font-script);
 }
 
 body {
