@@ -33,6 +33,7 @@ export function Reveal({
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: reduce ? 0 : y }}
       transition={{ duration: reduce ? 0 : duration, delay, ease: EASE_OUT_EXPO }}
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>
@@ -75,6 +76,7 @@ export function StaggerGroup({ children, className, once = true }: StaggerProps)
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>
@@ -83,7 +85,7 @@ export function StaggerGroup({ children, className, once = true }: StaggerProps)
 
 export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={staggerItem} className={className}>
+    <motion.div variants={staggerItem} className={className} suppressHydrationWarning>
       {children}
     </motion.div>
   );

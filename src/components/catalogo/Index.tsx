@@ -2,6 +2,7 @@
 
 import { Reveal } from "../Reveal";
 import CatalogFrame from "./CatalogFrame";
+import { Sparkle } from "./BrandMark";
 
 const entries = [
   { n: "01", label: "A Marca", anchor: "marca" },
@@ -25,8 +26,9 @@ export default function IndexSection() {
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-[#130209] text-[clamp(4rem,12vw,11rem)]">
+            <h2 className="font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-[#130209] text-[clamp(4rem,12vw,11rem)] flex items-start gap-3">
               ÍNDICE
+              <Sparkle className="text-[#1B4965] mt-2 md:mt-4" size={28} />
             </h2>
           </Reveal>
           <Reveal delay={0.15}>

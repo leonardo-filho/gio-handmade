@@ -2,6 +2,7 @@
 
 import { Reveal } from "../Reveal";
 import CatalogFrame from "./CatalogFrame";
+import { Sparkle } from "./BrandMark";
 
 const steps = [
   {
@@ -43,7 +44,7 @@ export default function Process() {
               </p>
             </Reveal>
             <Reveal delay={0.05}>
-              <h2 className="mt-6 font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-[#130209] text-[clamp(2.8rem,8vw,7rem)]">
+              <h2 className="mt-6 font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.04em] text-[#130209] text-[clamp(2.6rem,5.2vw,4.8rem)]">
                 COMO
                 <br />
                 ENCOMENDAR
@@ -91,8 +92,9 @@ export default function Process() {
             </ul>
 
             <Reveal delay={0.5}>
-              <p className="mt-12 pl-[80px] font-[family-name:var(--font-serif)] italic text-[#130209]/55 text-sm border-l border-[#130209]/20 pl-6 ml-1">
-                Cada peça leva sua numeração de série e é feita pensando só em você.
+              <p className="mt-12 ml-[80px] font-[family-name:var(--font-serif)] italic text-[#130209]/55 text-sm border-l border-[#130209]/20 pl-6 flex items-start gap-3">
+                <Sparkle className="text-[#1B4965] mt-1 shrink-0" size={14} />
+                <span>Cada peça leva sua numeração de série e é feita pensando só em você.</span>
               </p>
             </Reveal>
           </div>

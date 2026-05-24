@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/*
+ * Androgy — fonte oficial da logo Gio Handmade.
+ * Ela NÃO contém glifos com acentos (ABNT2). Restrito a Basic Latin
+ * para que ã, á, é, í, ó, ú, ç, etc. caiam automaticamente no fallback EB Garamond.
+ */
+@font-face {
+  font-family: "Androgy";
+  src: url("/brand/fonts/androgy.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0020-007F;
+}
+
 :root {
   /* Paleta oficial Gio Handmade */
   --brand-navy: #1B4965;
@@ -10,6 +24,9 @@
   /* Aliases semânticos */
   --background: var(--brand-cream);
   --foreground: var(--brand-ink);
+
+  /* Stack da fonte oficial — acentos saem em EB Garamond automaticamente */
+  --font-brand: "Androgy", var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 @theme inline {
@@ -23,10 +40,40 @@
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-script: var(--font-script);
+  --font-brand: var(--font-brand);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Âncoras das seções do catálogo não ficam atrás do nav fixo */
+section[id] {
+  scroll-margin-top: 72px;
+}
+
+@media (min-width: 768px) {
+  section[id] {
+    scroll-margin-top: 88px;
+  }
+}
+
+/* Tipografia editorial: ligaduras e numerais antigos no EB Garamond */
+.font-serif-editorial,
+.font-\[family-name\:var\(--font-serif\)\] {
+  font-feature-settings: "liga" 1, "dlig" 1, "onum" 1, "kern" 1;
+}
+
+/* Utilitário para a fonte oficial da marca */
+.font-brand {
+  font-family: var(--font-brand);
+  font-feature-settings: "liga" 1, "kern" 1;
 }

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 type CatalogFrameProps = {
   children: ReactNode;
@@ -9,10 +10,34 @@ type CatalogFrameProps = {
 };
 
 const toneMap = {
-  cream: { bg: "bg-[#EDE7D9]", fg: "text-[#130209]", muted: "text-[#130209]/60", line: "border-[#130209]/25" },
-  ink: { bg: "bg-[#130209]", fg: "text-[#EDE7D9]", muted: "text-[#EDE7D9]/55", line: "border-[#EDE7D9]/20" },
-  navy: { bg: "bg-[#1B4965]", fg: "text-[#EDE7D9]", muted: "text-[#EDE7D9]/65", line: "border-[#EDE7D9]/25" },
-  mint: { bg: "bg-[#C8E1E4]", fg: "text-[#130209]", muted: "text-[#130209]/55", line: "border-[#130209]/20" },
+  cream: {
+    bg: "bg-[#EDE7D9]",
+    fg: "text-[#130209]",
+    muted: "text-[#130209]/60",
+    line: "border-[#130209]/25",
+    logo: "/brand/logo/gio-ink.png",
+  },
+  ink: {
+    bg: "bg-[#130209]",
+    fg: "text-[#EDE7D9]",
+    muted: "text-[#EDE7D9]/55",
+    line: "border-[#EDE7D9]/20",
+    logo: "/brand/logo/gio-cream.png",
+  },
+  navy: {
+    bg: "bg-[#1B4965]",
+    fg: "text-[#EDE7D9]",
+    muted: "text-[#EDE7D9]/65",
+    line: "border-[#EDE7D9]/25",
+    logo: "/brand/logo/gio-mint.png",
+  },
+  mint: {
+    bg: "bg-[#C8E1E4]",
+    fg: "text-[#130209]",
+    muted: "text-[#130209]/55",
+    line: "border-[#130209]/20",
+    logo: "/brand/logo/gio-ink.png",
+  },
 };
 
 export default function CatalogFrame({ children, page, tone = "cream", full = false, id }: CatalogFrameProps) {
@@ -26,7 +51,16 @@ export default function CatalogFrame({ children, page, tone = "cream", full = fa
       <header
         className={`flex items-center justify-between px-6 md:px-14 pt-6 md:pt-8 text-[10px] md:text-[11px] tracking-[0.28em] uppercase font-[family-name:var(--font-display)] ${t.muted}`}
       >
-        <span>GIO HANDMADE · CATÁLOGO 2026</span>
+        <span className="flex items-center gap-3">
+          <Image
+            src={t.logo}
+            alt="Gio Handmade"
+            width={80}
+            height={32}
+            className="h-5 md:h-6 w-auto opacity-90"
+          />
+          <span className="hidden sm:inline">· Catálogo 2026</span>
+        </span>
         <span>{page}</span>
       </header>
 

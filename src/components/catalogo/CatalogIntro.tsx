@@ -34,7 +34,7 @@ export default function CatalogIntro() {
             </p>
           </Reveal>
           <Reveal delay={0.05}>
-            <h2 className="mt-6 font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.045em] text-[#EDE7D9] text-[clamp(3.5rem,11vw,10rem)]">
+            <h2 className="mt-6 font-[family-name:var(--font-display)] font-black uppercase leading-[0.85] tracking-[-0.045em] text-[#EDE7D9] text-[clamp(3rem,8vw,7.5rem)]">
               CATÁLOGO
             </h2>
           </Reveal>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Reveal } from "../Reveal";
 import CatalogFrame from "./CatalogFrame";
+import { Sparkle } from "./BrandMark";
 
 export default function Brand() {
   return (
@@ -58,7 +59,7 @@ export default function Brand() {
 
           <Reveal delay={0.26}>
             <div className="mt-10 inline-flex items-center gap-4 px-5 py-3 border border-[#130209]/30 rounded-full">
-              <span className="block w-2 h-2 rounded-full bg-[#1B4965]" />
+              <Sparkle className="text-[#1B4965]" size={14} />
               <span className="text-[10px] tracking-[0.4em] uppercase font-[family-name:var(--font-display)] text-[#130209]/70">
                 Feito à mão · Sentido na pele
               </span>
