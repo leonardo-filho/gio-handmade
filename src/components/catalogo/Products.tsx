@@ -8,7 +8,6 @@ type Product = {
   code: string;
   category: string;
   name: string;
-  description: string;
   materials: string;
   production: string;
   price: string;
@@ -21,12 +20,10 @@ const products: Product[] = [
   {
     code: "01",
     category: "TOP",
-    name: "Top Beaded",
-    description:
-      "Top em camadas de missangas e pedrarias que descem do busto até a cintura formando uma cortina brilhante. Decote em V e amarração no pescoço. Combina com saia preta básica, jeans ou calça de alfaiataria pra quebrar o brilho.",
-    materials: "Missangas, contas e pedrarias aplicadas à mão",
-    production: "10 a 15 dias úteis",
-    price: "R$ 550",
+    name: "Beaded Top",
+    materials: "Miçangas e cristais",
+    production: "7 a 15 dias úteis",
+    price: "R$ 600",
     custom: "Personalizável em cor, tamanho e tipo de pedraria.",
     image: "/tops.png",
   },
@@ -34,20 +31,16 @@ const products: Product[] = [
     code: "02",
     category: "CONJUNTO",
     name: "Conjunto Cristais",
-    description:
-      "Top e saia totalmente cobertos de cristais e correntes prateadas, com gotas que se movem ao caminhar. A peça mais elaborada da coleção — pensada para noite, festa e ocasião grande. Brilha sem precisar de holofote.",
-    materials: "Cristais facetados, correntes prateadas, pedrarias",
-    production: "25 a 30 dias úteis",
-    price: "R$ 1.000",
-    custom: "Personalizável em cor, tamanho e densidade da pedraria.",
+    materials: "Pedrarias e correntes",
+    production: "15 a 20 dias úteis",
+    price: "R$ 1.100",
+    custom: "Personalizável em cor da pedraria e da corrente.",
     image: "/conjuntos.png",
   },
   {
     code: "03",
-    category: "SAIA",
-    name: "Saia Conchas",
-    description:
-      "Saia curta em cristais e conchas naturais, com franjas longas que dançam com o corpo. Acompanha choker e detalhes no busto que fecham o look. Tem cara de praia, mas funciona em qualquer festa que pede algo diferente.",
+    category: "ACESSÓRIO",
+    name: "Acessório Conchas Naturais",
     materials: "Cristais, conchas naturais, correntes",
     production: "15 a 20 dias úteis",
     price: "R$ 600",
@@ -58,8 +51,6 @@ const products: Product[] = [
     code: "04",
     category: "TOP",
     name: "Top Cristais",
-    description:
-      "Top em correntes prateadas com pedrarias pretas e cristais em fileiras horizontais. Decote em V profundo, costas livres e ponta na cintura. Combina fácil com saia ou calça preta pra um look mais editorial.",
     materials: "Correntes prateadas, cristais facetados, pedrarias pretas",
     production: "10 a 15 dias úteis",
     price: "R$ 500",
@@ -70,35 +61,29 @@ const products: Product[] = [
     code: "05",
     category: "CONJUNTO",
     name: "Conjunto Pedrarias",
-    description:
-      "Conjunto de top e saia em correntes prateadas com pedrarias pretas e cristais formando padrão geométrico. A saia termina em desenho escamado que dá movimento ao caminhar. Peça de muito brilho — perfeita para festas, festivais e ensaios.",
     materials: "Correntes prateadas, pedrarias pretas, cristais",
-    production: "7 dias úteis",
+    production: "15 a 20 dias úteis",
     price: "R$ 1.300",
-    custom: "Personalizável em cor da pedraria, tamanho e densidade da malha.",
+    custom: "Personalizável em cor da pedraria e da corrente.",
     image: "/conjunto-pronta.png",
   },
   {
     code: "06",
     category: "VESTIDO",
     name: "Vestido Cristais",
-    description:
-      "Vestido inteiro em correntes e cristais facetados, em tons de verde, vinho e preto. As fileiras descem em curvas pelo corpo, criando um drapeado natural que veste bem qualquer formato. Pensado pra ocasiões em que a peça é o look todo.",
     materials: "Cristais facetados, correntes prateadas",
-    production: "25 a 30 dias úteis",
+    production: "20 a 25 dias úteis",
     price: "R$ 1.000",
-    custom: "Personalizável em cor, comprimento e densidade da pedraria.",
+    custom: "Personalizável em cor, comprimento e tipo de pedraria.",
     image: "/vestido.png",
   },
   {
     code: "07",
     category: "ACESSÓRIO",
     name: "Headpiece",
-    description:
-      "Tiara delicada em correntes finas, pedrarias pretas e cristais que caem na testa. Combina com qualquer peça da coleção e transforma um look básico em algo memorável. Ótima como primeira Gio Handmade.",
     materials: "Correntes finas, cristais, pedrarias",
     production: "5 a 7 dias úteis",
-    price: "R$ 150",
+    price: "R$ 170",
     custom: "Personalizável em cor, formato e tipo de aplicação.",
     image: "/headpiece.png",
   },
@@ -153,12 +138,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               <h3 className="mt-3 font-[family-name:var(--font-display)] font-black uppercase leading-[0.86] tracking-[-0.035em] text-[#130209] text-[clamp(2.4rem,5vw,4.4rem)]">
                 {product.name}
               </h3>
-            </Reveal>
-
-            <Reveal delay={0.12}>
-              <p className="mt-6 font-[family-name:var(--font-serif)] text-[#130209]/80 text-[15px] leading-relaxed">
-                {product.description}
-              </p>
             </Reveal>
 
             <Reveal delay={0.18}>

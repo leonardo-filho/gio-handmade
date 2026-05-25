@@ -7,34 +7,34 @@ import { Sparkle } from "./BrandMark";
 const steps = [
   {
     n: "01",
-    title: "Escolha o modelo",
-    text: "Selecione uma peça-base deste catálogo ou converse comigo sobre uma criação exclusiva.",
+    title: "Defina seu modelo",
+    text: "Nos envie a peça que você deseja, pode ser uma inspiração que você já tenha encontrado ou algo que você imaginou.",
   },
   {
     n: "02",
-    title: "Personalize",
-    text: "Cor, tamanho, tipo de pedraria e detalhes são definidos junto com você.",
+    title: "Defina a cor ideal",
+    text: "Escolha a cor que mais combina com o seu estilo e com o resultado que você quer alcançar.",
   },
   {
     n: "03",
-    title: "Sinal de 50%",
-    text: "Reserva sua vaga e dá início à produção.",
+    title: "Confirme sua encomenda",
+    text: "Faça o pagamento de 50% do valor total para reservar sua peça (no cartão de crédito é debitado o valor completo).",
   },
   {
     n: "04",
-    title: "Confecção · 7 a 30 dias úteis",
-    text: "Sua peça começa a nascer. O prazo varia com a complexidade — peças menores ficam prontas mais rápido.",
+    title: "Envie suas medidas",
+    text: "Após a confirmação da peça você receberá um vídeo ensinando a tirar as medidas necessárias, irei ajudar fornecendo orientações.",
   },
   {
     n: "05",
-    title: "Saldo + entrega",
-    text: "Restante pago em até 72h antes do envio. Peça numerada e única.",
+    title: "Aguarde a retirada",
+    text: "Definiremos uma data para você retirar sua encomenda feita com muito carinho!",
   },
 ];
 
 export default function Process() {
   return (
-    <CatalogFrame page="05 · COMO ENCOMENDAR" tone="cream" full id="processo">
+    <CatalogFrame page="03 · COMO ENCOMENDAR" tone="cream" full id="processo">
       <div className="max-w-7xl mx-auto w-full">
         <div className="grid md:grid-cols-12 gap-12 items-start">
           <div className="md:col-span-5 md:sticky md:top-24">
@@ -52,7 +52,7 @@ export default function Process() {
             </Reveal>
             <Reveal delay={0.12}>
               <p className="mt-8 font-[family-name:var(--font-serif)] italic text-[#130209]/70 text-lg max-w-md leading-relaxed">
-                Do primeiro contato à peça nas suas mãos — cinco passos pensados para o luxo do feito sob medida.
+                Do primeiro contato à peça nas suas mãos.
               </p>
             </Reveal>
             <Reveal delay={0.2}>

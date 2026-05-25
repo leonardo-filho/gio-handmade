@@ -5,19 +5,17 @@ import CatalogFrame from "./CatalogFrame";
 import { Sparkle } from "./BrandMark";
 
 const entries = [
-  { n: "01", label: "A Marca", anchor: "marca" },
-  { n: "02", label: "Manifesto", anchor: "manifesto" },
-  { n: "03", label: "Como Encomendar", anchor: "processo" },
-  { n: "04", label: "Catálogo · Modelos-base", anchor: "produtos" },
-  { n: "05", label: "Em Breve · Copa 2026", anchor: "em-breve" },
-  { n: "06", label: "Faixas de Preço", anchor: "precos" },
-  { n: "07", label: "Cuidados", anchor: "cuidados" },
-  { n: "08", label: "Contato", anchor: "contato" },
+  { n: "01", label: "Manifesto", anchor: "manifesto" },
+  { n: "02", label: "Como Encomendar", anchor: "processo" },
+  { n: "03", label: "Catálogo · Modelos-base", anchor: "produtos" },
+  { n: "04", label: "Faixas de Preço", anchor: "precos" },
+  { n: "05", label: "Cuidados", anchor: "cuidados" },
+  { n: "06", label: "Contato", anchor: "contato" },
 ];
 
 export default function IndexSection() {
   return (
-    <CatalogFrame page="02 · ÍNDICE" tone="cream" full>
+    <CatalogFrame page="01 · ÍNDICE" tone="cream" full>
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-12 gap-12 items-center">
         <div className="md:col-span-5">
           <Reveal>
@@ -33,7 +31,7 @@ export default function IndexSection() {
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mt-8 font-[family-name:var(--font-serif)] italic text-[#130209]/65 max-w-md text-lg leading-snug">
-              Um percurso pela coleção — da intenção por trás de cada peça aos cuidados que prolongam a sua vida.
+              Um percurso pela coleção, da intenção por trás de cada peça aos cuidados que prolongam a sua vida.
             </p>
           </Reveal>
         </div>

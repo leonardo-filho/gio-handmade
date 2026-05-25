@@ -6,7 +6,7 @@ import CatalogFrame from "./CatalogFrame";
 
 export default function CatalogIntro() {
   return (
-    <CatalogFrame page="06 · MODELOS-BASE" tone="ink" full>
+    <CatalogFrame page="04 · MODELOS-BASE" tone="ink" full>
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-12 gap-12 items-center">
         <div className="md:col-span-6 relative">
           <Reveal>
@@ -40,7 +40,7 @@ export default function CatalogIntro() {
           </Reveal>
           <Reveal delay={0.12}>
             <p className="mt-8 font-[family-name:var(--font-serif)] italic text-[#EDE7D9]/75 text-xl md:text-2xl leading-snug max-w-md">
-              Use como ponto de partida. Cor, comprimento, densidade da pedraria — tudo desenhado a quatro mãos com você.
+              Use como ponto de partida: cor, comprimento, tipos da pedraria. Tudo desenhado a quatro mãos com você.
             </p>
           </Reveal>
 

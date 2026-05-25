@@ -39,7 +39,7 @@ export default function CatalogNav() {
           />
         </Link>
         <div className="hidden md:flex items-center gap-7 text-[10px] tracking-[0.3em] uppercase font-[family-name:var(--font-display)] text-[#130209]/65">
-          <a href="#marca" className="hover:text-[#130209] transition-colors">A Marca</a>
+          <a href="#manifesto" className="hover:text-[#130209] transition-colors">Manifesto</a>
           <a href="#processo" className="hover:text-[#130209] transition-colors">Processo</a>
           <a href="#produtos" className="hover:text-[#130209] transition-colors">Modelos</a>
           <a href="#precos" className="hover:text-[#130209] transition-colors">Preços</a>

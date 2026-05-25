@@ -43,7 +43,7 @@ const care = [
 
 export default function Care() {
   return (
-    <CatalogFrame page="09 · CUIDADOS" tone="mint" full id="cuidados">
+    <CatalogFrame page="06 · CUIDADOS" tone="mint" full id="cuidados">
       <div className="max-w-7xl mx-auto w-full">
         <div className="grid md:grid-cols-12 gap-12 items-end mb-14">
           <div className="md:col-span-7">
@@ -97,7 +97,7 @@ export default function Care() {
                 <span className="block w-10 h-px bg-[#C8E1E4]/40" />
               </div>
               <p className="font-[family-name:var(--font-serif)] italic text-[#EDE7D9] text-xl md:text-3xl leading-snug max-w-xl">
-                Cuide como se a peça já fosse herança — tratada com carinho, ela atravessa muitos eventos com você.
+                Cuide da sua peça como ela é, especial.
               </p>
               <span className="text-[10px] tracking-[0.4em] uppercase font-[family-name:var(--font-display)] text-[#C8E1E4]/70">
                 Gio · Catálogo 2026

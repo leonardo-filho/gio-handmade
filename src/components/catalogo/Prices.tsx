@@ -5,19 +5,18 @@ import CatalogFrame from "./CatalogFrame";
 import { Sparkle } from "./BrandMark";
 
 const rows = [
-  { code: "07", name: "Headpiece", price: "R$ 150" },
+  { code: "07", name: "Headpiece", price: "R$ 170" },
   { code: "04", name: "Top Cristais", price: "R$ 500" },
-  { code: "01", name: "Top Beaded", price: "R$ 550" },
-  { code: "03", name: "Saia Conchas", price: "R$ 600" },
-  { code: "02", name: "Conjunto Cristais", price: "R$ 1.000" },
+  { code: "01", name: "Beaded Top", price: "R$ 600" },
+  { code: "03", name: "Acessório Conchas Naturais", price: "R$ 600" },
   { code: "06", name: "Vestido Cristais", price: "R$ 1.000" },
+  { code: "02", name: "Conjunto Cristais", price: "R$ 1.100" },
   { code: "05", name: "Conjunto Pedrarias", price: "R$ 1.300" },
-  { code: "—", name: "Coleção Copa 2026", price: "Em breve" },
 ];
 
 export default function Prices() {
   return (
-    <CatalogFrame page="08 · INVESTIMENTO" tone="cream" full id="precos">
+    <CatalogFrame page="05 · INVESTIMENTO" tone="cream" full id="precos">
       <div className="max-w-6xl mx-auto w-full">
         <div className="grid md:grid-cols-12 gap-10 items-end mb-12">
           <div className="md:col-span-7">
@@ -39,7 +38,7 @@ export default function Prices() {
           <div className="md:col-span-5">
             <Reveal delay={0.12}>
               <p className="font-[family-name:var(--font-serif)] italic text-[#130209]/70 text-lg leading-relaxed max-w-md">
-                Valores iniciais. Personalização e pedrarias premium podem alterar o preço final — combinamos tudo junto antes da produção.
+                Valores iniciais. Personalização e pedrarias premium podem alterar o preço final. Combinamos tudo junto antes da produção.
               </p>
             </Reveal>
           </div>
@@ -70,17 +69,26 @@ export default function Prices() {
           <div className="mt-10 grid sm:grid-cols-3 gap-6 text-[11px] tracking-[0.28em] uppercase font-[family-name:var(--font-display)] text-[#130209]/70">
             <div className="border-t border-[#130209]/30 pt-4">
               <span className="block text-[10px] text-[#130209]/55">Sinal</span>
-              <span className="mt-1 block text-[#130209] text-xl normal-case tracking-tight font-bold">50% no aceite</span>
+              <span className="mt-1 block text-[#130209] text-lg md:text-xl normal-case tracking-tight font-bold leading-snug">50% no aceite</span>
             </div>
             <div className="border-t border-[#130209]/30 pt-4">
-              <span className="block text-[10px] text-[#130209]/55">Saldo</span>
-              <span className="mt-1 block text-[#130209] text-xl normal-case tracking-tight font-bold">72h antes do envio</span>
+              <span className="block text-[10px] text-[#130209]/55">Saldo restante</span>
+              <span className="mt-1 block text-[#130209] text-lg md:text-xl normal-case tracking-tight font-bold leading-snug">Até 72h após a data combinada para entrega da peça</span>
             </div>
             <div className="border-t border-[#130209]/30 pt-4">
               <span className="block text-[10px] text-[#130209]/55">Envio</span>
-              <span className="mt-1 block text-[#130209] text-xl normal-case tracking-tight font-bold">Brasil inteiro</span>
+              <span className="mt-1 block text-[#130209] text-lg md:text-xl normal-case tracking-tight font-bold leading-snug">Toda a América</span>
             </div>
           </div>
+        </Reveal>
+
+        <Reveal delay={0.18}>
+          <p className="mt-8 flex items-start gap-3 font-[family-name:var(--font-serif)] italic text-[#130209]/75 text-[15px] md:text-base leading-relaxed max-w-3xl border-l border-[#1B4965]/30 pl-5">
+            <Sparkle className="text-[#1B4965] mt-1.5 shrink-0" size={14} />
+            <span>
+              Caso precise antes do prazo estipulado, entre em contato informando a data do evento. Em muitos casos conseguimos antecipar a produção.
+            </span>
+          </p>
         </Reveal>
 
         <Reveal delay={0.22}>

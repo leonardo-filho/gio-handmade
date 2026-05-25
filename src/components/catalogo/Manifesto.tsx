@@ -15,7 +15,7 @@ const slogans = [
 
 export default function Manifesto() {
   return (
-    <CatalogFrame page="04 · MANIFESTO" tone="ink" full id="manifesto">
+    <CatalogFrame page="02 · MANIFESTO" tone="ink" full id="manifesto">
       <div className="max-w-7xl mx-auto w-full">
         <div className="mb-16">
           <Reveal>
@@ -30,7 +30,7 @@ export default function Manifesto() {
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-8 font-[family-name:var(--font-serif)] italic text-[#EDE7D9]/75 text-xl md:text-2xl leading-snug max-w-2xl border-l-2 border-[#C8E1E4]/40 pl-5">
-              Seis frases que dizem o que não cabe explicar a cada peça — a régua de tudo que sai do meu ateliê.
+              Seis frases que dizem o que não cabe explicar a cada peça. A régua de tudo que sai do meu ateliê.
             </p>
           </Reveal>
         </div>
