@@ -14,6 +14,7 @@ export default function AboutSection() {
                             src="/eu.jpeg"
                             alt="Giovanna Alves, artesã da Gio Handmade"
                             fill
+                            sizes="(min-width: 768px) 512px, 100vw"
                             className="object-cover"
                         />
                     </div>

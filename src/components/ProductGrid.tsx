@@ -39,6 +39,7 @@ export default function ProductGrid() {
                 src={image.src}
                 alt={image.alt}
                 fill
+                sizes="(min-width: 768px) 299px, 33vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-[#1B4965]/0 group-hover:bg-[#1B4965]/20 transition-colors duration-500" />

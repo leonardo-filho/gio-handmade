@@ -17,8 +17,27 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Trava o scroll do fundo e permite fechar com Esc quando o menu mobile está aberto
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
-    { name: "Início", href: "#" },
+    { name: "Início", href: "#inicio" },
+    { name: "Brilho Tropical", href: "#brilho-tropical" },
     { name: "Categorias", href: "#categorias" },
     { name: "Processo", href: "#processo" },
     { name: "Coleção", href: "#colecao" },
@@ -49,19 +68,19 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-8 items-center">
+        <nav className="hidden lg:flex gap-6 xl:gap-8 items-center">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className="text-xs uppercase tracking-[0.2em] text-[#1B4965]/80 hover:text-[#1B4965] transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-[#1B4965]/80 hover:text-[#1B4965] transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/40 focus-visible:ring-offset-4 focus-visible:ring-offset-[#EDE7D9]"
             >
               {link.name}
             </Link>
           ))}
           <Link
             href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
-            className="text-xs uppercase tracking-[0.2em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-2 hover:bg-[#130209] transition-colors"
+            className="text-xs uppercase tracking-[0.2em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-2 hover:bg-[#130209] transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
           >
             Contato
           </Link>
@@ -69,8 +88,10 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          aria-label="Abrir menu"
-          className="md:hidden text-[#1B4965] focus:outline-none"
+          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
+          className="lg:hidden -mr-2 p-2.5 text-[#1B4965] rounded-md transition-colors hover:bg-[#1B4965]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/50"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           <svg
@@ -99,27 +120,41 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-[#EDE7D9]/98 backdrop-blur-md shadow-md py-6 px-6 flex flex-col gap-5 md:hidden border-t border-[#1B4965]/10">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm uppercase tracking-[0.25em] text-[#1B4965]/80 hover:text-[#1B4965]"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <Link
-            href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
+        <>
+          {/* Scrim — toque fora fecha o menu */}
+          <button
+            type="button"
+            aria-label="Fechar menu"
+            tabIndex={-1}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm uppercase tracking-[0.25em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-3 text-center"
+            className="absolute inset-x-0 top-full h-screen w-full cursor-default bg-[#130209]/20 lg:hidden"
+          />
+          <nav
+            id="mobile-menu"
+            aria-label="Menu principal"
+            className="absolute top-full left-0 w-full bg-[#EDE7D9]/98 backdrop-blur-md shadow-md py-4 px-6 flex flex-col lg:hidden border-t border-[#1B4965]/10"
           >
-            Contato
-          </Link>
-        </div>
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-3 text-sm uppercase tracking-[0.25em] text-[#1B4965]/80 hover:text-[#1B4965] rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link
+              href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="mt-3 text-sm uppercase tracking-[0.25em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-3.5 text-center rounded-md hover:bg-[#130209] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
+            >
+              Contato
+            </Link>
+          </nav>
+        </>
       )}
     </header>
   );

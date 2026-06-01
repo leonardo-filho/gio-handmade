@@ -23,8 +23,31 @@ export default function SmoothScroll() {
     }
     rafId = requestAnimationFrame(raf);
 
+    // Links âncora (#secao) precisam rolar via Lenis, senão o scroll nativo
+    // conflita com o smooth-scroll e às vezes não chega na seção.
+    function handleAnchorClick(e: MouseEvent) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey) return;
+      const target = e.target as HTMLElement | null;
+      const link = target?.closest('a[href*="#"]') as HTMLAnchorElement | null;
+      if (!link) return;
+
+      const url = new URL(link.href, window.location.href);
+      // só trata âncoras da própria página
+      if (url.pathname !== window.location.pathname || !url.hash) return;
+
+      const el = document.querySelector(url.hash);
+      if (!el) return;
+
+      e.preventDefault();
+      lenis.scrollTo(el as HTMLElement, { offset: -88, duration: 1.2 });
+      window.history.pushState(null, "", url.hash);
+    }
+
+    document.addEventListener("click", handleAnchorClick);
+
     return () => {
       cancelAnimationFrame(rafId);
+      document.removeEventListener("click", handleAnchorClick);
       lenis.destroy();
     };
   }, []);

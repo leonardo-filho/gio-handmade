@@ -1,12 +1,13 @@
 import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BrilhoTropical from "@/components/BrilhoTropical";
 import CollectionHighlights from "@/components/CollectionHighlights";
-import ProntaEntrega from "@/components/ProntaEntrega";
 import ProcessSection from "@/components/ProcessSection";
 import ProductGrid from "@/components/ProductGrid";
 import AboutSection from "@/components/AboutSection";
 import SmoothScroll from "@/components/SmoothScroll";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -14,12 +15,13 @@ export default function Home() {
       <SmoothScroll />
       <Header />
       <Hero />
+      <BrilhoTropical />
       <CollectionHighlights />
-      <ProntaEntrega />
       <ProcessSection />
       <ProductGrid />
       <AboutSection />
       <Footer />
+      <WhatsAppButton />
     </main>
   );
 }

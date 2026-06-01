@@ -68,6 +68,7 @@ export default function CollectionHighlights() {
                       src={item.src}
                       alt={item.title}
                       fill
+                      sizes="(min-width: 768px) 200px, 50vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   ) : (
