@@ -25,8 +25,8 @@
   --background: var(--brand-cream);
   --foreground: var(--brand-ink);
 
-  /* Stack da fonte oficial — acentos saem em EB Garamond automaticamente */
-  --font-brand: "Androgy", var(--font-serif), Georgia, "Times New Roman", serif;
+  /* Stack da fonte oficial — Androgy cobre Basic Latin; acentos caem no serif */
+  --font-brand: "Androgy", "EB Garamond", Georgia, "Times New Roman", serif;
 }
 
 @theme inline {
@@ -40,7 +40,6 @@
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-script: var(--font-script);
-  --font-brand: var(--font-brand);
 }
 
 html {

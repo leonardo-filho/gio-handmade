@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cronograma Brilho Tropical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#EDE7D9;
+    --cream-deep:#e3dcc9;
+    --navy:#1B4965;
+    --green:#2f7a45;
+    --gold:#b8902a;
+    --blue:#1d3f87;
+    --ink:#15303f;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  @page{ size:A4; margin:0; }
+  html,body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{
+    font-family:'Jost',sans-serif;
+    color:var(--navy);
+    background:var(--cream);
+    font-weight:300;
+    line-height:1.5;
+  }
+  .page{
+    width:210mm;
+    height:297mm;
+    padding:18mm 16mm 16mm;
+    position:relative;
+    overflow:hidden;
+    page-break-after:always;
+  }
+  .page:last-child{ page-break-after:auto; }
+
+  /* bandeirinha marca d'agua */
+  .flag-bg{
+    position:absolute; inset:0; opacity:.05; z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='46' viewBox='0 0 64 46'%3E%3Crect width='64' height='46' rx='3' fill='%232f7a45'/%3E%3Cpolygon points='32,6 58,23 32,40 6,23' fill='%23e8cf4d'/%3E%3Ccircle cx='32' cy='23' r='9' fill='%231d3f87'/%3E%3C/svg%3E");
+    background-size:78px auto;
+    transform:rotate(-12deg) scale(1.4);
+    transform-origin:center;
+  }
+  .content{ position:relative; z-index:1; }
+
+  /* ---------- CAPA ---------- */
+  .cover{
+    display:flex; flex-direction:column; justify-content:center;
+    text-align:center; height:100%;
+  }
+  .cover .kicker{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:20pt; color:rgba(27,73,101,.65);
+  }
+  .cover h1{
+    font-family:'Cormorant Garamond',serif; font-weight:600;
+    text-transform:uppercase; letter-spacing:.04em;
+    line-height:.92; color:var(--navy);
+    font-size:72pt; margin:6pt 0 0;
+  }
+  .cover .slogan{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:17pt; color:rgba(27,73,101,.75);
+    max-width:330pt; margin:18pt auto 0; line-height:1.3;
+  }
+  .rule{
+    width:54pt; height:2px; background:var(--green);
+    margin:26pt auto;
+  }
+  .cover .meta{
+    font-size:9.5pt; letter-spacing:.32em; text-transform:uppercase;
+    color:rgba(27,73,101,.55); font-weight:400;
+  }
+  .save{
+    margin-top:34pt;
+  }
+  .save .lbl{
+    font-family:'Cormorant Garamond',serif;
+    font-size:10pt; letter-spacing:.4em; text-transform:uppercase;
+    color:rgba(27,73,101,.8);
+  }
+  .save .date{
+    font-family:'Cormorant Garamond',serif; font-weight:500;
+    font-size:40pt; letter-spacing:.08em; color:var(--navy); margin-top:4pt;
+  }
+  .cover .footer-cover{
+    position:absolute; bottom:18mm; left:0; right:0;
+    text-align:center; font-size:8.5pt; letter-spacing:.3em;
+    text-transform:uppercase; color:rgba(27,73,101,.5);
+  }
+
+  /* ---------- HEADERS internos ---------- */
+  .page-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1.5px solid rgba(27,73,101,.25);
+    padding-bottom:10pt; margin-bottom:20pt;
+  }
+  .page-head h2{
+    font-family:'Cormorant Garamond',serif; font-weight:600;
+    font-size:26pt; text-transform:uppercase; letter-spacing:.03em;
+    color:var(--navy);
+  }
+  .page-head .tag{
+    font-size:8pt; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--green); font-weight:500;
+  }
+
+  .intro{
+    font-size:10.5pt; color:rgba(27,73,101,.85); font-weight:300;
+    margin-bottom:18pt; max-width:480pt; line-height:1.55;
+  }
+  .intro b{ font-weight:600; color:var(--navy); }
+
+  /* logica da semana */
+  .logic{
+    background:var(--cream-deep);
+    border-left:3px solid var(--gold);
+    padding:12pt 16pt; margin-bottom:20pt; border-radius:2px;
+  }
+  .logic p{ font-size:9.5pt; margin:3pt 0; color:rgba(27,73,101,.85); }
+  .logic b{ color:var(--navy); font-weight:600; }
+
+  /* ---------- CARD do dia ---------- */
+  .day{
+    display:flex; gap:14pt;
+    border:1px solid rgba(27,73,101,.16);
+    border-radius:4px; background:rgba(255,255,255,.35);
+    padding:13pt 15pt; margin-bottom:11pt;
+    page-break-inside:avoid;
+  }
+  .day .date-col{
+    flex:0 0 58pt; text-align:center;
+    border-right:1px solid rgba(27,73,101,.15);
+    padding-right:12pt;
+  }
+  .day .dow{
+    font-size:7.5pt; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--green); font-weight:600;
+  }
+  .day .dnum{
+    font-family:'Cormorant Garamond',serif; font-weight:600;
+    font-size:30pt; line-height:1; color:var(--navy); margin-top:2pt;
+  }
+  .day .dmon{
+    font-size:7.5pt; letter-spacing:.2em; text-transform:uppercase;
+    color:rgba(27,73,101,.5);
+  }
+  .day .body{ flex:1; }
+  .day .title{
+    font-family:'Jost',sans-serif; font-weight:600; font-size:11.5pt;
+    color:var(--navy); margin-bottom:5pt; letter-spacing:.01em;
+  }
+  .day .title .dot{
+    display:inline-block; width:8pt; height:8pt; border-radius:50%;
+    margin-right:5pt; vertical-align:middle;
+  }
+  .day ul{ list-style:none; }
+  .day li{
+    font-size:9.2pt; color:rgba(27,73,101,.85); padding-left:14pt;
+    position:relative; margin-bottom:3pt; line-height:1.45;
+  }
+  .day li::before{
+    content:""; position:absolute; left:0; top:5pt;
+    width:4pt; height:4pt; border-radius:50%; background:var(--gold);
+  }
+  .day li b{ color:var(--navy); font-weight:600; }
+  .day .badge{
+    display:inline-block; font-size:7.5pt; font-weight:600;
+    letter-spacing:.12em; text-transform:uppercase;
+    padding:2pt 7pt; border-radius:99pt; margin-bottom:6pt;
+  }
+  .badge.foto{ background:var(--gold); color:#fff; }
+  .badge.reveal{ background:var(--green); color:#fff; }
+  .day.highlight{
+    border:1.5px solid var(--green);
+    background:rgba(47,122,69,.06);
+  }
+  .day.foto-day{
+    border:1.5px solid var(--gold);
+    background:rgba(184,144,42,.06);
+  }
+
+  /* ---------- listas finais ---------- */
+  .columns{ display:flex; gap:18pt; margin-top:6pt; }
+  .col{ flex:1; }
+  .box{
+    border:1px solid rgba(27,73,101,.18); border-radius:4px;
+    padding:14pt 16pt; background:rgba(255,255,255,.35);
+    page-break-inside:avoid; margin-bottom:14pt;
+  }
+  .box h3{
+    font-family:'Cormorant Garamond',serif; font-weight:600;
+    font-size:16pt; color:var(--navy); margin-bottom:10pt;
+    display:flex; align-items:center; gap:7pt;
+  }
+  .box.warn{ border-color:rgba(184,144,42,.5); background:rgba(184,144,42,.05); }
+  .box.warn h3{ color:var(--gold); }
+  .box ul{ list-style:none; }
+  .box li{
+    font-size:9.5pt; color:rgba(27,73,101,.85); margin-bottom:7pt;
+    padding-left:18pt; position:relative; line-height:1.45;
+  }
+  .check li::before{
+    content:""; position:absolute; left:0; top:1pt;
+    width:10pt; height:10pt; border:1.5px solid var(--green); border-radius:2px;
+  }
+  .warn li::before{
+    content:"✕"; position:absolute; left:1pt; top:-1pt;
+    color:var(--gold); font-weight:700; font-size:10pt;
+  }
+  .box li b{ color:var(--navy); font-weight:600; }
+
+  .closing{
+    text-align:center; margin-top:24pt; padding-top:18pt;
+    border-top:1.5px solid rgba(27,73,101,.2);
+  }
+  .closing .q{
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:18pt; color:var(--navy);
+  }
+  .closing .brand{
+    margin-top:10pt; font-size:9pt; letter-spacing:.3em;
+    text-transform:uppercase; color:rgba(27,73,101,.55);
+  }
+  .pg{
+    position:absolute; bottom:10mm; right:16mm; z-index:2;
+    font-size:8pt; letter-spacing:.2em; color:rgba(27,73,101,.45);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<section class="page">
+  <div class="flag-bg"></div>
+  <div class="content cover">
+    <p class="kicker">vem aí&hellip;</p>
+    <h1>Brilho<br>Tropical</h1>
+    <p class="slogan">&ldquo;uma coleção para quem nunca parou de sonhar com o hexa&rdquo;</p>
+    <div class="rule"></div>
+    <p class="meta">Cronograma de divulgação &middot; 01 a 08 de junho</p>
+
+    <div class="save">
+      <p class="lbl">Save the Date</p>
+      <p class="date">08 &middot; 06 &middot; 26</p>
+    </div>
+
+    <div class="footer-cover">
+      Gio Handmade &middot; @gio.handmade__ &middot; edição limitada &middot; feito à mão em Belém 🇧🇷
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 1 — visão geral + dias 01-04 ============ -->
+<section class="page">
+  <div class="flag-bg"></div>
+  <div class="content">
+    <div class="page-head">
+      <h2>A semana</h2>
+      <span class="tag">Estratégia &middot; 01 a 08 jun</span>
+    </div>
+
+    <p class="intro">
+      A coleção ainda está em produção e <b>as fotos só saem dia 06</b> — então a primeira
+      metade da semana cria desejo com <b>processo, bastidor e o rebranding</b> (cartões e
+      sacolas novos). As peças prontas aparecem só no fim, na curva certa.
+    </p>
+
+    <div class="logic">
+      <p>🟢 <b>01 a 05/06</b> — processo, bastidor e identidade nova. Desejo sem entregar o produto.</p>
+      <p>📸 <b>06/06</b> — dia das fotos vira bastidor do ensaio.</p>
+      <p>✨ <b>07/06</b> — primeiro sneak peek saído do ensaio.</p>
+      <p>🏆 <b>08/06</b> — reveal oficial + abertura da fila.</p>
+    </div>
+
+    <!-- DIA 01 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Segunda</div><div class="dnum">01</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#2f7a45"></span>Abre a conversa (sem spoiler)</div>
+        <ul>
+          <li><b>Story manhã:</b> enquete &ldquo;Quem vai torcer pro Brasil esse ano? 🇧🇷&rdquo; — aquece e lê o público.</li>
+          <li><b>Story noite (~19h):</b> mãos trabalhando, close de cristal verde/amarelo — &ldquo;tem coisa nova nascendo aqui no ateliê&hellip;&rdquo;</li>
+          <li><b>Objetivo:</b> reativar a base e sinalizar que algo vem. Sem data ainda.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 02 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Terça</div><div class="dnum">02</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#b8902a"></span>Moodboard &middot; conceito</div>
+        <ul>
+          <li><b>Feed carrossel (~19h):</b> 5–6 imagens de inspiração (verde-amarelo-azul, bordado, brasilidade). Último slide: &ldquo;Brilho Tropical · em breve&rdquo;.</li>
+          <li><b>Legenda:</b> fala do conceito — cores, cultura e identidade brasileira. Sem mostrar peça.</li>
+          <li><b>Objetivo:</b> plantar o nome da coleção e a estética.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 03 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Quarta</div><div class="dnum">03</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#1d3f87"></span>Rebranding (seu trunfo)</div>
+        <ul>
+          <li><b>Feed ou Reel (~19h):</b> os cartões e sacolas novos chegando — unboxing do próprio material. &ldquo;A Gio amadureceu. Cada peça agora sai assim.&rdquo;</li>
+          <li><b>Story:</b> detalhe do cartão, da etiqueta, da sacola.</li>
+          <li><b>Objetivo:</b> comunicar premium e nova fase sem precisar das peças. É o que sustenta o preço.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 04 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Quinta</div><div class="dnum">04</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#2f7a45"></span>Bastidor de produção</div>
+        <ul>
+          <li><b>Reel (~19h):</b> 15–20s, mãos costurando cristal verde + amarelo, <b>sem mostrar a peça inteira</b>. Música marcante.</li>
+          <li><b>Legenda:</b> &ldquo;limitada. sob encomenda. feita à mão em Belém. 🇧🇷&rdquo;</li>
+          <li><b>Objetivo:</b> prova de que é artesanal de verdade + começa a escassez.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div class="pg">Gio Handmade &middot; Brilho Tropical</div>
+</section>
+
+<!-- ============ PÁGINA 2 — dias 05-08 ============ -->
+<section class="page">
+  <div class="flag-bg"></div>
+  <div class="content">
+    <div class="page-head">
+      <h2>Reta final</h2>
+      <span class="tag">Do save the date ao reveal</span>
+    </div>
+
+    <!-- DIA 05 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Sexta</div><div class="dnum">05</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#b8902a"></span>Save the date + lista de espera</div>
+        <ul>
+          <li><b>Feed (~19h):</b> arte &ldquo;SAVE THE DATE · 08·06·26 · Brilho Tropical&rdquo;.</li>
+          <li><b>CTA:</b> &ldquo;Coleção limitada, sob encomenda. Fila abre segunda 08/06. Me chama no direct pra entrar na lista de espera.&rdquo;</li>
+          <li><b>Story:</b> contagem regressiva pra 08/06 + link pro WhatsApp.</li>
+          <li>🔑 <b>Ação manual:</b> WhatsApp 1-a-1 pras top 15–20 clientes <b>antes</b> de todo mundo. Converte muito mais que o post.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 06 -->
+    <div class="day foto-day">
+      <div class="date-col"><div class="dow">Sábado</div><div class="dnum">06</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <span class="badge foto">Dia das fotos</span>
+        <div class="title">Bastidor do ensaio</div>
+        <ul>
+          <li><b>Stories ao vivo:</b> making-of — set, peças penduradas, modelo, você ajustando. Movimento, <b>não a foto final</b>.</li>
+          <li><b>Story enquete:</b> &ldquo;Adivinha quantas peças tem na coleção? 👀&rdquo; (são 3).</li>
+          <li><b>Objetivo:</b> transformar o dia de trabalho em conteúdo e subir a expectativa.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 07 -->
+    <div class="day">
+      <div class="date-col"><div class="dow">Domingo</div><div class="dnum">07</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <div class="title"><span class="dot" style="background:#2f7a45"></span>Primeiro sneak peek</div>
+        <ul>
+          <li><b>Feed ou Reel (~19h):</b> <b>1 detalhe</b> da primeira foto pronta — um recorte, um close de bordado. Nunca a peça inteira.</li>
+          <li><b>Legenda:</b> &ldquo;amanhã, 10h. a fila abre. 🇧🇷✨&rdquo;</li>
+          <li><b>Story:</b> repostar + contagem &ldquo;falta 1 dia&rdquo;.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DIA 08 -->
+    <div class="day highlight">
+      <div class="date-col"><div class="dow">Segunda</div><div class="dnum">08</div><div class="dmon">Jun</div></div>
+      <div class="body">
+        <span class="badge reveal">Lançamento</span>
+        <div class="title">Reveal + abertura da fila</div>
+        <ul>
+          <li><b>10h00 — Feed carrossel (6–8 slides):</b> as 3 peças, fotos do ensaio. Slide final = CTA.</li>
+          <li><b>10h05 — Reel</b> cinematográfico com a trilha da semana.</li>
+          <li><b>10h10 — Stories:</b> &ldquo;Fila ABERTA. Edição limitada. DM com a peça que você quer — sinal de 50% confirma a vaga, por ordem de chegada.&rdquo;</li>
+          <li><b>Mecânica:</b> ter as 3 referências prontas pra mandar no WhatsApp na hora; prazo de entrega claro.</li>
+          <li>Responder <b>cada</b> comentário e DM na 1ª hora. Ao esgotar, <b>fechar a fila</b> publicamente no story.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div class="pg">Gio Handmade &middot; Brilho Tropical</div>
+</section>
+
+<!-- ============ PÁGINA 3 — preparar / não fazer ============ -->
+<section class="page">
+  <div class="flag-bg"></div>
+  <div class="content">
+    <div class="page-head">
+      <h2>Antes de começar</h2>
+      <span class="tag">Preparo &middot; cuidados</span>
+    </div>
+
+    <div class="box check">
+      <h3>✓ O que preparar com antecedência</h3>
+      <ul>
+        <li><b>Artes base no Canva</b> (moodboard, save the date, reveal) com a paleta nova — reservar 3–4h até quarta.</li>
+        <li><b>Trilha sonora única</b> do Reel de 04/06 ao reveal — cria identidade auditiva.</li>
+        <li><b>Lista das top 15–20 clientes</b> pro WhatsApp 1-a-1 na sexta.</li>
+        <li><b>3 referências/croquis</b> das peças prontos pra mandar no direct no dia 08.</li>
+        <li><b>Prazo de entrega fechado</b> antes de abrir a fila — não prometer &ldquo;antes do jogo&rdquo; sem cronograma.</li>
+      </ul>
+    </div>
+
+    <div class="box warn">
+      <h3>Não faça</h3>
+      <ul>
+        <li>Mostrar peça pronta antes de 07/06 — quebra a curva de desejo.</li>
+        <li>Impulsionar antes do dia 08 — a verba (R$ 250) é só pro post de abertura. Antes disso, orgânico.</li>
+        <li>Postar 5x/dia querendo bombar — 1 conteúdo forte + stories por dia.</li>
+      </ul>
+    </div>
+
+    <div class="closing">
+      <p class="q">&ldquo;marca nova, alma artesanal.&rdquo;</p>
+      <p class="brand">Gio Handmade &middot; @gio.handmade__ &middot; Belém — Pará</p>
+    </div>
+  </div>
+  <div class="pg">Gio Handmade &middot; Brilho Tropical</div>
+</section>
+
+</body>
+</html>

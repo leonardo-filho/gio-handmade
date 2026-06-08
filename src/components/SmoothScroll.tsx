@@ -39,7 +39,11 @@ export default function SmoothScroll() {
       if (!el) return;
 
       e.preventDefault();
-      lenis.scrollTo(el as HTMLElement, { offset: -88, duration: 1.2 });
+      // Offset dinâmico = altura real do header fixo + respiro, pra seção
+      // não encostar embaixo da barra (header muda de altura ao rolar).
+      const header = document.querySelector("header");
+      const headerH = header ? Math.round(header.getBoundingClientRect().height) : 80;
+      lenis.scrollTo(el as HTMLElement, { offset: -(headerH + 20), duration: 1.2 });
       window.history.pushState(null, "", url.hash);
     }
 
