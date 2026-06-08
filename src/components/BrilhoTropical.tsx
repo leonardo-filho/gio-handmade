@@ -18,7 +18,7 @@ const FLAG =
     "<svg xmlns='http://www.w3.org/2000/svg' width='64' height='46' viewBox='0 0 64 46'><rect width='64' height='46' rx='3' fill='#2f7a45'/><polygon points='32,6 58,23 32,40 6,23' fill='#e8cf4d'/><circle cx='32' cy='23' r='9' fill='#1d3f87'/></svg>"
   );
 
-type Foto = { src: string; alt: string };
+type Foto = { src: string; alt: string; objectPosition?: string };
 
 type Peca = {
   id: string;
@@ -48,7 +48,7 @@ const pecas: Peca[] = [
       "Ou até 12x com juros pelo Link de Pagamento",
     ],
     fotos: [
-      { src: "/colecao/top-hexa-frente.jpg", alt: "Top Hexa é Luxo — vista de frente" },
+      { src: "/colecao/top-hexa-frente-v4.jpg", alt: "Top Hexa é Luxo — vista de frente" },
       { src: "/colecao/top-hexa-bandeira.jpg", alt: "Top Hexa é Luxo — editorial com a bandeira do Brasil" },
       { src: "/colecao/top-hexa-costas.jpg", alt: "Top Hexa é Luxo — detalhe da corrente nas costas" },
     ],
@@ -68,10 +68,10 @@ const pecas: Peca[] = [
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
-      { src: "/colecao/top-aguas-frente.jpg", alt: "Top Águas Brasileiras — vista de frente" },
-      { src: "/colecao/top-aguas-detalhe.jpg", alt: "Top Águas Brasileiras — detalhe das miçangas e do pingente" },
-      { src: "/colecao/top-aguas-lateral.jpg", alt: "Top Águas Brasileiras — vista lateral" },
-      { src: "/colecao/top-aguas-costas.jpg", alt: "Top Águas Brasileiras — detalhe da corrente nas costas" },
+      { src: "/colecao/top-aguas-frente.jpg", alt: "Top Águas Brasileiras — vista de frente", objectPosition: "60% center" },
+      { src: "/colecao/top-aguas-detalhe.jpg", alt: "Top Águas Brasileiras — detalhe das miçangas e do pingente", objectPosition: "70% center" },
+      { src: "/colecao/top-aguas-lateral.jpg", alt: "Top Águas Brasileiras — vista lateral", objectPosition: "35% center" },
+      { src: "/colecao/top-aguas-costas.jpg", alt: "Top Águas Brasileiras — detalhe da corrente nas costas", objectPosition: "55% center" },
     ],
   },
   {
@@ -89,9 +89,9 @@ const pecas: Peca[] = [
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
-      { src: "/colecao/top-floresce-frente.jpg", alt: "Top Floresce, Brasil! — vista de frente" },
-      { src: "/colecao/top-floresce-detalhe.jpg", alt: "Top Floresce, Brasil! — editorial de costas" },
-      { src: "/colecao/top-floresce-lateral.jpg", alt: "Top Floresce, Brasil! — vista lateral" },
+      { src: "/colecao/top-floresce-frente.jpg", alt: "Top Floresce, Brasil! — vista de frente", objectPosition: "60% center" },
+      { src: "/colecao/top-floresce-detalhe.jpg", alt: "Top Floresce, Brasil! — editorial de costas", objectPosition: "35% center" },
+      { src: "/colecao/top-floresce-lateral.jpg", alt: "Top Floresce, Brasil! — vista lateral", objectPosition: "35% center" },
       { src: "/colecao/top-floresce-costas.jpg", alt: "Top Floresce, Brasil! — detalhe das correntes nas costas" },
     ],
   },
@@ -110,10 +110,9 @@ const pecas: Peca[] = [
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
-      { src: "/colecao/chocker-ouro-verde-detalhe.jpg", alt: "Chocker Ouro Verde — cristais verde esmeralda e pingente do Brasil" },
-      { src: "/colecao/chocker-ouro-verde-frente.jpg", alt: "Chocker Ouro Verde — usada no pescoço" },
-      { src: "/colecao/chocker-ouro-verde-2.jpg", alt: "Chocker Ouro Verde — editorial" },
-      { src: "/colecao/chocker-ouro-verde-3.jpg", alt: "Chocker Ouro Verde — editorial" },
+      { src: "/colecao/chocker-ouro-verde-01.jpg", alt: "Chocker Ouro Verde — detalhe dos cristais e pingente do Brasil" },
+      { src: "/colecao/chocker-ouro-verde-02.jpg", alt: "Chocker Ouro Verde — segunda foto editorial" },
+      { src: "/colecao/chocker-ouro-verde-03.jpg", alt: "Chocker Ouro Verde — terceira foto editorial" },
     ],
   },
 ];
@@ -200,6 +199,7 @@ function PecaModal({ peca, onClose }: { peca: Peca; onClose: () => void }) {
                   sizes="(min-width: 768px) 50vw, 100vw"
                   quality={90}
                   className="object-cover"
+                  style={{ objectPosition: peca.fotos[foto].objectPosition ?? "center" }}
                   priority
                 />
               </motion.div>
@@ -332,6 +332,7 @@ function PecaCard({ peca, numero, onOpen }: { peca: Peca; numero: number; onOpen
           sizes="(min-width: 768px) 360px, (min-width: 640px) 50vw, 100vw"
           quality={90}
           className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+          style={{ objectPosition: peca.fotos[0].objectPosition ?? "center" }}
         />
         {/* Gradiente + 'ver detalhes' no hover */}
         <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-center bg-gradient-to-t from-[#130209]/55 to-transparent pb-5 pt-16 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
