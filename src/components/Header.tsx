@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import AnnouncementBar from "./AnnouncementBar";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -45,13 +46,15 @@ export default function Header() {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-[#EDE7D9]/95 backdrop-blur-md shadow-sm py-2 border-b border-[#1B4965]/10"
-          : "bg-[#EDE7D9]/70 backdrop-blur-sm py-3 border-b border-transparent"
-      }`}
-    >
+    <header className="fixed top-0 left-0 w-full z-50">
+      <AnnouncementBar />
+      <div
+        className={`w-full transition-all duration-500 ${
+          isScrolled
+            ? "bg-[#EDE7D9]/95 backdrop-blur-md shadow-sm py-2 border-b border-[#1B4965]/10"
+            : "bg-[#EDE7D9]/70 backdrop-blur-sm py-3 border-b border-transparent"
+        }`}
+      >
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" aria-label="Gio Handmade" className="flex items-center">
@@ -118,6 +121,7 @@ export default function Header() {
             )}
           </svg>
         </button>
+      </div>
       </div>
 
       {/* Mobile Menu */}

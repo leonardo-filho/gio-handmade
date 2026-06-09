@@ -12,7 +12,7 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-dvh w-full overflow-hidden bg-[#EDE7D9]" id="inicio">
-      <div className="relative z-10 flex min-h-dvh w-full flex-col items-center justify-center px-4 pb-8 pt-20 text-center text-[#1B4965] sm:px-6 md:px-8 md:pt-24">
+      <div className="relative z-10 flex min-h-dvh w-full flex-col items-center justify-center px-4 pb-8 pt-28 text-center text-[#1B4965] sm:px-6 md:px-8 md:pt-32">
         <motion.div
           className="flex flex-col items-center"
           initial={{ opacity: 0, y: reduce ? 0 : 16 }}

@@ -56,12 +56,34 @@ body {
 
 /* Âncoras das seções do catálogo não ficam atrás do nav fixo */
 section[id] {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 100px;
 }
 
 @media (min-width: 768px) {
   section[id] {
-    scroll-margin-top: 88px;
+    scroll-margin-top: 116px;
+  }
+}
+
+/* Letreiro de frete grátis — loop contínuo. Dois tracks idênticos deslizam -50%. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none;
+    width: 100%;
+    justify-content: center;
   }
 }
 
