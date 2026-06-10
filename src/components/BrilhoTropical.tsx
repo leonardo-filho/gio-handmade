@@ -28,6 +28,7 @@ type Peca = {
   precoPix: string; // valor à vista no Pix
   precoCartao: string; // valor cheio no cartão
   parcelas: string; // melhor parcela sem juros
+  producao: string; // prazo de produção da peça
   pagamentos: string[];
   fotos: Foto[]; // a primeira é a foto principal (capa do card)
 };
@@ -42,6 +43,7 @@ const pecas: Peca[] = [
     precoPix: "490",
     precoCartao: "549",
     parcelas: "3x de R$ 183 sem juros",
+    producao: "até 3 dias úteis para produção",
     pagamentos: [
       "R$ 490 à vista no Pix",
       "R$ 549 em até 3x de R$ 183 sem juros",
@@ -62,6 +64,7 @@ const pecas: Peca[] = [
     precoPix: "650",
     precoCartao: "729",
     parcelas: "3x de R$ 243 sem juros",
+    producao: "até 4 dias úteis para produção",
     pagamentos: [
       "R$ 650 à vista no Pix",
       "R$ 729 em até 3x de R$ 243 sem juros",
@@ -83,6 +86,7 @@ const pecas: Peca[] = [
     precoPix: "570",
     precoCartao: "639",
     parcelas: "3x de R$ 213 sem juros",
+    producao: "até 4 dias úteis para produção",
     pagamentos: [
       "R$ 570 à vista no Pix",
       "R$ 639 em até 3x de R$ 213 sem juros",
@@ -104,6 +108,7 @@ const pecas: Peca[] = [
     precoPix: "70",
     precoCartao: "77",
     parcelas: "2x de R$ 38,50 sem juros",
+    producao: "até 2 dias úteis para produção",
     pagamentos: [
       "R$ 70 à vista no Pix",
       "R$ 77 em até 2x de R$ 38,50 sem juros",
@@ -270,6 +275,9 @@ function PecaModal({ peca, onClose }: { peca: Peca; onClose: () => void }) {
             <p className="mt-1 text-sm text-[#1B4965]/65">
               ou R$ {peca.precoCartao} em até {peca.parcelas}
             </p>
+            <p className="mt-2 text-xs font-medium uppercase tracking-[0.14em] text-[#2f7a45]">
+              {peca.producao}
+            </p>
           </div>
 
           {/* Descrição */}
@@ -357,6 +365,9 @@ function PecaCard({ peca, numero, onOpen }: { peca: Peca; numero: number; onOpen
         <h3 className="mt-2 font-[family-name:var(--font-serif)] text-2xl text-[#1B4965] underline-offset-4 group-hover:underline">
           {peca.nome}
         </h3>
+        <p className="mt-1 font-[family-name:var(--font-serif)] text-sm text-[#1B4965]/75">
+          {peca.producao}
+        </p>
         <p className="mt-2 font-[family-name:var(--font-serif)] text-lg text-[#1B4965]">
           <span className="font-medium tabular-nums">R$ {peca.precoPix}</span>{" "}
           <span className="text-sm not-italic text-[#2f7a45]">no Pix</span>

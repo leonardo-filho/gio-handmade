@@ -36,7 +36,7 @@ export default function ProcessSection() {
     {
       num: "04",
       title: "Confecção",
-      text: "Sua peça começa a nascer! O prazo de produção é de 7 a 30 dias úteis, dependendo da complexidade.",
+      text: "Sua peça começa a nascer! O prazo de produção é de até 15 dias úteis, dependendo da complexidade.",
       highlight: "Prazo",
       icon: (
         <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -107,7 +107,7 @@ export default function ProcessSection() {
                 </svg>
               </div>
               <h3 className="text-sm md:text-lg font-bold text-[#1B4965] mb-2 font-[family-name:var(--font-serif)]">Cartão</h3>
-              <p className="text-xs md:text-sm text-[#1B4965]/70">2x sem juros <span className="text-[#1B4965]/40">(acima de R$600)</span></p>
+              <p className="text-xs md:text-sm text-[#1B4965]/70">Em até 12x com juros no link de pagamento</p>
             </div>
           </div>
         </Reveal>
