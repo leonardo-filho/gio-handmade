@@ -26,7 +26,7 @@ type Peca = {
   tagline: string;
   descricao: string;
   precoPix: string; // valor à vista no Pix
-  precoCartao: string; // valor cheio no cartão
+  precoCartao?: string; // valor cheio no cartão (exibido quando informado)
   parcelas: string; // melhor parcela sem juros
   producao: string; // prazo de produção da peça
   pagamentos: string[];
@@ -41,12 +41,11 @@ const pecas: Peca[] = [
     descricao:
       "Feito à mão com miçangas e cristais, esse top é para quem quer torcer com muito estilo e brilho! Confeccionado sob medida, ele reproduz as cores e o formato da bandeira do Brasil. A corrente pode ser dourada ou prata, ficando ao seu critério! Acompanha pulseira combinando.",
     precoPix: "490",
-    precoCartao: "549",
-    parcelas: "3x de R$ 183 sem juros",
+    parcelas: "3x de R$ 163,66 sem juros",
     producao: "até 3 dias úteis para produção",
     pagamentos: [
       "R$ 490 à vista no Pix",
-      "R$ 549 em até 3x de R$ 183 sem juros",
+      "Em até 3x de R$ 163,66 sem juros",
       "Ou até 12x com juros pelo Link de Pagamento",
     ],
     fotos: [
@@ -62,12 +61,11 @@ const pecas: Peca[] = [
     descricao:
       "Feito à mão com um mix de formatos de miçangas e cristais em tons de azul turquesa, azul royal e detalhes dourados, este top é uma obra de arte que você usa no corpo. Acompanha pingente da bandeira do Brasil que pode ser removido depois — use na Copa e reaproveite! Feito sob medida, a corrente pode ser dourada ou prata, e acompanha pulseira combinando.",
     precoPix: "650",
-    precoCartao: "729",
-    parcelas: "3x de R$ 243 sem juros",
+    parcelas: "3x de R$ 216,66 sem juros",
     producao: "até 4 dias úteis para produção",
     pagamentos: [
       "R$ 650 à vista no Pix",
-      "R$ 729 em até 3x de R$ 243 sem juros",
+      "Em até 3x de R$ 216,66 sem juros",
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
@@ -84,12 +82,11 @@ const pecas: Peca[] = [
     descricao:
       "Um top que é pura arte, estruturado em correntes entrelaçadas com pedrarias caídas nas cores da bandeira, criando um efeito cheio de movimento. Possui chocker integrada no pescoço para um look completo e sofisticado. Feito sob medida, a corrente pode ser dourada ou prata, e acompanha pulseira combinando.",
     precoPix: "570",
-    precoCartao: "639",
-    parcelas: "3x de R$ 213 sem juros",
+    parcelas: "3x de R$ 190 sem juros",
     producao: "até 4 dias úteis para produção",
     pagamentos: [
       "R$ 570 à vista no Pix",
-      "R$ 639 em até 3x de R$ 213 sem juros",
+      "Em até 3x de R$ 190 sem juros",
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
@@ -273,7 +270,7 @@ function PecaModal({ peca, onClose }: { peca: Peca; onClose: () => void }) {
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#2f7a45]">no Pix</span>
             </div>
             <p className="mt-1 text-sm text-[#1B4965]/65">
-              ou R$ {peca.precoCartao} em até {peca.parcelas}
+              ou {peca.precoCartao ? `R$ ${peca.precoCartao} em ` : ""}até {peca.parcelas}
             </p>
             <p className="mt-2 text-xs font-medium uppercase tracking-[0.14em] text-[#2f7a45]">
               {peca.producao}
@@ -373,7 +370,7 @@ function PecaCard({ peca, numero, onOpen }: { peca: Peca; numero: number; onOpen
           <span className="text-sm not-italic text-[#2f7a45]">no Pix</span>
         </p>
         <p className="mt-0.5 text-xs text-[#1B4965]/55">
-          ou R$ {peca.precoCartao} em até {peca.parcelas}
+          ou {peca.precoCartao ? `R$ ${peca.precoCartao} em ` : ""}até {peca.parcelas}
         </p>
       </div>
     </button>
