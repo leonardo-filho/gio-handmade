@@ -40,12 +40,12 @@ const pecas: Peca[] = [
     tagline: "Para torcer com muito estilo e brilho",
     descricao:
       "Feito à mão com miçangas e cristais, esse top é para quem quer torcer com muito estilo e brilho! Confeccionado sob medida, ele reproduz as cores e o formato da bandeira do Brasil. A corrente pode ser dourada ou prata, ficando ao seu critério! Acompanha pulseira combinando.",
-    precoPix: "490",
-    parcelas: "3x de R$ 163,66 sem juros",
+    precoPix: "400",
+    parcelas: "3x de R$ 133,33 sem juros",
     producao: "até 3 dias úteis para produção",
     pagamentos: [
-      "R$ 490 à vista no Pix",
-      "Em até 3x de R$ 163,66 sem juros",
+      "R$ 400 à vista no Pix",
+      "Em até 3x de R$ 133,33 sem juros",
       "Ou até 12x com juros pelo Link de Pagamento",
     ],
     fotos: [
@@ -60,12 +60,12 @@ const pecas: Peca[] = [
     tagline: "Um mergulho de estilo inspirado nas águas do Brasil",
     descricao:
       "Feito à mão com um mix de formatos de miçangas e cristais em tons de azul turquesa, azul royal e detalhes dourados, este top é uma obra de arte que você usa no corpo. Acompanha pingente da bandeira do Brasil que pode ser removido depois — use na Copa e reaproveite! Feito sob medida, a corrente pode ser dourada ou prata, e acompanha pulseira combinando.",
-    precoPix: "650",
-    parcelas: "3x de R$ 216,66 sem juros",
+    precoPix: "570",
+    parcelas: "3x de R$ 190 sem juros",
     producao: "até 4 dias úteis para produção",
     pagamentos: [
-      "R$ 650 à vista no Pix",
-      "Em até 3x de R$ 216,66 sem juros",
+      "R$ 570 à vista no Pix",
+      "Em até 3x de R$ 190 sem juros",
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
@@ -81,12 +81,12 @@ const pecas: Peca[] = [
     tagline: "Onde a elegância encontra a paixão pelo Brasil",
     descricao:
       "Um top que é pura arte, estruturado em correntes entrelaçadas com pedrarias caídas nas cores da bandeira, criando um efeito cheio de movimento. Possui chocker integrada no pescoço para um look completo e sofisticado. Feito sob medida, a corrente pode ser dourada ou prata, e acompanha pulseira combinando.",
-    precoPix: "570",
-    parcelas: "3x de R$ 190 sem juros",
+    precoPix: "550",
+    parcelas: "3x de R$ 183,33 sem juros",
     producao: "até 4 dias úteis para produção",
     pagamentos: [
-      "R$ 570 à vista no Pix",
-      "Em até 3x de R$ 190 sem juros",
+      "R$ 550 à vista no Pix",
+      "Em até 3x de R$ 183,33 sem juros",
       "Ou até 12x com juros via Link de Pagamento",
     ],
     fotos: [
