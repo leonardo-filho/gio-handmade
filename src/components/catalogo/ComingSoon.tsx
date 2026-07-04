@@ -52,7 +52,7 @@ export default function ComingSoon() {
           </Reveal>
           <Reveal delay={0.18}>
             <p className="mt-5 font-[family-name:var(--font-serif)] text-[#EDE7D9]/70 text-base max-w-xl leading-relaxed">
-              Serão três opções de roupa, cada uma em uma combinação inédita das cores da bandeira. Tiragem numerada — não volta após a coleção encerrar.
+              Serão três opções de roupa, cada uma em uma combinação inédita das cores da bandeira. Tiragem numerada, não volta após a coleção encerrar.
             </p>
           </Reveal>
 

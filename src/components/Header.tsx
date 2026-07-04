@@ -3,11 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import AnnouncementBar from "./AnnouncementBar";
+import CartButton from "./cart/CartButton";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  // Na home usamos âncora relativa (#secao) para o smooth-scroll do Lenis;
+  // em outras páginas (ex.: /loja) usamos /#secao para voltar à home e rolar.
+  const anchor = (id: string) => (pathname === "/" ? `#${id}` : `/#${id}`);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,12 +43,12 @@ export default function Header() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { name: "Início", href: "#inicio" },
-    { name: "Brilho Tropical", href: "#brilho-tropical" },
-    { name: "Categorias", href: "#categorias" },
-    { name: "Processo", href: "#processo" },
-    { name: "Coleção", href: "#colecao" },
-    { name: "Sobre", href: "#sobre" },
+    { name: "Início", href: anchor("inicio") },
+    { name: "Solaris", href: anchor("solaris") },
+    { name: "Loja", href: "/loja" },
+    { name: "Categorias", href: anchor("categorias") },
+    { name: "Processo", href: anchor("processo") },
+    { name: "Sobre", href: anchor("sobre") },
   ];
 
   return (
@@ -87,40 +93,44 @@ export default function Header() {
           >
             Contato
           </Link>
+          <CartButton />
         </nav>
 
-        {/* Mobile Menu Button */}
-        <button
-          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-menu"
-          className="lg:hidden -mr-2 p-2.5 text-[#1B4965] rounded-md transition-colors hover:bg-[#1B4965]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/50"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+        {/* Cluster mobile: carrinho + menu */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <CartButton />
+          <button
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+            className="-mr-2 p-2.5 text-[#1B4965] rounded-md transition-colors hover:bg-[#1B4965]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/50"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {isMobileMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
       </div>
 

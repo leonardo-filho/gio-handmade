@@ -46,7 +46,7 @@ export default function Hero() {
         >
           <Image
             src="/brilho-tropical.jpg"
-            alt="Modelo usando peça bordada da coleção Brilho Tropical"
+            alt="Modelo usando peça bordada da coleção Solaris"
             fill
             priority
             sizes="(min-width: 768px) 715px, 96vw"
@@ -72,16 +72,16 @@ export default function Hero() {
           transition={{ duration: 0.9 * base, ease: EASE_OUT_EXPO, delay: 1.05 * base }}
         >
           <Link
-            href="#brilho-tropical"
+            href="#solaris"
             className="px-8 py-3 bg-[#1B4965] text-[#EDE7D9] uppercase tracking-widest text-xs font-bold transition-colors duration-300 hover:bg-[#130209]"
           >
-            Coleção Brilho Tropical
+            Coleção Solaris
           </Link>
           <Link
-            href="#categorias"
+            href="/loja"
             className="px-8 py-3 border border-[#1B4965] text-[#1B4965] uppercase tracking-widest text-xs font-bold transition-colors duration-300 hover:bg-[#1B4965] hover:text-[#EDE7D9]"
           >
-            Ver Minhas Criações
+            Ver a Loja
           </Link>
           <Link
             href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."

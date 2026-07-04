@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BrilhoTropical from "@/components/BrilhoTropical";
+import Solaris from "@/components/Solaris";
 import CollectionHighlights from "@/components/CollectionHighlights";
 import ProcessSection from "@/components/ProcessSection";
 import ProductGrid from "@/components/ProductGrid";
@@ -15,7 +15,7 @@ export default function Home() {
       <SmoothScroll />
       <Header />
       <Hero />
-      <BrilhoTropical />
+      <Solaris />
       <CollectionHighlights />
       <ProcessSection />
       <ProductGrid />

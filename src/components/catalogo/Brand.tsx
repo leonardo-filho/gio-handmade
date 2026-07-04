@@ -52,7 +52,7 @@ export default function Brand() {
             </Reveal>
             <Reveal delay={0.18}>
               <p className="font-[family-name:var(--font-serif)] text-[#130209]/80 leading-relaxed text-[15px]">
-                Cristais, pedrarias, correntes e missangas — aplicados um a um, com calma e cuidado. Para ocasiões especiais e para você se sentir bem antes de qualquer elogio.
+                Cristais, pedrarias, correntes e missangas, aplicados um a um, com calma e cuidado. Para ocasiões especiais e para você se sentir bem antes de qualquer elogio.
               </p>
             </Reveal>
           </div>

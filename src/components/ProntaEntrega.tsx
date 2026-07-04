@@ -25,10 +25,10 @@ const produtos: Produto[] = [
   {
     id: 1,
     nome: "Conjunto Cristal & Correntes",
-    descricao: "Veste do 36 ao 40 — regulável no top e na saia. Disponível para envio imediato.",
+    descricao: "Veste do 36 ao 40, regulável no top e na saia. Disponível para envio imediato.",
     preco: 1000,
     parcelamento: "até 3x sem juros",
-    tamanho: "36–40",
+    tamanho: "36 a 40",
     src: "/conjunto-pronta.png",
     mensagem: "Olá! Vi o Conjunto Cristal & Correntes no site e tenho interesse. Ainda está disponível?",
   },

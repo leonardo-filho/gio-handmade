@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Questrial, Archivo, Pinyon_Script } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { CartProvider } from "@/components/cart/CartProvider";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 // EB Garamond — todas as variantes do manual oficial Gio Handmade
 const ebGaramond = localFont({
@@ -62,7 +64,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={`${ebGaramond.variable} ${questrial.variable} ${archivo.variable} ${pinyonScript.variable} antialiased`}>
-        {children}
+        <CartProvider>
+          {children}
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

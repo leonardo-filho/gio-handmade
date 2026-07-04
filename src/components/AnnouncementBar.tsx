@@ -1,9 +1,9 @@
 "use client";
 
-// Letreiro de frete grátis no topo do site — gatilho de conversão do lançamento.
+// Letreiro de anúncio no topo do site — divulga a coleção nova.
 // O texto "roda" em loop contínuo (marquee). Em prefers-reduced-motion, fica estático e centralizado.
 
-const MESSAGE = "Frete grátis para todo o Brasil";
+const MESSAGE = "Solaris · nova coleção de verão · feito à mão em Belém";
 
 export default function AnnouncementBar() {
   // Repete a mensagem para preencher a largura e garantir loop sem emendas.
