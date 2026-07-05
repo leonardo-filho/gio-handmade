@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 type Item = { id: string; label: string };
 
@@ -63,13 +64,20 @@ export default function LojaNav({ items }: { items: Item[] }) {
               data-chip={it.id}
               onClick={() => setActive(it.id)}
               aria-current={on ? "true" : undefined}
-              className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors ${
+              className={`relative shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors ${
                 on
-                  ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
+                  ? "border-transparent text-[#EDE7D9]"
                   : "border-[#1B4965]/25 text-[#1B4965]/70 hover:border-[#1B4965] hover:text-[#1B4965]"
               }`}
             >
-              {it.label}
+              {on && (
+                <motion.div
+                  layoutId="lojanav-active-chip"
+                  className="absolute inset-0 rounded-full bg-[#1B4965]"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{it.label}</span>
             </a>
           );
         })}
