@@ -39,11 +39,13 @@ export default function SmoothScroll() {
       if (!el) return;
 
       e.preventDefault();
-      // Offset dinâmico = altura real do header fixo + respiro, pra seção
-      // não encostar embaixo da barra (header muda de altura ao rolar).
+      // Offset dinâmico = altura real do header fixo (+ barra de categorias da
+      // loja, quando presente) + respiro, pra seção não ficar atrás das barras.
       const header = document.querySelector("header");
       const headerH = header ? Math.round(header.getBoundingClientRect().height) : 80;
-      lenis.scrollTo(el as HTMLElement, { offset: -(headerH + 20), duration: 1.2 });
+      const lojaNav = document.querySelector("[data-loja-nav]");
+      const navH = lojaNav ? Math.round(lojaNav.getBoundingClientRect().height) : 0;
+      lenis.scrollTo(el as HTMLElement, { offset: -(headerH + navH + 16), duration: 1.2 });
       window.history.pushState(null, "", url.hash);
     }
 

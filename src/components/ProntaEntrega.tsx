@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
+import { calcularParcelamento } from "@/lib/parcelas";
 
 type Produto = {
   id: number;
@@ -27,7 +28,6 @@ const produtos: Produto[] = [
     nome: "Conjunto Cristal & Correntes",
     descricao: "Veste do 36 ao 40, regulável no top e na saia. Disponível para envio imediato.",
     preco: 1000,
-    parcelamento: "até 3x sem juros",
     tamanho: "36 a 40",
     src: "/conjunto-pronta.png",
     mensagem: "Olá! Vi o Conjunto Cristal & Correntes no site e tenho interesse. Ainda está disponível?",
@@ -85,9 +85,7 @@ export default function ProntaEntrega() {
                 <p className="text-sm font-bold text-[#1B4965]">
                   R$ {produto.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </p>
-                {produto.parcelamento && (
-                  <p className="text-xs text-[#1B4965]/50 mt-0.5">{produto.parcelamento}</p>
-                )}
+                <p className="text-xs text-[#1B4965]/50 mt-0.5">{produto.parcelamento || calcularParcelamento(produto.preco)}</p>
               </div>
             </Link>
             </StaggerItem>

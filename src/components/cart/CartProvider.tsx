@@ -16,7 +16,6 @@ export type CartItem = {
   preco: number;
   foto: string;
   categoria?: string;
-  aPartirDe?: boolean;
 };
 
 export type CartLine = CartItem & { qty: number };
@@ -29,7 +28,6 @@ type CartContextValue = {
   clear: () => void;
   count: number;
   subtotal: number;
-  temAPartirDe: boolean;
   isOpen: boolean;
   open: () => void;
   close: () => void;
@@ -101,7 +99,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     () => lines.reduce((acc, l) => acc + l.preco * l.qty, 0),
     [lines]
   );
-  const temAPartirDe = useMemo(() => lines.some((l) => l.aPartirDe), [lines]);
 
   const value = useMemo<CartContextValue>(
     () => ({
@@ -112,13 +109,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clear,
       count,
       subtotal,
-      temAPartirDe,
       isOpen,
       open,
       close,
       hydrated,
     }),
-    [lines, add, remove, setQty, clear, count, subtotal, temAPartirDe, isOpen, open, close, hydrated]
+    [lines, add, remove, setQty, clear, count, subtotal, isOpen, open, close, hydrated]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

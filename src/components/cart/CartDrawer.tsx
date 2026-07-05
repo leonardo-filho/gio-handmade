@@ -15,7 +15,7 @@ type FreteStatus = "idle" | "loading" | "ok" | "erro";
 
 export default function CartDrawer() {
   const reduce = useReducedMotion();
-  const { lines, isOpen, close, remove, setQty, subtotal, count, temAPartirDe, clear } = useCart();
+  const { lines, isOpen, close, remove, setQty, subtotal, count, clear } = useCart();
 
   const [cep, setCep] = useState("");
   const [freteStatus, setFreteStatus] = useState<FreteStatus>("idle");
@@ -171,7 +171,7 @@ export default function CartDrawer() {
             ) : (
               <>
                 {/* ---------- Itens ---------- */}
-                <div className="flex-1 overflow-y-auto px-5 py-4">
+                <div data-lenis-prevent className="flex-1 overflow-y-auto px-5 py-4">
                   <ul className="space-y-4">
                     {lines.map((l) => (
                       <li key={l.id} className="flex gap-3.5">
@@ -195,7 +195,6 @@ export default function CartDrawer() {
                             </button>
                           </div>
                           <p className="mt-0.5 text-xs text-[#1B4965]/55">
-                            {l.aPartirDe ? "a partir de " : ""}
                             {formatBRL(l.preco)}
                           </p>
 
@@ -302,17 +301,12 @@ export default function CartDrawer() {
                     </div>
                     <div className="flex items-baseline justify-between pt-1">
                       <span className="font-[family-name:var(--font-serif)] text-lg text-[#1B4965]">
-                        {temAPartirDe ? "Total estimado" : "Total"}
+                        Total
                       </span>
                       <span className="font-[family-name:var(--font-serif)] text-2xl font-medium tabular-nums text-[#1B4965]">
                         {formatBRL(total)}
                       </span>
                     </div>
-                    {temAPartirDe && (
-                      <p className="pt-0.5 text-[11px] text-[#1B4965]/50">
-                        Peças sob encomenda: valores a partir de, confirmados no WhatsApp.
-                      </p>
-                    )}
                   </div>
 
                   {/* CTA */}

@@ -5,40 +5,34 @@ import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
 type CategoryItem = {
   id: string;
   title: string;
-  description: string;
   src?: string;
 };
 
 const categories: CategoryItem[] = [
   {
     id: "tops",
-    title: "Tops & Croppeds",
-    description: "Modelos exclusivos feitos sob medida para o seu corpo.",
-    src: "/tops.png",
+    title: "Tops",
+    src: "/colecao/top-lourdes.jpg",
   },
   {
-    id: "Vestido",
-    title: "Vestido",
-    description: "Do curto ao longo, com o caimento perfeito.",
-    src: "/vestido.png",
+    id: "vestidos",
+    title: "Vestidos",
+    src: "/colecao/vestido-luna.jpg",
   },
   {
     id: "conjuntos",
     title: "Conjuntos",
-    description: "A combinação completa para festivais e ocasiões especiais.",
-    src: "/conjuntos.png",
+    src: "/colecao/conjunto-gio.jpg",
   },
   {
-    id: "saia-cinto",
-    title: "Saia & Cinto",
-    description: "Saias e cintos feitos sob medida para o seu corpo.",
-    src: "/saias.png",
+    id: "saias",
+    title: "Saias",
+    src: "/colecao/saia-gio.jpg",
   },
   {
-    id: "headpiece",
-    title: "Headpiece",
-    description: "Acessórios para cabeça feitos à mão com correntes e cristais.",
-    src: "/headpiece.png",
+    id: "acessorios",
+    title: "Acessórios",
+    src: "/colecao/headpiece-luna.jpg",
   },
 ];
 
@@ -60,7 +54,7 @@ export default function CollectionHighlights() {
         <StaggerGroup className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-5xl mx-auto">
           {categories.map((item) => (
             <StaggerItem key={item.id} className="w-[calc(50%-8px)] md:w-[calc(20%-20px)]">
-            <Link href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento." className="group block">
+            <Link href={`/loja#${item.id}`} className="group block">
               <div className="flex flex-col h-full">
                 <div className="relative w-full aspect-[3/4] bg-[#EDE7D9] mb-4 overflow-hidden">
                   {item.src ? (
@@ -85,9 +79,6 @@ export default function CollectionHighlights() {
                   <h3 className="text-lg font-[family-name:var(--font-serif)] text-[#1B4965] group-hover:underline decoration-1 underline-offset-4">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-[#1B4965]/60 mt-1">
-                    {item.description}
-                  </p>
                 </div>
               </div>
             </Link>
