@@ -9,6 +9,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import {
+  calcularDesconto,
+  validarCupom,
+  type Cupom,
+  type ResultadoCupom,
+} from "@/lib/cupons";
 
 export type CartItem = {
   id: string;
@@ -28,6 +34,10 @@ type CartContextValue = {
   clear: () => void;
   count: number;
   subtotal: number;
+  cupom: Cupom | null;
+  desconto: number;
+  aplicarCupom: (codigo: string) => ResultadoCupom;
+  removerCupom: () => void;
   isOpen: boolean;
   open: () => void;
   close: () => void;
@@ -37,9 +47,11 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "gio-cart-v1";
+const STORAGE_KEY_CUPOM = "gio-cupom-v1";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
+  const [cupomCodigo, setCupomCodigo] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
@@ -54,6 +66,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignora storage indisponível */
     }
+    try {
+      const rawCupom = window.localStorage.getItem(STORAGE_KEY_CUPOM);
+      // Revalida na entrada: um cupom salvo que já expirou não é reaplicado.
+      if (rawCupom && validarCupom(rawCupom).status === "ok") {
+        setCupomCodigo(rawCupom.toUpperCase());
+      }
+    } catch {
+      /* ignora */
+    }
     setHydrated(true);
   }, []);
 
@@ -66,6 +87,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
       /* ignora */
     }
   }, [lines, hydrated]);
+
+  // Persiste o cupom aplicado (após hidratar)
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      if (cupomCodigo) window.localStorage.setItem(STORAGE_KEY_CUPOM, cupomCodigo);
+      else window.localStorage.removeItem(STORAGE_KEY_CUPOM);
+    } catch {
+      /* ignora */
+    }
+  }, [cupomCodigo, hydrated]);
 
   const add = useCallback((item: CartItem, qty: number = 1) => {
     setLines((prev) => {
@@ -94,10 +126,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
+  const aplicarCupom = useCallback((codigo: string): ResultadoCupom => {
+    const resultado = validarCupom(codigo);
+    if (resultado.status === "ok") setCupomCodigo(resultado.cupom.codigo);
+    return resultado;
+  }, []);
+
+  const removerCupom = useCallback(() => setCupomCodigo(null), []);
+
   const count = useMemo(() => lines.reduce((acc, l) => acc + l.qty, 0), [lines]);
   const subtotal = useMemo(
     () => lines.reduce((acc, l) => acc + l.preco * l.qty, 0),
     [lines]
+  );
+
+  // Revalida o cupom a cada render relevante: se expirou ou o código não existe
+  // mais, ele simplesmente deixa de valer (sem desconto).
+  const cupom = useMemo(() => {
+    if (!cupomCodigo) return null;
+    const resultado = validarCupom(cupomCodigo);
+    return resultado.status === "ok" ? resultado.cupom : null;
+  }, [cupomCodigo]);
+
+  const desconto = useMemo(
+    () => (cupom ? calcularDesconto(subtotal, cupom) : 0),
+    [cupom, subtotal]
   );
 
   const value = useMemo<CartContextValue>(
@@ -109,12 +162,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clear,
       count,
       subtotal,
+      cupom,
+      desconto,
+      aplicarCupom,
+      removerCupom,
       isOpen,
       open,
       close,
       hydrated,
     }),
-    [lines, add, remove, setQty, clear, count, subtotal, isOpen, open, close, hydrated]
+    [lines, add, remove, setQty, clear, count, subtotal, cupom, desconto, aplicarCupom, removerCupom, isOpen, open, close, hydrated]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

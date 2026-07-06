@@ -15,11 +15,44 @@ type FreteStatus = "idle" | "loading" | "ok" | "erro";
 
 export default function CartDrawer() {
   const reduce = useReducedMotion();
-  const { lines, isOpen, close, remove, setQty, subtotal, count, clear } = useCart();
+  const {
+    lines,
+    isOpen,
+    close,
+    remove,
+    setQty,
+    subtotal,
+    count,
+    clear,
+    cupom,
+    desconto,
+    aplicarCupom,
+    removerCupom,
+  } = useCart();
 
   const [cep, setCep] = useState("");
   const [freteStatus, setFreteStatus] = useState<FreteStatus>("idle");
   const [frete, setFrete] = useState<FreteEstimado | null>(null);
+
+  const [codigoCupom, setCodigoCupom] = useState("");
+  const [cupomErro, setCupomErro] = useState<string | null>(null);
+
+  function onAplicarCupom() {
+    const resultado = aplicarCupom(codigoCupom);
+    if (resultado.status === "ok") {
+      setCodigoCupom("");
+      setCupomErro(null);
+    } else if (resultado.status === "expirado") {
+      setCupomErro("Esse cupom expirou.");
+    } else {
+      setCupomErro("Cupom inválido. Confira o código.");
+    }
+  }
+
+  function onRemoverCupom() {
+    removerCupom();
+    setCupomErro(null);
+  }
 
   // Esc fecha + trava o scroll do fundo enquanto aberto
   useEffect(() => {
@@ -62,7 +95,7 @@ export default function CartDrawer() {
     }
   }
 
-  const total = subtotal + (frete?.valor ?? 0);
+  const total = subtotal - desconto + (frete?.valor ?? 0);
 
   function mensagemWhatsApp() {
     const itens = lines
@@ -78,6 +111,10 @@ export default function CartDrawer() {
       `Subtotal: ${formatBRL(subtotal)}`,
     ];
 
+    if (cupom && desconto > 0) {
+      linhas.push(`Cupom ${cupom.codigo} (${cupom.percentual}% OFF): -${formatBRL(desconto)}`);
+    }
+
     if (frete) {
       const destino = `${frete.endereco.localidade}/${frete.endereco.uf}`;
       linhas.push(`Frete (${destino} · estimativa): ${formatBRL(frete.valor)}`);
@@ -89,7 +126,7 @@ export default function CartDrawer() {
 
       //linhas.push(`Prazo estimado: de ${frete.prazoMin} a ${frete.prazoMax} dias úteis`);
     } else {
-      linhas.push(`*Total (sem frete): ${formatBRL(subtotal)}*`);
+      linhas.push(`*Total (sem frete): ${formatBRL(subtotal - desconto)}*`);
       linhas.push("");
       linhas.push("Quero calcular o frete com você.");
     }
@@ -287,12 +324,68 @@ export default function CartDrawer() {
                     </p>
                   </div>
 
+                  {/* Cupom de desconto */}
+                  <div className="mb-4">
+                    {cupom ? (
+                      <div className="flex items-center justify-between rounded-sm border border-[#2f7a45]/40 bg-[#2f7a45]/[0.08] px-3 py-2.5">
+                        <span className="flex items-center gap-2 text-sm text-[#2f7a45]">
+                          <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M20 6 9 17l-5-5" />
+                          </svg>
+                          Cupom <span className="font-bold">{cupom.codigo}</span> · {cupom.percentual}% OFF
+                        </span>
+                        <button
+                          type="button"
+                          onClick={onRemoverCupom}
+                          className="shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#1B4965]/55 underline-offset-4 transition-colors hover:text-[#1B4965] hover:underline"
+                        >
+                          Remover
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <label htmlFor="cupom" className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#1B4965]/55">
+                          Cupom de desconto
+                        </label>
+                        <div className="mt-2 flex gap-2">
+                          <input
+                            id="cupom"
+                            placeholder="Digite seu cupom"
+                            value={codigoCupom}
+                            onChange={(e) => {
+                              setCodigoCupom(e.target.value);
+                              if (cupomErro) setCupomErro(null);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") onAplicarCupom();
+                            }}
+                            className="min-w-0 flex-1 rounded-sm border border-[#1B4965]/25 bg-white px-3 py-2.5 text-sm uppercase tracking-[0.08em] text-[#1B4965] placeholder:normal-case placeholder:tracking-normal placeholder:text-[#1B4965]/40 focus:border-[#1B4965] focus:outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={onAplicarCupom}
+                            className="shrink-0 rounded-sm border border-[#1B4965] px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-[#1B4965] transition-colors hover:bg-[#1B4965] hover:text-[#EDE7D9]"
+                          >
+                            Aplicar
+                          </button>
+                        </div>
+                        {cupomErro && <p className="mt-2 text-xs text-[#a33]">{cupomErro}</p>}
+                      </>
+                    )}
+                  </div>
+
                   {/* Totais */}
                   <div className="space-y-1.5 border-t border-[#1B4965]/10 pt-3 text-sm">
                     <div className="flex justify-between text-[#1B4965]/75">
                       <span>Subtotal</span>
                       <span className="tabular-nums">{formatBRL(subtotal)}</span>
                     </div>
+                    {desconto > 0 && (
+                      <div className="flex justify-between font-medium text-[#2f7a45]">
+                        <span>Desconto{cupom ? ` (${cupom.codigo})` : ""}</span>
+                        <span className="tabular-nums">−{formatBRL(desconto)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-[#1B4965]/75">
                       <span>Frete</span>
                       <span className="tabular-nums">
