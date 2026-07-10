@@ -1,10 +1,16 @@
 // Catálogo completo da vitrine (loja). Fonte única de dados dos produtos
 // mostrados em /loja e na home, e adicionados ao carrinho.
 //
-// Observação de negócio: as peças são feitas à mão, sob encomenda. O preço
-// exibido é o valor no PIX; o parcelamento sem juros vai no campo `parcelas`.
+// Observação de negócio: as peças são feitas à mão, sob encomenda. A vitrine
+// mostra PRIMEIRO o valor no cartão com o parcelamento sem juros
+// ("R$ 599,90 até 5x sem juros") e o pix como alternativa ("ou R$ 550 no pix").
+// `preco` é o valor no PIX (usado também no carrinho); `precoCartao` é o valor
+// total no cartão e `maxParcelas` o parcelamento máximo sem juros.
 // O texto completo de cada peça (materiais, acabamento, notas) fica em
 // `detalhes` e abre no modal quando o cliente clica no card.
+//
+// Link direto de cada peça (para stories/bio): /loja?produto=<id>
+// (ex.: /loja?produto=top-lourdes — abre a vitrine já com o modal da peça).
 //
 // A "Coleção Solaris" (5 tops + 2 headpieces) é a nova coleção de verão e
 // aparece num bloco próprio na home e no topo da loja.
@@ -13,8 +19,9 @@ export type Produto = {
   id: string;
   nome: string;
   detalhes: string; // texto completo mostrado no modal de detalhes
-  preco: number;
-  parcelas?: string; // ex.: "3x de R$ 125 sem juros"
+  preco: number; // valor à vista no PIX
+  precoCartao?: number; // valor total no cartão (mostrado primeiro na vitrine)
+  maxParcelas?: number; // parcelamento sem juros: "até Nx sem juros"
   foto: string;
   fotoHover?: string; // 2ª foto revelada no hover do card
   fotosExtra?: string[]; // fotos adicionais (3ª em diante), exibidas na galeria do modal
@@ -27,14 +34,17 @@ export type Produto = {
 export const produtos: Produto[] = [
   // ============================================================
   //  COLEÇÃO SOLARIS — nova coleção de verão (5 tops + 2 headpieces)
+  //  (headpieces ainda com valores de cartão derivados do parcelamento
+  //  antigo; a Gio ainda vai repassar os novos)
   // ============================================================
   {
     id: "solaris-top-solaris",
     nome: "Top Solaris",
     detalhes:
       "Bordado à mão, um a um. Caso queira bordar as costas, avisar previamente. A peça-símbolo da coleção.",
-    preco: 650,
-    parcelas: "5x de R$ 140 sem juros",
+    preco: 600,
+    precoCartao: 649.9,
+    maxParcelas: 5,
     foto: "/colecao/solaris-top-solaris.jpg",
     fotoHover: "/colecao/solaris-top-solaris-2.jpg",
     fotosExtra: [
@@ -52,8 +62,9 @@ export const produtos: Produto[] = [
     nome: "Top Perla",
     detalhes:
       "Feito à mão, sob medida, com um mix de pérolas. Possui acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 700,
-    parcelas: "4x de R$ 185 sem juros",
+    preco: 650,
+    precoCartao: 699.9,
+    maxParcelas: 5,
     foto: "/colecao/solaris-top-perla.jpg",
     fotoHover: "/colecao/solaris-top-perla-2.jpg",
     fotosExtra: [
@@ -69,8 +80,9 @@ export const produtos: Produto[] = [
     nome: "Top Aurora",
     detalhes:
       "Feito à mão, sob medida, com um mix de penduricalhos de miçangas e corrente de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/solaris-top-aurora.jpg",
     fotoHover: "/colecao/solaris-top-aurora-2.jpg",
     fotosExtra: [
@@ -87,7 +99,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de elos e penduricalhos de miçangas. Possui acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 470,
-    parcelas: "4x de R$ 130 sem juros",
+    precoCartao: 499.9,
+    maxParcelas: 5,
     foto: "/colecao/solaris-top-lumina.jpg",
     fotoHover: "/colecao/solaris-top-lumina-2.jpg",
     fotosExtra: [
@@ -104,7 +117,8 @@ export const produtos: Produto[] = [
     nome: "Top Noir",
     detalhes: "Biquíni com miçangas bordadas à mão.",
     preco: 230,
-    parcelas: "3x de R$ 88 sem juros",
+    precoCartao: 250,
+    maxParcelas: 3,
     foto: "/colecao/solaris-top-noir.jpg",
     fotoHover: "/colecao/solaris-top-noir-2.jpg",
     fotosExtra: [
@@ -121,7 +135,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de elos. Possui acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 200,
-    parcelas: "3x de R$ 75 sem juros",
+    precoCartao: 225,
+    maxParcelas: 3,
     foto: "/colecao/solaris-headpiece-lumina.jpg",
     fotoHover: "/colecao/solaris-headpiece-lumina-2.jpg",
     fotosExtra: ["/colecao/solaris-headpiece-lumina-3.jpg"],
@@ -134,7 +149,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pérolas. Possui acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 100,
-    parcelas: "2x de R$ 63 sem juros",
+    precoCartao: 126,
+    maxParcelas: 2,
     foto: "/colecao/solaris-headpiece-perla.jpg",
     fotoHover: "/colecao/solaris-headpiece-perla-2.jpg",
     categoria: "Coleção Solaris",
@@ -149,8 +165,9 @@ export const produtos: Produto[] = [
     nome: "Conjunto Giô",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1150,
-    parcelas: "5x de R$ 250 sem juros",
+    preco: 1100,
+    precoCartao: 1199.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-gio.jpg",
     fotoHover: "/colecao/conjunto-gio-2.jpg",
     fotosExtra: ["/colecao/conjunto-gio-3.jpg"],
@@ -163,7 +180,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pérolas e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 900,
-    parcelas: "5x de R$ 190 sem juros",
+    precoCartao: 950,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-sarah.jpg",
     fotoHover: "/colecao/conjunto-sarah-2.jpg",
     fotosExtra: [
@@ -179,8 +197,9 @@ export const produtos: Produto[] = [
     nome: "Conjunto Moonlight",
     detalhes:
       "Feito à mão, sob medida, com um mix de penduricalhos de pedras de acrílico e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1300,
-    parcelas: "6x de R$ 230 sem juros",
+    preco: 1200,
+    precoCartao: 1299.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-moonlight.jpg",
     fotoHover: "/colecao/conjunto-moonlight-2.jpg",
     categoria: "Conjuntos",
@@ -192,7 +211,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pedras de acrílico e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 1100,
-    parcelas: "5x de R$ 240 sem juros",
+    precoCartao: 1199.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-crystal.jpg",
     fotoHover: "/colecao/conjunto-crystal-2.jpg",
     categoria: "Conjuntos",
@@ -203,8 +223,9 @@ export const produtos: Produto[] = [
     nome: "Conjunto Selene",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedras de acrílico, cristais e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1000,
-    parcelas: "5x de R$ 220 sem juros",
+    preco: 950,
+    precoCartao: 999.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-selene.jpg",
     fotoHover: "/colecao/conjunto-selene-2.jpg",
     categoria: "Conjuntos",
@@ -215,8 +236,9 @@ export const produtos: Produto[] = [
     nome: "Conjunto Duda",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1000,
-    parcelas: "5x de R$ 220 sem juros",
+    preco: 950,
+    precoCartao: 999.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-duda.jpg",
     fotoHover: "/colecao/conjunto-duda-2.jpg",
     categoria: "Conjuntos",
@@ -231,8 +253,9 @@ export const produtos: Produto[] = [
     nome: "Vestido Luna",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas de acrílico e cristais. Correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1300,
-    parcelas: "6x de R$ 230 sem juros",
+    preco: 1200,
+    precoCartao: 1299.9,
+    maxParcelas: 5,
     foto: "/colecao/vestido-luna.jpg",
     fotoHover: "/colecao/vestido-luna-2.jpg",
     fotosExtra: ["/colecao/vestido-luna-3.jpg"],
@@ -245,7 +268,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e vidro de acrílico. Correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 1100,
-    parcelas: "6x de R$ 200 sem juros",
+    precoCartao: 1199.9,
+    maxParcelas: 5,
     foto: "/colecao/vestido-prisma.jpg",
     fotoHover: "/colecao/vestido-prisma-2.jpg",
     categoria: "Vestidos",
@@ -260,8 +284,9 @@ export const produtos: Produto[] = [
     nome: "Top Lourdes",
     detalhes:
       "Bordado à mão, com um mix de mais de 2.300 cristais. Caso queira bordar as costas, avisar previamente.",
-    preco: 900,
-    parcelas: "5x de R$ 190 sem juros",
+    preco: 850,
+    precoCartao: 899.9,
+    maxParcelas: 7,
     foto: "/colecao/top-lourdes.jpg",
     fotoHover: "/colecao/top-lourdes-2.jpg",
     fotosExtra: ["/colecao/top-lourdes-3.jpg", "/colecao/top-lourdes-4.jpg"],
@@ -273,8 +298,9 @@ export const produtos: Produto[] = [
     nome: "Regata Nyx",
     detalhes:
       "Feito à mão, sob medida, com um mix de argolas de metal e elos de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 700,
-    parcelas: "4x de R$ 190 sem juros",
+    preco: 650,
+    precoCartao: 699.9,
+    maxParcelas: 5,
     foto: "/colecao/regata-nyx.jpg",
     fotoHover: "/colecao/regata-nyx-2.jpg",
     fotosExtra: [
@@ -290,8 +316,9 @@ export const produtos: Produto[] = [
     nome: "Top Medusa",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e cristais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 700,
-    parcelas: "4x de R$ 190 sem juros",
+    preco: 670,
+    precoCartao: 699.9,
+    maxParcelas: 5,
     foto: "/colecao/top-medusa.jpg",
     fotoHover: "/colecao/top-medusa-2.jpg",
     fotosExtra: ["/colecao/top-medusa-3.jpg"],
@@ -303,8 +330,9 @@ export const produtos: Produto[] = [
     nome: "Top Ana",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e cristais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 650,
-    parcelas: "4x de R$ 175 sem juros",
+    preco: 620,
+    precoCartao: 650,
+    maxParcelas: 5,
     foto: "/colecao/top-ana.jpg",
     fotoHover: "/colecao/top-ana-2.jpg",
     categoria: "Tops",
@@ -315,8 +343,9 @@ export const produtos: Produto[] = [
     nome: "Top Kesha",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas, cristais e pedrarias. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 650,
-    parcelas: "4x de R$ 175 sem juros",
+    preco: 620,
+    precoCartao: 650,
+    maxParcelas: 5,
     foto: "/colecao/top-kesha.jpg",
     categoria: "Tops",
     producao: "até 12 dias úteis",
@@ -326,8 +355,9 @@ export const produtos: Produto[] = [
     nome: "Top Musa",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas, cristais e pedrarias. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 4,
     foto: "/colecao/top-musa.jpg",
     categoria: "Tops",
     producao: "até 12 dias úteis",
@@ -337,8 +367,9 @@ export const produtos: Produto[] = [
     nome: "Top Crystal",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedras de acrílico e vidro transparente. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/top-crystal.jpg",
     fotoHover: "/colecao/top-crystal-2.jpg",
     fotosExtra: ["/colecao/conjunto-crystal.jpg"],
@@ -350,8 +381,9 @@ export const produtos: Produto[] = [
     nome: "Top Ônix",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e pedras naturais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 550,
-    parcelas: "3x de R$ 190 sem juros",
+    preco: 500,
+    precoCartao: 550,
+    maxParcelas: 3,
     foto: "/colecao/top-onix.jpg",
     categoria: "Tops",
     producao: "até 10 dias úteis",
@@ -362,7 +394,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e cristais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade). Disponível em várias cores.",
     preco: 550,
-    parcelas: "3x de R$ 200 sem juros",
+    precoCartao: 599,
+    maxParcelas: 4,
     foto: "/colecao/top-julia.jpg",
     fotoHover: "/colecao/top-julia-2.jpg",
     fotosExtra: ["/colecao/top-julia-3.jpg"],
@@ -375,7 +408,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias, elos e correntes de aço banhados em verniz italiano (alta resistência e durabilidade).",
     preco: 550,
-    parcelas: "4x de R$ 150 sem juros",
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/top-gio.jpg",
     fotoHover: "/colecao/top-gio-2.jpg",
     fotosExtra: ["/colecao/conjunto-gio.jpg"],
@@ -388,7 +422,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e miçangas. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade). Material solicitado de fora.",
     preco: 550,
-    parcelas: "4x de R$ 150 sem juros",
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/top-duda.jpg",
     fotosExtra: ["/colecao/conjunto-duda.jpg"],
     categoria: "Tops",
@@ -399,8 +434,9 @@ export const produtos: Produto[] = [
     nome: "Top Mirror",
     detalhes:
       "Feito à mão, sob medida, com um mix de chatons espelhados, elos e corrente de aço banhado em verniz italiano (alta resistência e durabilidade) e penduricalhos de miçanga.",
-    preco: 400,
-    parcelas: "3x de R$ 150 sem juros",
+    preco: 380,
+    precoCartao: 400,
+    maxParcelas: 3,
     foto: "/colecao/top-mirror.jpg",
     fotoHover: "/colecao/top-mirror-2.jpg",
     fotosExtra: ["/colecao/top-mirror-3.jpg"],
@@ -412,8 +448,9 @@ export const produtos: Produto[] = [
     nome: "Top Imperatriz",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e pérolas. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 450,
-    parcelas: "3x de R$ 165 sem juros",
+    preco: 430,
+    precoCartao: 450,
+    maxParcelas: 3,
     foto: "/colecao/top-imperatriz.jpg",
     categoria: "Tops",
     producao: "até 7 dias úteis",
@@ -424,7 +461,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas, cristais e pedrarias. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 450,
-    parcelas: "3x de R$ 165 sem juros",
+    precoCartao: 499.9,
+    maxParcelas: 4,
     foto: "/colecao/top-bruna.jpg",
     categoria: "Tops",
     producao: "até 10 dias úteis",
@@ -434,8 +472,9 @@ export const produtos: Produto[] = [
     nome: "Top Golden",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e pedras naturais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 450,
-    parcelas: "3x de R$ 165 sem juros",
+    preco: 430,
+    precoCartao: 450,
+    maxParcelas: 3,
     foto: "/colecao/top-golden.jpg",
     categoria: "Tops",
     producao: "até 10 dias úteis",
@@ -446,7 +485,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de correntes de aço banhadas em verniz italiano (alta resistência e durabilidade).",
     preco: 450,
-    parcelas: "3x de R$ 170 sem juros",
+    precoCartao: 499.9,
+    maxParcelas: 4,
     foto: "/colecao/top-chains.jpg",
     categoria: "Tops",
     producao: "até 5 dias úteis",
@@ -457,7 +497,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas e cristais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 430,
-    parcelas: "3x de R$ 155 sem juros",
+    precoCartao: 450,
+    maxParcelas: 3,
     foto: "/colecao/top-layla.jpg",
     categoria: "Tops",
     producao: "até 7 dias úteis",
@@ -468,7 +509,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de elos e conchas de acrílico. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 370,
-    parcelas: "3x de R$ 135 sem juros",
+    precoCartao: 399.9,
+    maxParcelas: 4,
     foto: "/colecao/top-giurds.jpg",
     fotoHover: "/colecao/top-giurds-2.jpg",
     categoria: "Tops",
@@ -480,7 +522,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e elos. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 370,
-    parcelas: "3x de R$ 135 sem juros",
+    precoCartao: 399.9,
+    maxParcelas: 4,
     foto: "/colecao/top-beatriz.jpg",
     categoria: "Tops",
     producao: "até 10 dias úteis",
@@ -491,7 +534,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de elos, paetês e pedrarias que representam o fundo do mar. Possui corrente de aço e acabamento banhados em verniz italiano (alta resistência e durabilidade).",
     preco: 300,
-    parcelas: "3x de R$ 105 sem juros",
+    precoCartao: 350,
+    maxParcelas: 4,
     foto: "/colecao/top-nanda.jpg",
     fotoHover: "/colecao/top-nanda-2.jpg",
     categoria: "Tops",
@@ -502,8 +546,9 @@ export const produtos: Produto[] = [
     nome: "Top Ananda",
     detalhes:
       "Feito à mão, sob medida, com miçangas de acrílico e de madeira. Possui corrente de aço banhada em verniz italiano para ajuste nas costas e pescoço.",
-    preco: 300,
-    parcelas: "3x de R$ 105 sem juros",
+    preco: 270,
+    precoCartao: 299.9,
+    maxParcelas: 3,
     foto: "/colecao/top-ananda.jpg",
     categoria: "Tops",
     producao: "até 5 dias úteis",
@@ -513,8 +558,9 @@ export const produtos: Produto[] = [
     nome: "Top Shirlene",
     detalhes:
       "Feito à mão, sob medida, com um mix de pérolas e correntes. Possui acabamento e correntes de aço banhados em verniz italiano (alta resistência e durabilidade).",
-    preco: 270,
-    parcelas: "3x de R$ 100 sem juros",
+    preco: 299.9,
+    precoCartao: 320,
+    maxParcelas: 3,
     foto: "/colecao/top-shirlene.jpg",
     categoria: "Tops",
     producao: "até 5 dias úteis",
@@ -563,8 +609,9 @@ export const produtos: Produto[] = [
     nome: "Saia Brisa",
     detalhes:
       "Feito à mão, sob medida, com um mix de cristais e conchas naturais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 650,
-    parcelas: "4x de R$ 175 sem juros",
+    preco: 670,
+    precoCartao: 699.9,
+    maxParcelas: 5,
     foto: "/colecao/saia-brisa.jpg",
     fotoHover: "/colecao/saia-brisa-2.jpg",
     categoria: "Saias",
@@ -575,8 +622,9 @@ export const produtos: Produto[] = [
     nome: "Saia Crystal",
     detalhes:
       "Feito à mão, sob medida, com um mix de cristais, contas de acrílico e correntes em acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/conjunto-crystal.jpg",
     fotoHover: "/colecao/saia-crystal.jpg",
     fotosExtra: ["/colecao/saia-crystal-2.jpg"],
@@ -588,8 +636,9 @@ export const produtos: Produto[] = [
     nome: "Saia Duda",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e miçangas. Possui acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/saia-duda.jpg",
     fotoHover: "/colecao/saia-duda-2.jpg",
     fotosExtra: ["/colecao/conjunto-duda.jpg"],
@@ -601,8 +650,9 @@ export const produtos: Produto[] = [
     nome: "Saia Giô",
     detalhes:
       "Feito à mão, sob medida, com um mix de pedrarias e correntes de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 600,
-    parcelas: "4x de R$ 160 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/saia-gio-2.jpg",
     fotoHover: "/colecao/saia-gio.jpg",
     fotosExtra: ["/colecao/conjunto-gio.jpg"],
@@ -614,8 +664,9 @@ export const produtos: Produto[] = [
     nome: "Saia Sarah",
     detalhes:
       "Feito à mão, sob medida, com um mix de cristais e conchas naturais. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 580,
-    parcelas: "4x de R$ 155 sem juros",
+    preco: 550,
+    precoCartao: 599.9,
+    maxParcelas: 5,
     foto: "/colecao/saia-sarah.jpg",
     fotoHover: "/colecao/saia-sarah-2.jpg",
     categoria: "Saias",
@@ -630,8 +681,9 @@ export const produtos: Produto[] = [
     nome: "Acessório Marea",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas de acrílico e pérolas. Possui correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 380,
-    parcelas: "3x de R$ 140 sem juros",
+    preco: 350,
+    precoCartao: 380,
+    maxParcelas: 3,
     foto: "/colecao/acessorio-marea.jpg",
     categoria: "Tops",
     producao: "até 5 dias úteis",
@@ -642,7 +694,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, sob medida, com um mix de pérolas e miçangas que representam o fundo do mar. Possui corrente de aço banhada em verniz italiano para ajuste nas costas e pescoço.",
     preco: 320,
-    parcelas: "3x de R$ 125 sem juros",
+    precoCartao: 350,
+    maxParcelas: 3,
     foto: "/colecao/acessorio-maris.jpg",
     fotoHover: "/colecao/acessorio-maris-2.jpg",
     fotosExtra: ["/colecao/acessorio-maris-3.jpg"],
@@ -655,7 +708,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, com um mix de miçangas e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 200,
-    parcelas: "3x de R$ 75 sem juros",
+    precoCartao: 225,
+    maxParcelas: 3,
     foto: "/colecao/headpiece-luna.jpg",
     fotoHover: "/colecao/headpiece-luna-2.jpg",
     categoria: "Acessórios",
@@ -667,7 +721,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, com um mix de miçangas e corrente de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 170,
-    parcelas: "3x de R$ 70 sem juros",
+    precoCartao: 210,
+    maxParcelas: 3,
     foto: "/colecao/headpiece-crystal.jpg",
     fotoHover: "/colecao/headpiece-crystal-2.jpg",
     categoria: "Acessórios",
@@ -679,7 +734,8 @@ export const produtos: Produto[] = [
     detalhes:
       "Feito à mão, com um mix de miçangas e corrente de aço banhado em verniz italiano (alta resistência e durabilidade).",
     preco: 170,
-    parcelas: "3x de R$ 70 sem juros",
+    precoCartao: 210,
+    maxParcelas: 3,
     foto: "/colecao/headpiece-moonlight.jpg",
     fotoHover: "/colecao/headpiece-moonlight-2.jpg",
     categoria: "Acessórios",

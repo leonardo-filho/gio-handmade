@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCart } from "../cart/CartProvider";
-import { formatBRLCurto } from "@/lib/format";
-import { calcularParcelamento } from "@/lib/parcelas";
+import { formatBRLPreco } from "@/lib/format";
+import { labelParcelamento, parcelamentoCartao } from "@/lib/parcelas";
 import type { Produto } from "@/data/produtos";
 
 const WA = "559192982017";
@@ -18,6 +19,20 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
   const { add } = useCart();
   const fotos = [produto.foto, produto.fotoHover, ...(produto.fotosExtra ?? [])].filter(Boolean) as string[];
   const [fotoAtiva, setFotoAtiva] = useState(0);
+  const [linkCopiado, setLinkCopiado] = useState(false);
+  const parcelamento = parcelamentoCartao(produto);
+
+  // Link direto da peça (para stories/bio): abre a loja já com este modal.
+  async function copiarLink() {
+    const link = `${window.location.origin}/loja?produto=${produto.id}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setLinkCopiado(true);
+      setTimeout(() => setLinkCopiado(false), 2000);
+    } catch {
+      window.prompt("Copie o link da peça:", link);
+    }
+  }
 
   // Esc fecha + trava o scroll do fundo enquanto aberto
   useEffect(() => {
@@ -33,7 +48,11 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
     };
   }, [onClose]);
 
+  // Adiciona, mostra "Adicionado ✓" por um instante e fecha o modal — a
+  // cliente volta pra loja e continua navegando (o badge do header atualiza).
+  const [adicionado, setAdicionado] = useState(false);
   function adicionar() {
+    if (adicionado) return;
     add({
       id: produto.id,
       nome: produto.nome,
@@ -41,7 +60,8 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
       foto: produto.foto,
       categoria: produto.categoria,
     });
-    onClose();
+    setAdicionado(true);
+    setTimeout(onClose, 700);
   }
 
   // Mensagem já pronta: pedido + convite para personalizar (upsell) e combinar (cross-sell)
@@ -51,7 +71,10 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
       `Oi Gio! Quero encomendar a ${produto.nome}. Também queria ver acabamentos extras (pingentes, franjas) e combinar com um headpiece, pulseira ou chocker. Pode me ajudar?`
     );
 
-  return (
+  // Portal no <body>: os cards da vitrine animam com transform (StaggerItem),
+  // e um ancestral com transform vira o containing block de position:fixed —
+  // sem o portal o modal renderia "dentro" do card durante a animação.
+  return createPortal(
     <motion.div
       className="fixed inset-0 z-[95] flex items-end justify-center sm:items-center"
       initial={{ opacity: 0 }}
@@ -132,12 +155,39 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
             {produto.nome}
           </h2>
 
-          {/* Preço */}
+          {/* Preço: cartão parcelado primeiro, pix como alternativa */}
           <div className="mt-4 border-t border-[#1B4965]/15 pt-4">
             <p className="font-[family-name:var(--font-serif)] text-2xl font-medium tabular-nums text-[#1B4965]">
-              {formatBRLCurto(produto.preco)} <span className="text-sm font-normal text-[#1B4965]/55">no pix</span>
+              {formatBRLPreco(parcelamento.total)}{" "}
+              <span className="text-sm font-normal text-[#1B4965]/55">
+                {labelParcelamento(parcelamento)}
+              </span>
             </p>
-            <p className="mt-0.5 text-sm text-[#1B4965]/70">ou {produto.parcelas || calcularParcelamento(produto.preco)}</p>
+            <p className="mt-0.5 text-sm text-[#1B4965]/70">
+              ou {formatBRLPreco(produto.preco)} no pix
+            </p>
+            <button
+              type="button"
+              onClick={copiarLink}
+              className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-[#1B4965]/55 underline-offset-4 transition-colors hover:text-[#1B4965] hover:underline"
+            >
+              {linkCopiado ? (
+                <>
+                  <svg className="h-3.5 w-3.5 text-[#2f7a45]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 6 9 17l-5-5" />
+                  </svg>
+                  Link copiado!
+                </>
+              ) : (
+                <>
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                  </svg>
+                  Copiar link da peça
+                </>
+              )}
+            </button>
           </div>
 
           {/* Descrição completa */}
@@ -174,9 +224,20 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
             <button
               type="button"
               onClick={adicionar}
-              className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#1B4965] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-[#EDE7D9] transition-colors hover:bg-[#130209] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
+              className={`inline-flex items-center justify-center gap-2 rounded-sm px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-[#EDE7D9] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9] ${
+                adicionado ? "bg-[#2f7a45]" : "bg-[#1B4965] hover:bg-[#130209]"
+              }`}
             >
-              Adicionar ao carrinho
+              {adicionado ? (
+                <>
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 6 9 17l-5-5" />
+                  </svg>
+                  Adicionado
+                </>
+              ) : (
+                "Adicionar ao carrinho"
+              )}
             </button>
             <a
               href={whatsapp}
@@ -192,6 +253,7 @@ export default function ProdutoModal({ produto, onClose }: { produto: Produto; o
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

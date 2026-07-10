@@ -4,7 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import ProdutoModal from "../loja/ProdutoModal";
-import { formatBRLCurto } from "@/lib/format";
+import { formatBRLPreco } from "@/lib/format";
+import { labelParcelamento, parcelamentoCartao } from "@/lib/parcelas";
 import type { Produto } from "@/data/produtos";
 
 // Card das peças da Coleção Solaris na home (seção creme/navy).
@@ -13,6 +14,7 @@ export default function SolarisPieceCard({ produto }: { produto: Produto }) {
   const [aberto, setAberto] = useState(false);
   const abrir = () => setAberto(true);
   const tipo = produto.nome.startsWith("Headpiece") ? "Headpiece" : "Top";
+  const parcelamento = parcelamentoCartao(produto);
 
   return (
     <div className="group flex h-full w-full flex-col">
@@ -58,8 +60,13 @@ export default function SolarisPieceCard({ produto }: { produto: Produto }) {
           </h3>
         </button>
         <p className="mt-1 font-[family-name:var(--font-serif)] text-lg font-medium tabular-nums text-[#1B4965]">
-          {formatBRLCurto(produto.preco)}
-          <span className="ml-1 text-[11px] font-normal text-[#1B4965]/50">no pix</span>
+          {formatBRLPreco(parcelamento.total)}
+          <span className="ml-1 text-[11px] font-normal text-[#1B4965]/50">
+            {labelParcelamento(parcelamento)}
+          </span>
+        </p>
+        <p className="mt-0.5 text-[11px] text-[#1B4965]/55">
+          ou {formatBRLPreco(produto.preco)} no pix
         </p>
       </div>
 

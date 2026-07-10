@@ -12,3 +12,16 @@ export function formatBRL(valor: number): string {
 export function formatBRLCurto(valor: number): string {
   return "R$ " + valor.toLocaleString("pt-BR", { maximumFractionDigits: 0 });
 }
+
+// Preço de vitrine: sem centavos quando o valor é redondo ("R$ 550"),
+// com centavos quando não é ("R$ 599,90").
+export function formatBRLPreco(valor: number): string {
+  const inteiro = Number.isInteger(valor);
+  return (
+    "R$ " +
+    valor.toLocaleString("pt-BR", {
+      minimumFractionDigits: inteiro ? 0 : 2,
+      maximumFractionDigits: inteiro ? 0 : 2,
+    })
+  );
+}

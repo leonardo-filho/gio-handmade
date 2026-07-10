@@ -105,7 +105,7 @@ export default function CartDrawer() {
     const linhas = [
       "Oi Gio! Quero fechar meu pedido feito pelo site ✨",
       "",
-      "*Itens:*",
+      "*Itens (valores no pix):*",
       itens,
       "",
       `Subtotal: ${formatBRL(subtotal)}`,
@@ -400,6 +400,9 @@ export default function CartDrawer() {
                         {formatBRL(total)}
                       </span>
                     </div>
+                    <p className="pt-0.5 text-[11px] text-[#1B4965]/45">
+                      Valores à vista no pix. Para parcelar sem juros no cartão, combine no WhatsApp.
+                    </p>
                   </div>
 
                   {/* CTA */}

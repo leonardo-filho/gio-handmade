@@ -1,24 +1,40 @@
+// Parcelamento no cartão de crédito. A vitrine mostra primeiro o valor no
+// cartão ("R$ 599,90 até 5x sem juros") e o pix como alternativa mais barata.
+
+export type Parcelamento = {
+  total: number; // valor total no cartão
+  vezes: number; // parcelamento máximo sem juros ("até Nx sem juros")
+};
+
 /**
- * Calcula o valor do parcelamento no cartão de crédito baseado no valor à vista (PIX).
- * Adiciona uma margem padrão de ~10% para o valor no cartão e arredonda para o múltiplo
- * de 5 mais próximo para manter os preços limpos e similares ao que já era praticado.
+ * Retorna o valor no cartão e o parcelamento máximo de um produto.
+ * Usa os valores definidos no catálogo (`precoCartao` + `maxParcelas`);
+ * para peças ainda sem valor de cartão definido, estima com acréscimo de
+ * ~10% sobre o pix, arredondado ao múltiplo de 5 (mesma regra já praticada).
  */
-export function calcularParcelamento(precoPix: number): string {
-  // Acréscimo padrão de ~10% para o valor no cartão
-  const valorCartaoBruto = precoPix * 1.10;
-  
-  // Arredonda para o múltiplo de 5 mais próximo (ex: 715, 605, 1250)
-  const valorCartao = Math.ceil(valorCartaoBruto / 5) * 5;
+export function parcelamentoCartao(produto: {
+  preco: number;
+  precoCartao?: number;
+  maxParcelas?: number;
+}): Parcelamento {
+  if (produto.precoCartao && produto.maxParcelas) {
+    return { total: produto.precoCartao, vezes: produto.maxParcelas };
+  }
 
-  // Define o número de parcelas baseado no valor
-  let parcelas = 1;
-  if (valorCartao >= 1200) parcelas = 6;
-  else if (valorCartao >= 900) parcelas = 5;
-  else if (valorCartao >= 500) parcelas = 4;
-  else if (valorCartao >= 150) parcelas = 3;
-  else if (valorCartao >= 100) parcelas = 2;
+  // Math.round evita ruído de ponto flutuante (400 * 1.1 = 440.00000000000006)
+  const total = Math.ceil(Math.round(produto.preco * 110) / 100 / 5) * 5;
 
-  // Valor final de cada parcela, garantindo que não tenha dizimas
-  const valorParcela = Math.ceil(valorCartao / parcelas);
-  return `${parcelas}x de R$ ${valorParcela} sem juros`;
+  let vezes = 1;
+  if (total >= 1200) vezes = 6;
+  else if (total >= 900) vezes = 5;
+  else if (total >= 500) vezes = 4;
+  else if (total >= 150) vezes = 3;
+  else if (total >= 100) vezes = 2;
+
+  return { total, vezes };
+}
+
+// Texto do parcelamento ("até 5x sem juros"; "no cartão" quando não parcela).
+export function labelParcelamento(p: Parcelamento): string {
+  return p.vezes > 1 ? `até ${p.vezes}x sem juros` : "no cartão";
 }

@@ -1,20 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
 import AddToCartButton from "../cart/AddToCartButton";
 import ProdutoModal from "./ProdutoModal";
-import { formatBRLCurto } from "@/lib/format";
-import { calcularParcelamento } from "@/lib/parcelas";
+import { formatBRLPreco } from "@/lib/format";
+import { labelParcelamento, parcelamentoCartao } from "@/lib/parcelas";
 import type { Produto } from "@/data/produtos";
 
 export default function ProdutoCard({ produto }: { produto: Produto }) {
   const [aberto, setAberto] = useState(false);
-  const abrir = () => setAberto(true);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const parcelamento = parcelamentoCartao(produto);
+
+  // Sincroniza a URL ao abrir/fechar: cada peça ganha um link compartilhável
+  // (/loja?produto=top-lourdes) que a Gio pode usar nos stories e na bio.
+  const abrir = () => {
+    setAberto(true);
+    window.history.replaceState(null, "", `?produto=${produto.id}`);
+  };
+  const fechar = () => {
+    setAberto(false);
+    window.history.replaceState(null, "", window.location.pathname);
+  };
+
+  // Deep link: se a página abriu com ?produto=<id> (ou #<id>), posiciona na
+  // peça na hora e abre o modal um instante depois — em dois tempos a chegada
+  // fica suave (a pessoa vê o card e o modal entra animando por cima).
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const alvo = url.searchParams.get("produto") ?? url.hash.replace(/^#/, "");
+    if (alvo !== produto.id) return;
+    cardRef.current?.scrollIntoView({ block: "center" });
+    const timer = setTimeout(() => setAberto(true), 350);
+    return () => clearTimeout(timer);
+  }, [produto.id]);
 
   return (
-    <div className="group flex h-full flex-col">
+    <div ref={cardRef} id={produto.id} className="group flex h-full scroll-mt-[150px] flex-col">
       {/* Foto (clique abre os detalhes) */}
       <button
         type="button"
@@ -67,10 +91,14 @@ export default function ProdutoCard({ produto }: { produto: Produto }) {
 
         <div className="mt-2">
           <p className="font-[family-name:var(--font-serif)] text-lg font-medium tabular-nums text-[#1B4965]">
-            {formatBRLCurto(produto.preco)}
-            <span className="ml-1 text-[11px] font-normal text-[#1B4965]/50">no pix</span>
+            {formatBRLPreco(parcelamento.total)}
+            <span className="ml-1 text-[11px] font-normal text-[#1B4965]/50">
+              {labelParcelamento(parcelamento)}
+            </span>
           </p>
-          <p className="mt-0.5 text-[11px] text-[#1B4965]/55">ou {produto.parcelas || calcularParcelamento(produto.preco)}</p>
+          <p className="mt-0.5 text-[11px] text-[#1B4965]/55">
+            ou {formatBRLPreco(produto.preco)} no pix
+          </p>
           {produto.producao && (
             <p className="mt-0.5 text-[11px] text-[#1B4965]/45">{produto.producao} de confecção</p>
           )}
@@ -99,7 +127,7 @@ export default function ProdutoCard({ produto }: { produto: Produto }) {
       </div>
 
       <AnimatePresence>
-        {aberto && <ProdutoModal produto={produto} onClose={() => setAberto(false)} />}
+        {aberto && <ProdutoModal produto={produto} onClose={fechar} />}
       </AnimatePresence>
     </div>
   );

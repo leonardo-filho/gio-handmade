@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal, StaggerGroup, StaggerItem } from "./Reveal";
-import { calcularParcelamento } from "@/lib/parcelas";
+import { formatBRLPreco } from "@/lib/format";
+import { labelParcelamento, parcelamentoCartao } from "@/lib/parcelas";
 
 type Produto = {
   id: number;
   nome: string;
   descricao: string;
-  preco: number;
-  parcelamento?: string;
+  preco: number; // valor à vista no PIX
+  precoCartao?: number;
+  maxParcelas?: number;
   tamanho?: string;
   src: string;
   mensagem?: string;
@@ -83,9 +85,14 @@ export default function ProntaEntrega() {
                 </h3>
                 <p className="text-xs text-[#1B4965]/60 mt-1 mb-2 leading-relaxed">{produto.descricao}</p>
                 <p className="text-sm font-bold text-[#1B4965]">
-                  R$ {produto.preco.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  {formatBRLPreco(parcelamentoCartao(produto).total)}{" "}
+                  <span className="font-normal text-[#1B4965]/60">
+                    {labelParcelamento(parcelamentoCartao(produto))}
+                  </span>
                 </p>
-                <p className="text-xs text-[#1B4965]/50 mt-0.5">{produto.parcelamento || calcularParcelamento(produto.preco)}</p>
+                <p className="text-xs text-[#1B4965]/50 mt-0.5">
+                  ou {formatBRLPreco(produto.preco)} no pix
+                </p>
               </div>
             </Link>
             </StaggerItem>

@@ -99,6 +99,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [cupomCodigo, hydrated]);
 
+  // Adicionar NÃO abre o drawer: a cliente continua navegando na loja e o
+  // badge do carrinho no header dá o feedback. O drawer abre só pelo ícone.
   const add = useCallback((item: CartItem, qty: number = 1) => {
     setLines((prev) => {
       const existente = prev.find((l) => l.id === item.id);
@@ -107,7 +109,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...item, qty }];
     });
-    setIsOpen(true);
   }, []);
 
   const remove = useCallback((id: string) => {
