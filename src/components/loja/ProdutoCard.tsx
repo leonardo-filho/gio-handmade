@@ -66,7 +66,7 @@ export default function ProdutoCard({ produto }: { produto: Produto }) {
             />
           )}
           {produto.prontaEntrega && (
-            <span className="absolute left-2 top-2 z-10 bg-[#2f7a45] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+            <span className="absolute left-2 top-2 z-10 bg-[#1B4965] px-2 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#EDE7D9]">
               Pronta entrega
             </span>
           )}
