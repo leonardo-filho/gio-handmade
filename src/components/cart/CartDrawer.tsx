@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCart } from "./CartProvider";
 import { formatBRL } from "@/lib/format";
+import { calcularDesconto } from "@/lib/cupons";
 import { calcularFrete, mascararCep, normalizarCep, ORIGEM, type FreteEstimado } from "@/lib/frete";
+import { labelParcelamento, parcelamentoCartao } from "@/lib/parcelas";
+import { produtos } from "@/data/produtos";
 
 const WA = "559192982017";
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
 
 type FreteStatus = "idle" | "loading" | "ok" | "erro";
+type FormaPagamento = "pix" | "cartao";
 
 export default function CartDrawer() {
   const reduce = useReducedMotion();
@@ -25,7 +29,6 @@ export default function CartDrawer() {
     count,
     clear,
     cupom,
-    desconto,
     aplicarCupom,
     removerCupom,
   } = useCart();
@@ -36,6 +39,45 @@ export default function CartDrawer() {
 
   const [codigoCupom, setCodigoCupom] = useState("");
   const [cupomErro, setCupomErro] = useState<string | null>(null);
+  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento>("pix");
+
+  const produtoPorId = useMemo(() => new Map(produtos.map((produto) => [produto.id, produto])), []);
+
+  const linhasPagamento = useMemo(
+    () =>
+      lines.map((line) => {
+        const produto = produtoPorId.get(line.id);
+        const parcelamento = parcelamentoCartao(produto ?? { preco: line.preco });
+        const precoUnitario = formaPagamento === "cartao" ? parcelamento.total : line.preco;
+
+        return {
+          line,
+          parcelamento,
+          precoUnitario,
+          totalLinha: precoUnitario * line.qty,
+        };
+      }),
+    [formaPagamento, lines, produtoPorId]
+  );
+
+  const subtotalPix = subtotal;
+  const subtotalCartao = useMemo(
+    () =>
+      lines.reduce((acc, line) => {
+        const produto = produtoPorId.get(line.id);
+        return acc + parcelamentoCartao(produto ?? { preco: line.preco }).total * line.qty;
+      }, 0),
+    [lines, produtoPorId]
+  );
+
+  const subtotalPagamento = formaPagamento === "cartao" ? subtotalCartao : subtotalPix;
+  const descontoPagamento = cupom ? calcularDesconto(subtotalPagamento, cupom) : 0;
+  const total = subtotalPagamento - descontoPagamento + (frete?.valor ?? 0);
+  const descontoPix = cupom ? calcularDesconto(subtotalPix, cupom) : 0;
+  const descontoCartao = cupom ? calcularDesconto(subtotalCartao, cupom) : 0;
+  const totalPix = subtotalPix - descontoPix + (frete?.valor ?? 0);
+  const totalCartao = subtotalCartao - descontoCartao + (frete?.valor ?? 0);
+  const formaPagamentoLabel = formaPagamento === "cartao" ? "Cartão de crédito" : "Pix à vista";
 
   function onAplicarCupom() {
     const resultado = aplicarCupom(codigoCupom);
@@ -95,24 +137,30 @@ export default function CartDrawer() {
     }
   }
 
-  const total = subtotal - desconto + (frete?.valor ?? 0);
-
   function mensagemWhatsApp() {
-    const itens = lines
-      .map((l) => `• ${l.qty}x ${l.nome}: ${formatBRL(l.preco * l.qty)}`)
+    const itens = linhasPagamento
+      .map(({ line, parcelamento, precoUnitario, totalLinha }) => {
+        const detalheQuantidade = line.qty > 1 ? ` (${formatBRL(precoUnitario)} un.)` : "";
+        const detalhePagamento =
+          formaPagamento === "cartao" ? ` · ${labelParcelamento(parcelamento)}` : "";
+
+        return `• ${line.qty}x ${line.nome}: ${formatBRL(totalLinha)}${detalheQuantidade}${detalhePagamento}`;
+      })
       .join("\n");
 
     const linhas = [
       "Oi Gio! Quero fechar meu pedido feito pelo site ✨",
       "",
-      "*Itens (valores no pix):*",
+      `Forma de pagamento: ${formaPagamentoLabel}`,
+      "",
+      formaPagamento === "cartao" ? "*Itens (valores no cartão):*" : "*Itens (valores no pix):*",
       itens,
       "",
-      `Subtotal: ${formatBRL(subtotal)}`,
+      `Subtotal: ${formatBRL(subtotalPagamento)}`,
     ];
 
-    if (cupom && desconto > 0) {
-      linhas.push(`Cupom ${cupom.codigo} (${cupom.percentual}% OFF): -${formatBRL(desconto)}`);
+    if (cupom && descontoPagamento > 0) {
+      linhas.push(`Cupom ${cupom.codigo} (${cupom.percentual}% OFF): -${formatBRL(descontoPagamento)}`);
     }
 
     if (frete) {
@@ -126,7 +174,7 @@ export default function CartDrawer() {
 
       //linhas.push(`Prazo estimado: de ${frete.prazoMin} a ${frete.prazoMax} dias úteis`);
     } else {
-      linhas.push(`*Total (sem frete): ${formatBRL(subtotal - desconto)}*`);
+      linhas.push(`*Total (sem frete): ${formatBRL(subtotalPagamento - descontoPagamento)}*`);
       linhas.push("");
       linhas.push("Quero calcular o frete com você.");
     }
@@ -210,7 +258,7 @@ export default function CartDrawer() {
                 {/* ---------- Itens ---------- */}
                 <div data-lenis-prevent className="flex-1 overflow-y-auto px-5 py-4">
                   <ul className="space-y-4">
-                    {lines.map((l) => (
+                    {linhasPagamento.map(({ line: l, parcelamento, precoUnitario, totalLinha }) => (
                       <li key={l.id} className="flex gap-3.5">
                         <div className="relative h-24 w-[72px] shrink-0 overflow-hidden rounded-sm bg-white">
                           <Image src={l.foto} alt={l.nome} fill sizes="72px" className="object-cover" />
@@ -232,7 +280,9 @@ export default function CartDrawer() {
                             </button>
                           </div>
                           <p className="mt-0.5 text-xs text-[#1B4965]/55">
-                            {formatBRL(l.preco)}
+                            {formaPagamento === "cartao"
+                              ? `${formatBRL(precoUnitario)} ${labelParcelamento(parcelamento)}`
+                              : `${formatBRL(precoUnitario)} no pix`}
                           </p>
 
                           <div className="mt-auto flex items-center justify-between pt-2">
@@ -261,7 +311,7 @@ export default function CartDrawer() {
                               </button>
                             </div>
                             <span className="font-[family-name:var(--font-serif)] text-base font-medium tabular-nums text-[#1B4965]">
-                              {formatBRL(l.preco * l.qty)}
+                              {formatBRL(totalLinha)}
                             </span>
                           </div>
                         </div>
@@ -374,16 +424,59 @@ export default function CartDrawer() {
                     )}
                   </div>
 
+                  {/* Forma de pagamento */}
+                  <fieldset className="mb-4">
+                    <legend className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#1B4965]/55">
+                      Forma de pagamento
+                    </legend>
+                    <div className="mt-2 grid grid-cols-2 gap-1 rounded-sm border border-[#1B4965]/20 bg-white/45 p-1">
+                      <button
+                        type="button"
+                        aria-pressed={formaPagamento === "pix"}
+                        onClick={() => setFormaPagamento("pix")}
+                        className={`rounded-[2px] px-2.5 py-2.5 text-left transition-colors ${
+                          formaPagamento === "pix"
+                            ? "bg-[#1B4965] text-[#EDE7D9]"
+                            : "text-[#1B4965] hover:bg-[#1B4965]/8"
+                        }`}
+                      >
+                        <span className="block text-[11px] font-bold uppercase tracking-[0.14em]">
+                          Pix
+                        </span>
+                        <span className="mt-0.5 block text-sm font-semibold tabular-nums">
+                          {formatBRL(totalPix)}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={formaPagamento === "cartao"}
+                        onClick={() => setFormaPagamento("cartao")}
+                        className={`rounded-[2px] px-2.5 py-2.5 text-left transition-colors ${
+                          formaPagamento === "cartao"
+                            ? "bg-[#1B4965] text-[#EDE7D9]"
+                            : "text-[#1B4965] hover:bg-[#1B4965]/8"
+                        }`}
+                      >
+                        <span className="block text-[11px] font-bold uppercase tracking-[0.14em]">
+                          Cartão
+                        </span>
+                        <span className="mt-0.5 block text-sm font-semibold tabular-nums">
+                          {formatBRL(totalCartao)}
+                        </span>
+                      </button>
+                    </div>
+                  </fieldset>
+
                   {/* Totais */}
                   <div className="space-y-1.5 border-t border-[#1B4965]/10 pt-3 text-sm">
                     <div className="flex justify-between text-[#1B4965]/75">
-                      <span>Subtotal</span>
-                      <span className="tabular-nums">{formatBRL(subtotal)}</span>
+                      <span>Subtotal {formaPagamento === "cartao" ? "no cartão" : "no pix"}</span>
+                      <span className="tabular-nums">{formatBRL(subtotalPagamento)}</span>
                     </div>
-                    {desconto > 0 && (
+                    {descontoPagamento > 0 && (
                       <div className="flex justify-between font-medium text-[#2f7a45]">
                         <span>Desconto{cupom ? ` (${cupom.codigo})` : ""}</span>
-                        <span className="tabular-nums">−{formatBRL(desconto)}</span>
+                        <span className="tabular-nums">−{formatBRL(descontoPagamento)}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-[#1B4965]/75">
@@ -401,7 +494,9 @@ export default function CartDrawer() {
                       </span>
                     </div>
                     <p className="pt-0.5 text-[11px] text-[#1B4965]/45">
-                      Valores à vista no pix. Para parcelar sem juros no cartão, combine no WhatsApp.
+                      {formaPagamento === "cartao"
+                        ? "Total calculado com os valores de cartão da vitrine. Parcelamento confirmado no WhatsApp."
+                        : "Total calculado com os valores à vista no pix."}
                     </p>
                   </div>
 
