@@ -19,7 +19,7 @@ export const cupons: Cupom[] = [
   {
     codigo: "SOLARIS",
     percentual: 10,
-    validoAte: "2026-07-13", // segunda-feira que vem
+    validoAte: "2026-08-01", // sábado
     descricao: "10% OFF em toda a loja",
   },
 ];
