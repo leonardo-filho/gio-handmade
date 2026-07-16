@@ -25,7 +25,6 @@ export default function CartDrawer() {
     close,
     remove,
     setQty,
-    subtotal,
     count,
     clear,
     cupom,
@@ -47,8 +46,9 @@ export default function CartDrawer() {
     () =>
       lines.map((line) => {
         const produto = produtoPorId.get(line.id);
-        const parcelamento = parcelamentoCartao(produto ?? { preco: line.preco });
-        const precoUnitario = formaPagamento === "cartao" ? parcelamento.total : line.preco;
+        const precoPix = produto?.preco ?? line.preco;
+        const parcelamento = parcelamentoCartao(produto ?? { preco: precoPix });
+        const precoUnitario = formaPagamento === "cartao" ? parcelamento.total : precoPix;
 
         return {
           line,
@@ -60,7 +60,14 @@ export default function CartDrawer() {
     [formaPagamento, lines, produtoPorId]
   );
 
-  const subtotalPix = subtotal;
+  const subtotalPix = useMemo(
+    () =>
+      lines.reduce((acc, line) => {
+        const produto = produtoPorId.get(line.id);
+        return acc + (produto?.preco ?? line.preco) * line.qty;
+      }, 0),
+    [lines, produtoPorId]
+  );
   const subtotalCartao = useMemo(
     () =>
       lines.reduce((acc, line) => {
