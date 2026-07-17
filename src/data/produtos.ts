@@ -285,6 +285,24 @@ export const produtos: Produto[] = [
   //  TOPS
   // ============================================================
   {
+    id: "top-maya",
+    nome: "Top Maya",
+    detalhes:
+      "Bordado à mão, com um mix de mais de 2.500 miçangas e pedrarias. Caso queira bordar as costas, avisar previamente.",
+    preco: 1099.9,
+    precoCartao: 1199.9,
+    maxParcelas: 5,
+    foto: "/colecao/top-maya.jpg",
+    fotoHover: "/colecao/top-maya-2.jpg",
+    fotosExtra: [
+      "/colecao/top-maya-3.jpg",
+      "/colecao/top-maya-4.jpg",
+      "/colecao/top-maya-5.jpg",
+    ],
+    categoria: "Tops",
+    producao: "até 14 dias úteis",
+  },
+  {
     id: "top-lourdes",
     nome: "Top Lourdes",
     detalhes:
