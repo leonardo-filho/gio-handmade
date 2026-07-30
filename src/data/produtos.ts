@@ -258,9 +258,9 @@ export const produtos: Produto[] = [
     nome: "Vestido Luna",
     detalhes:
       "Feito à mão, sob medida, com um mix de miçangas de acrílico e cristais. Correntes e acabamento de aço banhado em verniz italiano (alta resistência e durabilidade).",
-    preco: 1200,
-    precoCartao: 1299.9,
-    maxParcelas: 5,
+    preco: 1400,
+    precoCartao: 1499,
+    maxParcelas: 6,
     foto: "/colecao/vestido-luna.jpg",
     fotoHover: "/colecao/vestido-luna-2.jpg",
     fotosExtra: ["/colecao/vestido-luna-3.jpg"],
