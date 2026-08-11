@@ -22,6 +22,12 @@ export const cupons: Cupom[] = [
     validoAte: "2026-08-01", // sábado
     descricao: "10% OFF em toda a loja",
   },
+  {
+    codigo: "PRIMEIRACOMPRA",
+    percentual: 10,
+    validoAte: "2028-12-31", // cupom permanente na prática
+    descricao: "10% OFF na primeira compra",
+  },
 ];
 
 export type ResultadoCupom =
