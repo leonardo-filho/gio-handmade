@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gio Handmade · 4 versões</title>
+<meta name="description" content="As 4 versões da loja da Gio lado a lado, para escolher a base no sábado, 28/11/2026.">
+<link rel="icon" href="src/app/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --creme: #EDE7D9;
+    --creme-claro: #F4F0E6;
+    --navy: #1B4965;
+    --navy-fundo: #0F2A3B;
+    --menta: #C8E1E4;
+    --tinta: #130209;
+    --suave: #3F6178;
+    --linha: rgba(27, 73, 101, 0.18);
+    --serifa: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sem-serifa: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--creme);
+    color: var(--navy);
+    font-family: var(--serifa);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 4px; }
+
+  /* Topo */
+  .topo {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 16px 32px; padding: 18px clamp(16px, 3vw, 40px) 14px;
+    border-bottom: 1px solid var(--linha);
+  }
+  .marca { display: flex; align-items: center; gap: 18px; min-width: 0; }
+  /* O PNG do logo tem muita sobra em volta: a caixa recorta só a assinatura. */
+  .logo { position: relative; flex: none; width: 76px; height: 53px; overflow: hidden; }
+  .logo img { position: absolute; width: 108px; height: 108px; left: -16px; top: -27.8px; }
+  .sobre {
+    margin: 0 0 2px; font-family: var(--sem-serifa); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--suave);
+  }
+  h1 { margin: 0; font-weight: 500; font-size: clamp(22px, 2.3vw, 30px); line-height: 1.1; }
+
+  .controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .seg {
+    display: inline-flex; border: 1px solid var(--navy); border-radius: 999px; padding: 3px; gap: 2px;
+  }
+  .seg button, .discreto {
+    font-family: var(--sem-serifa); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    min-height: 36px; padding: 0 14px; border-radius: 999px; border: 0; cursor: pointer;
+    background: transparent; color: var(--navy);
+  }
+  .seg button:hover { background: rgba(27, 73, 101, 0.08); }
+  .seg button[aria-pressed="true"] { background: var(--navy); color: var(--creme); }
+  .discreto { border: 1px solid var(--linha); }
+  .discreto:hover { border-color: var(--navy); }
+
+  /* Grade das versões */
+  .grade {
+    display: grid; grid-template-columns: repeat(var(--colunas, 4), minmax(0, 1fr));
+    gap: 28px clamp(16px, 2vw, 32px); padding: 20px clamp(16px, 3vw, 40px) 32px;
+    align-items: start;
+  }
+  .versao { min-width: 0; }
+  .cabeca { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .numero {
+    margin: 0; font-family: var(--sem-serifa); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--suave);
+  }
+  h2 { margin: 2px 0 0; font-weight: 500; font-size: clamp(22px, 1.9vw, 28px); line-height: 1.1; }
+  .abrir {
+    flex: none; font-family: var(--sem-serifa); font-size: 12px; letter-spacing: 0.04em;
+    text-decoration: underline; text-underline-offset: 4px; color: var(--suave);
+    display: inline-flex; align-items: center; min-height: 32px; white-space: nowrap;
+  }
+  .abrir:hover { color: var(--navy); }
+
+  /* Aparelho: o tamanho real (390x844 ou 1440x900) encolhido por escala para caber. */
+  .palco { position: relative; margin: 0 auto; }
+  .aparelho {
+    position: absolute; top: 0; left: 0; transform-origin: 0 0;
+    background: var(--navy-fundo); box-shadow: 0 18px 40px rgba(15, 42, 59, 0.22);
+  }
+  .aparelho.celular { padding: 12px; border-radius: 54px; }
+  .aparelho.computador { padding: 0; border-radius: 12px; overflow: hidden; }
+  .barra {
+    display: none; height: 40px; align-items: center; gap: 8px; padding: 0 16px;
+    background: #E4DDCD; border-bottom: 1px solid rgba(27, 73, 101, 0.15);
+  }
+  .computador .barra { display: flex; }
+  .barra i { width: 12px; height: 12px; border-radius: 50%; background: rgba(27, 73, 101, 0.28); }
+  .barra .endereco {
+    margin-left: 14px; flex: 1; max-width: 520px; height: 26px; border-radius: 13px; background: var(--creme-claro);
+    font: 14px var(--sem-serifa); color: var(--suave); display: flex; align-items: center; padding: 0 14px;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .tela { position: relative; overflow: hidden; background: var(--creme); }
+  .celular .tela { border-radius: 42px; }
+  .tela iframe { display: block; border: 0; background: var(--creme); }
+  .espera {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 40px; text-align: center; background: var(--creme); color: var(--navy);
+    font-size: 26px; line-height: 1.3;
+  }
+  .computador .espera { font-size: 30px; }
+  .espera[hidden] { display: none; }
+  .espera small { font-family: var(--sem-serifa); font-size: 17px; color: var(--suave); line-height: 1.5; }
+  .espera code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 16px; }
+  .espera button {
+    font: 15px var(--sem-serifa); letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 12px 20px; border-radius: 999px; border: 1px solid var(--navy); background: transparent;
+    color: var(--navy); cursor: pointer;
+  }
+  .ponto { width: 10px; height: 10px; border-radius: 50%; background: var(--navy); animation: pulso 1.4s ease-in-out infinite; }
+  @keyframes pulso { 50% { opacity: 0.25; } }
+  @media (prefers-reduced-motion: reduce) { .ponto { animation: none; } }
+
+  .resumo { margin: 16px 0 0; font-size: 17px; line-height: 1.5; color: var(--navy); }
+  details { margin-top: 10px; border-top: 1px solid var(--linha); padding-top: 8px; }
+  summary {
+    cursor: pointer; font-family: var(--sem-serifa); font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--suave); min-height: 32px; display: flex; align-items: center;
+  }
+  summary:hover { color: var(--navy); }
+  details ul { margin: 8px 0 0; padding-left: 18px; font-size: 16px; line-height: 1.5; }
+  details li + li { margin-top: 6px; }
+
+  .rodape {
+    padding: 8px clamp(16px, 3vw, 40px) 32px; font-family: var(--sem-serifa); font-size: 13px;
+    color: var(--suave); line-height: 1.6;
+  }
+  .rodape code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; }
+
+  @media (max-width: 640px) {
+    .topo { padding-top: 14px; }
+    .logo { width: 60px; height: 42px; }
+    .logo img { width: 85px; height: 85px; left: -12.6px; top: -21.9px; }
+    .controles { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="marca">
+    <span class="logo"><img src="public/brand/logo/gio-navy.png" alt="Gio Handmade"></span>
+    <div>
+      <p class="sobre">Apresentação de sábado, 28/11</p>
+      <h1>Quatro jeitos de mostrar as suas peças</h1>
+    </div>
+  </div>
+  <div class="controles">
+    <div class="seg" role="group" aria-label="Tamanho da tela">
+      <button type="button" data-modo="celular" aria-pressed="true">Celular</button>
+      <button type="button" data-modo="computador" aria-pressed="false">Computador</button>
+    </div>
+    <div class="seg" role="group" aria-label="Página mostrada nas quatro versões">
+      <button type="button" data-pagina="/" aria-pressed="true">Início</button>
+      <button type="button" data-pagina="/loja" aria-pressed="false">Loja</button>
+      <button type="button" data-pagina="/loja/top-maya" aria-pressed="false">Top Maya</button>
+    </div>
+    <button type="button" class="discreto" id="recarregar">Recarregar</button>
+  </div>
+</header>
+
+<main class="grade" id="grade" aria-label="As quatro versões"></main>
+
+<footer class="rodape">
+  As versões rodam neste computador: <code>node scripts/apresentacao.mjs</code> sobe as quatro nas portas
+  <span id="portas">3001 a 3004</span>. Os botões de cima levam as quatro para a mesma página; dentro de cada
+  uma, dá para navegar à vontade. Pagamento em modo demonstração: nenhuma compra é cobrada.
+</footer>
+
+<script>
+  // Nome e resumo de cada versão, tirados do docs/VERSAO.md de cada branch.
+  const VERSOES = [
+    {
+      n: 1,
+      nome: "Vitrine",
+      resumo: "É a versão mais parecida com as lojas que você admira: fundo liso, foto grande, pouco texto e a compra inteira dentro do site, do pedido ao WhatsApp. O diferencial é o “Ver de perto”, que deixa a cliente percorrer o bordado de perto com o dedo ou com o mouse em qualquer peça.",
+      diferente: [
+        "Ver de perto: em qualquer peça, toque na foto e o bordado abre de perto, em tela cheia, seguindo o dedo. No computador, a lupa segue o mouse.",
+        "Tabela de medidas com o desenho do manequim marcando busto, cintura e quadril, e a sugestão de tamanho pelas medidas da cliente.",
+        "Compra dentro do site em 5 etapas curtas, com o sinal de 50% e o pedido chegando pronto no seu WhatsApp."
+      ]
+    },
+    {
+      n: 2,
+      nome: "Provador",
+      resumo: "Na página da peça, a cliente digita busto, cintura e quadril e vê o tamanho acender na tabela, com um manequim que muda junto. As medidas seguem com a peça até o pedido no WhatsApp, e cada top sugere a saia e o headpiece que combinam, com o preço somado.",
+      diferente: [
+        "As medidas seguem com a peça até o pedido no WhatsApp; quem preferir manda por vídeo.",
+        "Monte o look: cada top sugere a saia e o headpiece que combinam, com o preço somado.",
+        "Fotos grandes, uma por tela.",
+        "Home com uma peça em destaque, pronta entrega e categorias.",
+        "Compra em 5 etapas dentro do site, com sinal de 50% ou tudo de uma vez."
+      ]
+    },
+    {
+      n: 3,
+      nome: "Ateliê de Luz e Relevo",
+      resumo: "A loja segue o jeito enxuto das lojas que você admira: fundo liso, foto grande e pouco texto. A diferença está na página da peça: uma lupa com luz para ver o bordado de perto em qualquer peça, e o Top Maya em 3D com as 2.500 miçangas para girar com o dedo.",
+      diferente: [
+        "Lente e luz: em qualquer peça, uma lupa amplia o bordado e uma luz mostra o brilho das miçangas.",
+        "Top Maya em 3D: as 2.500 miçangas em relevo, para girar com o dedo.",
+        "Medidas: a cliente informa busto, cintura e quadril (ou manda vídeo depois) e vê o tamanho de referência.",
+        "Pedido no site: dados, CEP, sinal de 50% e o pedido enviado para o seu WhatsApp."
+      ]
+    },
+    {
+      n: 4,
+      nome: "Lookbook",
+      resumo: "Cada peça é contada como um pequeno lookbook, em poucas telas cheias: a peça inteira, o bordado de perto (a foto se aproxima sozinha até onde as miçangas são mais densas), a peça no corpo e a ficha com o preço. No celular, o preço e o COMPRAR ficam sempre à mão, e a compra termina no próprio site em cinco passos curtos.",
+      diferente: [
+        "O bordado de perto: o site acha, em cada foto, onde o bordado é mais denso, e a imagem se aproxima devagar até ele.",
+        "No celular, o preço e o COMPRAR ficam presos embaixo.",
+        "A loja é uma grade de revista, com fotos de tamanhos alternados.",
+        "A home é um ensaio de quatro fotos e uma frase.",
+        "A compra termina no site, em cinco passos, com medidas e sinal de 50%."
+      ]
+    }
+  ];
+
+  const MODOS = {
+    celular: { largura: 390, altura: 844, borda: 24, barra: 0 },
+    computador: { largura: 1440, altura: 900, borda: 0, barra: 41 }
+  };
+
+  // ?porta=3201 quando o script subiu em outras portas (v1 na porta, v2 na seguinte...).
+  const params = new URLSearchParams(location.search);
+  const portaInicial = (() => {
+    const p = Number(params.get("porta"));
+    return Number.isInteger(p) && p > 0 && p < 65532 ? p : 3001;
+  })();
+  const base = (v) => `http://localhost:${portaInicial + v.n - 1}`;
+
+  function lerPreferencia() {
+    try { return localStorage.getItem("gio-comparacao-modo"); } catch { return null; }
+  }
+  function gravarPreferencia(modo) {
+    try { localStorage.setItem("gio-comparacao-modo", modo); } catch { /* sem armazenamento: tudo bem */ }
+  }
+
+  const estado = {
+    modo: MODOS[params.get("modo")] ? params.get("modo") : (MODOS[lerPreferencia()] ? lerPreferencia() : "celular"),
+    pagina: ["/", "/loja", "/loja/top-maya"].includes(params.get("pagina")) ? params.get("pagina") : "/"
+  };
+
+  document.getElementById("portas").textContent = `${portaInicial} a ${portaInicial + 3}`;
+
+  const grade = document.getElementById("grade");
+  const cartoes = VERSOES.map((v) => {
+    const el = document.createElement("article");
+    el.className = "versao";
+    el.innerHTML = `
+      <div class="cabeca">
+        <div>
+          <p class="numero">Versão ${v.n}</p>
+          <h2>${v.nome}</h2>
+        </div>
+        <a class="abrir" target="_blank" rel="noopener">Abrir em tela cheia ↗</a>
+      </div>
+      <div class="palco">
+        <div class="aparelho">
+          <div class="barra" aria-hidden="true"><i></i><i></i><i></i><span class="endereco"></span></div>
+          <div class="tela">
+            <iframe title="Versão ${v.n}, ${v.nome}" allow="fullscreen; clipboard-write"></iframe>
+            <div class="espera" role="status">
+              <span class="ponto" aria-hidden="true"></span>
+              <span class="espera-texto">Abrindo a versão ${v.n}...</span>
+              <small class="espera-dica" hidden>Ela sobe com <code>node scripts/apresentacao.mjs</code>.<br>Esta tela se atualiza sozinha.</small>
+              <button type="button" class="espera-forcar" hidden>Tentar abrir assim mesmo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="resumo">${v.resumo}</p>
+      <details>
+        <summary>O que ela tem de diferente</summary>
+        <ul>${v.diferente.map((d) => `<li>${d}</li>`).join("")}</ul>
+      </details>`;
+    grade.appendChild(el);
+    const c = {
+      v, el,
+      palco: el.querySelector(".palco"),
+      aparelho: el.querySelector(".aparelho"),
+      iframe: el.querySelector("iframe"),
+      espera: el.querySelector(".espera"),
+      esperaTexto: el.querySelector(".espera-texto"),
+      dica: el.querySelector(".espera-dica"),
+      forcar: el.querySelector(".espera-forcar"),
+      abrir: el.querySelector(".abrir"),
+      endereco: el.querySelector(".endereco"),
+      noAr: false,
+      tentativas: 0
+    };
+    c.iframe.addEventListener("load", () => { if (c.iframe.src) c.espera.hidden = true; });
+    c.forcar.addEventListener("click", () => { c.noAr = true; carregar(c); });
+    return c;
+  });
+
+  function carregar(c) {
+    const url = base(c.v) + estado.pagina;
+    c.espera.hidden = false;
+    c.esperaTexto.textContent = `Abrindo a versão ${c.v.n}...`;
+    c.dica.hidden = true;
+    c.forcar.hidden = true;
+    c.iframe.src = url;
+  }
+
+  function atualizarLinks() {
+    for (const c of cartoes) {
+      const url = base(c.v) + estado.pagina;
+      c.abrir.href = url;
+      c.abrir.setAttribute("aria-label", `Abrir a versão ${c.v.n} em tela cheia, numa aba nova`);
+      c.endereco.textContent = url.replace(/^http:\/\//, "");
+    }
+  }
+
+  // Confere se o servidor já está no ar pelo favicon, antes de pôr o site na moldura.
+  function sondar(c) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const limite = setTimeout(() => { img.src = ""; resolve(false); }, 15000);
+      img.onload = () => { clearTimeout(limite); resolve(true); };
+      img.onerror = () => { clearTimeout(limite); resolve(false); };
+      img.src = `${base(c.v)}/favicon.ico?sonda=${Date.now()}`;
+    });
+  }
+
+  async function vigiar(c) {
+    while (!c.noAr) {
+      if (await sondar(c)) {
+        c.noAr = true;
+        carregar(c);
+        return;
+      }
+      c.tentativas += 1;
+      if (c.noAr) return;
+      c.esperaTexto.textContent = `Esperando a versão ${c.v.n} em localhost:${portaInicial + c.v.n - 1}`;
+      c.dica.hidden = false;
+      c.forcar.hidden = c.tentativas < 3;
+      await new Promise((r) => setTimeout(r, 3000));
+    }
+  }
+
+  function colunas() {
+    const w = window.innerWidth;
+    if (estado.modo === "celular") return w >= 1200 ? 4 : w >= 700 ? 2 : 1;
+    return w >= 1000 ? 2 : 1;
+  }
+
+  function ajustar() {
+    const m = MODOS[estado.modo];
+    grade.style.setProperty("--colunas", colunas());
+    const larguraTotal = m.largura + m.borda;
+    const alturaTotal = m.altura + m.borda + m.barra;
+    const cabeca = cartoes[0].el.querySelector(".cabeca").offsetHeight + 12;
+    const alturaLivre = Math.max(window.innerHeight - cabeca - 48, estado.modo === "celular" ? 560 : 420);
+    for (const c of cartoes) {
+      const larguraLivre = c.el.clientWidth;
+      const escala = Math.max(0.2, Math.min(larguraLivre / larguraTotal, alturaLivre / alturaTotal, 1));
+      c.aparelho.className = `aparelho ${estado.modo}`;
+      c.aparelho.style.width = `${larguraTotal}px`;
+      c.aparelho.style.height = `${alturaTotal}px`;
+      c.aparelho.style.transform = `scale(${escala})`;
+      c.iframe.width = m.largura;
+      c.iframe.height = m.altura;
+      c.palco.style.width = `${Math.floor(larguraTotal * escala)}px`;
+      c.palco.style.height = `${Math.floor(alturaTotal * escala)}px`;
+    }
+  }
+
+  function marcar(seletor, atributo, valor) {
+    document.querySelectorAll(seletor).forEach((b) => b.setAttribute("aria-pressed", String(b.getAttribute(atributo) === valor)));
+  }
+
+  document.querySelectorAll("[data-modo]").forEach((b) => b.addEventListener("click", () => {
+    estado.modo = b.dataset.modo;
+    gravarPreferencia(estado.modo);
+    marcar("[data-modo]", "data-modo", estado.modo);
+    ajustar();
+  }));
+
+  document.querySelectorAll("[data-pagina]").forEach((b) => b.addEventListener("click", () => {
+    estado.pagina = b.dataset.pagina;
+    marcar("[data-pagina]", "data-pagina", estado.pagina);
+    atualizarLinks();
+    for (const c of cartoes) if (c.noAr) carregar(c);
+  }));
+
+  document.getElementById("recarregar").addEventListener("click", () => {
+    for (const c of cartoes) if (c.noAr) carregar(c);
+  });
+
+  marcar("[data-modo]", "data-modo", estado.modo);
+  marcar("[data-pagina]", "data-pagina", estado.pagina);
+  atualizarLinks();
+  ajustar();
+  window.addEventListener("resize", ajustar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(ajustar);
+  cartoes.forEach(vigiar);
+</script>
+</body>
+</html>
