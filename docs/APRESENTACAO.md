@@ -134,7 +134,7 @@ Para ver quem ocupa a porta: no Windows, `netstat -ano | findstr :3001` e depois
 
 **PowerShell diz que "a execução de scripts foi desabilitada"** ao digitar `npm`. O script não depende disso (ele chama o npm pelo cmd). Para usar o npm à mão, digite `npm.cmd` no lugar de `npm`.
 
-**Uma versão não subiu.** As outras continuam no ar. Leia as linhas marcadas com o nome dela (por exemplo `[v3 Ateliê de Luz e Relevo]`). Se for módulo faltando, rode com `--reinstalar`.
+**Uma versão não subiu.** As outras continuam no ar. Leia as linhas marcadas com o nome dela (por exemplo `[v3 Ateliê de Luz e Relevo]`). Se for módulo faltando, rode com `--reinstalar`. Se a página inicial dela responder 404 (aconteceu uma vez nos testes, com o cache do Next), o script já limpa o cache daquela versão e sobe de novo sozinho; se continuar, apague a pasta `.next` dentro da pasta dela e rode de novo.
 
 **"A pasta ... já existe, mas não é uma cópia deste repositório"** ou **"a branch mudou no GitHub de um jeito que não dá para só avançar".** Apague a pasta indicada dentro de `gio-apresentacao` e rode de novo: o script baixa aquela versão outra vez.
 

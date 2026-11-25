@@ -185,10 +185,11 @@ function repassar(fluxo, marca, destino) {
 
 // ---------------------------------------------------------------- servidores
 
-const servidores = []; // { v, filho, pronto }
+const servidores = []; // { v, pasta, filho, pronto, parando }
+const vivo = (filho) => filho.exitCode === null && filho.signalCode === null;
 
 function matar(filho, sinal = "SIGTERM") {
-  if (!filho || filho.exitCode !== null || filho.signalCode !== null) return;
+  if (!filho || !vivo(filho)) return;
   if (NO_WINDOWS) {
     // /T leva junto o next-server que o next dev abre por baixo.
     spawnSync("taskkill", ["/pid", String(filho.pid), "/T", "/F"], { stdio: "ignore", windowsHide: true });
@@ -216,9 +217,7 @@ async function encerrarTudo(codigo) {
   if (servidores.length) console.log(`\n${negrito("Encerrando os servidores...")}`);
   encerrarServidores();
   const limite = Date.now() + 5000;
-  while (Date.now() < limite && servidores.some((s) => s.filho.exitCode === null && s.filho.signalCode === null)) {
-    await dormir(200);
-  }
+  while (Date.now() < limite && servidores.some((s) => vivo(s.filho))) await dormir(200);
   for (const s of servidores) matar(s.filho, "SIGKILL");
   if (servidores.length) console.log("Tudo encerrado.");
   process.exit(codigo);
@@ -265,15 +264,21 @@ async function responde(url, timeoutMs) {
 async function esperar200(servidor) {
   const inicio = Date.now();
   let ultimo = "sem resposta";
-  let errosSeguidos = 0;
+  let repetidas = 0;
   while (Date.now() - inicio < LIMITE_SUBIDA_MS) {
-    if (servidor.filho.exitCode !== null || servidor.filho.signalCode !== null) {
+    if (!vivo(servidor.filho)) {
       return { ok: false, motivo: "o servidor parou antes de responder (veja as linhas acima)" };
     }
+    const anterior = ultimo;
     ultimo = await responde(`${urlDe(servidor.v)}/`, 150000);
     if (ultimo === "200") return { ok: true, ms: Date.now() - inicio };
-    errosSeguidos = ultimo.startsWith("5") ? errosSeguidos + 1 : 0;
-    if (errosSeguidos >= 3) return { ok: false, motivo: `a página inicial deu erro ${ultimo} três vezes seguidas (veja as linhas acima)` };
+    repetidas = ultimo === anterior ? repetidas + 1 : 1;
+    // Página inicial em 404 com o servidor no ar: o cache do Next se perdeu (já
+    // aconteceu num teste ao subir as 4 juntas). Quem chamou limpa e sobe de novo.
+    if (ultimo === "404" && repetidas >= 3) return { ok: false, cacheQuebrado: true, motivo: "a página inicial respondeu 404" };
+    if (ultimo.startsWith("5") && repetidas >= 3) {
+      return { ok: false, motivo: `a página inicial deu erro ${ultimo} três vezes seguidas (veja as linhas acima)` };
+    }
     await dormir(1500);
   }
   return { ok: false, motivo: `não respondeu 200 em ${segundos(LIMITE_SUBIDA_MS)} (última resposta: ${ultimo})` };
@@ -290,16 +295,47 @@ function subir(v, pasta) {
     detached: !NO_WINDOWS, // grupo próprio no Mac e no Linux, para encerrar o next-server junto
     windowsHide: true,
   });
-  const servidor = { v, filho, pronto: false };
+  const servidor = { v, pasta, filho, pronto: false, parando: false };
   repassar(filho.stdout, prefixo(v), process.stdout);
   repassar(filho.stderr, prefixo(v), process.stderr);
   filho.on("exit", (codigo, sinal) => {
-    if (encerrando) return;
+    if (encerrando || servidor.parando) return;
     const como = sinal ? `sinal ${sinal}` : `código ${codigo}`;
     console.log(`${prefixo(v)} ${vermelho(`o servidor parou (${como}).`)} As outras versões continuam no ar.`);
   });
-  servidores.push(servidor);
   return servidor;
+}
+
+async function pararUm(servidor) {
+  servidor.parando = true;
+  matar(servidor.filho);
+  const limite = Date.now() + 10000;
+  while (Date.now() < limite && vivo(servidor.filho)) await dormir(200);
+  matar(servidor.filho, "SIGKILL");
+}
+
+function limparCacheNext(pasta) {
+  try {
+    fs.rmSync(path.join(pasta, ".next"), { recursive: true, force: true, maxRetries: 5, retryDelay: 500 });
+  } catch {
+    /* se não der para apagar, a nova tentativa mostra o erro */
+  }
+}
+
+/** Espera a versão responder 200; se o cache do Next se perdeu, limpa e sobe de novo uma vez. */
+async function esperarVersao(indice) {
+  let servidor = servidores[indice];
+  let r = await esperar200(servidor);
+  if (!r.ok && r.cacheQuebrado && !encerrando) {
+    console.log(`${prefixo(servidor.v)} ${amarelo("a página inicial respondeu 404; limpando o cache do Next desta versão e subindo de novo")}`);
+    await pararUm(servidor);
+    limparCacheNext(servidor.pasta);
+    servidor = subir(servidor.v, servidor.pasta);
+    servidores[indice] = servidor;
+    r = await esperar200(servidor);
+    if (!r.ok && r.cacheQuebrado) r = { ok: false, motivo: "a página inicial continua em 404 mesmo com o cache limpo (veja as linhas acima)" };
+  }
+  return { servidor, r };
 }
 
 // ---------------------------------------------------------------- passos
@@ -488,14 +524,14 @@ async function principal() {
     );
   }
   for (const v of VERSOES) {
-    subir(v, pastas.get(v.n));
+    servidores.push(subir(v, pastas.get(v.n)));
     info(`${rotulo(v)}: subindo em ${urlDe(v)}`);
   }
   info(fraco("A primeira abertura compila o site e pode levar de 30 s a 2 min por versão."));
 
   const resultados = await Promise.all(
-    servidores.map(async (s) => {
-      const r = await esperar200(s);
+    servidores.map(async (_, indice) => {
+      const { servidor: s, r } = await esperarVersao(indice);
       if (r.ok) {
         s.pronto = true;
         console.log(`${prefixo(s.v)} ${verde("respondeu 200")} em ${segundos(r.ms)}; preparando a loja e o Top Maya`);
