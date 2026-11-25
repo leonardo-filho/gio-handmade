@@ -71,7 +71,8 @@
     align-items: start;
   }
   .versao { min-width: 0; }
-  .cabeca { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .cabeca { margin-bottom: 12px; }
+  .linha-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .numero {
     margin: 0; font-family: var(--sem-serifa); font-size: 11px; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--suave);
@@ -262,11 +263,11 @@
     el.className = "versao";
     el.innerHTML = `
       <div class="cabeca">
-        <div>
+        <div class="linha-topo">
           <p class="numero">Versão ${v.n}</p>
-          <h2>${v.nome}</h2>
+          <a class="abrir" target="_blank" rel="noopener">Abrir em tela cheia ↗</a>
         </div>
-        <a class="abrir" target="_blank" rel="noopener">Abrir em tela cheia ↗</a>
+        <h2>${v.nome}</h2>
       </div>
       <div class="palco">
         <div class="aparelho">
@@ -363,7 +364,12 @@
     grade.style.setProperty("--colunas", colunas());
     const larguraTotal = m.largura + m.borda;
     const alturaTotal = m.altura + m.borda + m.barra;
-    const cabeca = cartoes[0].el.querySelector(".cabeca").offsetHeight + 12;
+    // Cabeçalhos com a mesma altura, para as molduras ficarem alinhadas mesmo quando um nome quebra a linha.
+    const cabecas = cartoes.map((c) => c.el.querySelector(".cabeca"));
+    cabecas.forEach((h) => { h.style.minHeight = ""; });
+    const maior = Math.max(...cabecas.map((h) => h.offsetHeight));
+    cabecas.forEach((h) => { h.style.minHeight = `${maior}px`; });
+    const cabeca = maior + 12;
     const alturaLivre = Math.max(window.innerHeight - cabeca - 48, estado.modo === "celular" ? 560 : 420);
     for (const c of cartoes) {
       const larguraLivre = c.el.clientWidth;
