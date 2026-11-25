@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import Card from "@/components/v3/Card";
+import GradeEditorial from "@/components/v4/loja/GradeEditorial";
 import Categorias from "@/components/v3/loja/Categorias";
 import HashAntigo from "@/components/v3/loja/HashAntigo";
 import Ordenar from "@/components/v3/loja/Ordenar";
@@ -16,7 +16,7 @@ import { produtoPorId, slugsDeVista } from "@/components/loja/vistas";
 export const metadata: Metadata = {
   title: "Loja · Gio Handmade",
   description:
-    "Tops, conjuntos, saias, vestidos e headpieces bordados à mão, um a um, em Belém. Monte sua sacola e finalize pelo WhatsApp.",
+    "Tops, conjuntos, saias, vestidos e headpieces bordados à mão, um a um, em Belém. Monte sua sacola e finalize a compra aqui no site.",
 };
 
 type Busca = Promise<Record<string, string | string[] | undefined>>;
@@ -27,7 +27,8 @@ const primeiro = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] 
 const IDS = [...produtoPorId.keys()];
 const SLUGS = [...slugsDeVista];
 
-// A loja: título da vista, ordem, linha de categorias e a grade corrida. A
+// A loja (versão 4): título da vista, ordem, linha de categorias e a grade
+// editorial, com proporções que se alternam. A
 // vista (?ver=) e a ordem (?ordem=) são lidas aqui no servidor, então quem
 // chega por story já recebe a grade certa, sem troca depois da hidratação.
 // O link antigo de peça (/loja?produto=<id>) vai para a página dela.
@@ -80,15 +81,9 @@ export default async function LojaPage({ searchParams }: { searchParams: Busca }
       </div>
       <Categorias ativa={vista.slug} ordem={ordem} />
 
-      <section id="pecas" className="scroll-mt-28 pb-14 pt-3 md:pb-20 md:pt-5">
+      <section id="pecas" className="scroll-mt-28 pb-14 pt-3 md:pb-20 md:pt-5 lg:px-4">
         <h2 className="sr-only">Peças</h2>
-        <ul className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-4 lg:gap-y-10">
-          {itens.map((p, i) => (
-            <li key={p.id}>
-              <Card produto={p} prioridade={i < 4} />
-            </li>
-          ))}
-        </ul>
+        <GradeEditorial itens={itens} />
       </section>
       <Footer />
       <WhatsAppButton />

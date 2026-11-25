@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Androgy — fonte oficial da logo Gio Handmade.
+ * Androgy: fonte oficial da logo Gio Handmade.
  * Ela NÃO contém glifos com acentos (ABNT2). Restrito a Basic Latin
  * para que ã, á, é, í, ó, ú, ç, etc. caiam automaticamente no fallback EB Garamond.
  */
@@ -15,7 +15,7 @@
 }
 
 /*
- * Joliet — fonte usada apenas no título da coleção "Solaris".
+ * Joliet: fonte usada apenas no título da coleção "Solaris".
  * Servida pelo próprio projeto (public/brand/fonts) para funcionar em qualquer
  * visitante, sem depender de a fonte estar instalada no computador de quem acessa.
  */
@@ -45,7 +45,7 @@
   --background: var(--brand-cream);
   --foreground: var(--brand-ink);
 
-  /* Stack da fonte oficial — Androgy cobre Basic Latin; acentos caem no serif */
+  /* Stack da fonte oficial: Androgy cobre Basic Latin; acentos caem no serif */
   --font-brand: "Androgy", "EB Garamond", Georgia, "Times New Roman", serif;
 }
 
@@ -94,7 +94,7 @@ section[id] {
   }
 }
 
-/* Letreiro de frete grátis — loop contínuo. Dois tracks idênticos deslizam -50%. */
+/* Letreiro de frete grátis: loop contínuo. Dois tracks idênticos deslizam -50%. */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -140,4 +140,39 @@ section[id] {
    padrão, o que deixa o "5x" e os centavos pequenos e descendentes). */
 .nums-preco {
   font-feature-settings: "lnum" 1, "tnum" 1, "kern" 1;
+}
+
+/* Versão 4 (lookbook). Pranchas de tela cheia na página da peça: o alto da
+   tela menos o cabeçalho e, abaixo do lg, menos a barra de compra presa
+   embaixo. A página encaixa a rolagem nelas (proximity: perto de uma prancha
+   ela encaixa; no resto da página, a rolagem é livre). O seletor é
+   section.prancha[id] para vencer o section[id] lá de cima (margem de 100 px). */
+section.prancha[id] {
+  height: calc(100svh - 60px - 68px);
+  min-height: 420px;
+  scroll-margin-top: 60px;
+}
+
+@media (min-width: 768px) {
+  section.prancha[id] {
+    height: calc(100svh - 76px - 68px);
+    scroll-margin-top: 76px;
+  }
+}
+
+@media (min-width: 1024px) {
+  section.prancha[id] {
+    height: calc(100vh - 76px);
+    min-height: 560px;
+  }
+}
+
+:root:has([data-lookbook]) {
+  scroll-snap-type: y proximity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:has([data-lookbook]) {
+    scroll-snap-type: none;
+  }
 }

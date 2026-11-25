@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import AnnouncementBar from "./AnnouncementBar";
 import CartButton from "./cart/CartButton";
 import { useGavetas } from "./v3/estrutura/Gavetas";
 import { IconeLupa, IconeMenu } from "./v3/estrutura/Icones";
 import { FOCO, HOVER } from "./v3/estrutura/estilo";
 
-// Cabeçalho v3 (spec, seção 2): a faixa de aviso, que sai com a rolagem, e a
-// barra creme, presa ao rolar, sem encolher, sem linha e sem sombra (60 px no
-// celular e 76 px do md para cima).
+// Cabeçalho (versão 4): só a barra creme, presa ao rolar, sem encolher, sem
+// linha e sem sombra (60 px no celular e 76 px do md para cima). A faixa de
+// aviso do topo saiu: o lookbook abre direto na foto, e a promessa de frete
+// grátis fica para a Gio decidir (o checkout desta versão cobra a estimativa).
 //
 // Toda a navegação fica atrás do hambúrguer, até no desktop: à esquerda o
 // menu e a lupa (os dois abrem a gaveta da esquerda), no centro o logo e à
@@ -25,7 +25,6 @@ export default function Header() {
 
   return (
     <>
-      <AnnouncementBar />
       <header className="sticky top-0 z-40 w-full bg-[#EDE7D9] text-[#1B4965]">
         <div className="relative flex h-[60px] items-center justify-between px-1.5 md:h-[76px] md:px-4 lg:px-6">
           <div className="flex items-center">
