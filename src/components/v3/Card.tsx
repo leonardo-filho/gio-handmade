@@ -1,5 +1,7 @@
 // Card de peça (v3): grade da /loja, carrossel da home e "Veja também".
-// Contrato: export default function Card({ produto, prioridade }: { produto: Produto; prioridade?: boolean }).
+// Contrato: export default function Card({ produto, prioridade, selo }: { produto: Produto; prioridade?: boolean; selo?: boolean }).
+// selo={false} tira o selo "PRONTA ENTREGA" onde ele se repete (o carrossel
+// de pronta entrega da home, que já tem o título).
 //
 // Foto 3:4 com o selo "PRONTA ENTREGA" (o único selo) e, abaixo, três linhas:
 // nome, preço no cartão e o pix. As parcelas ficam na página da peça. No
@@ -13,7 +15,15 @@ import { precosDe } from "./loja/precos";
 // Celular: 2 colunas (ou 2,25 no carrossel); tablet: 3; desktop: 4.
 const SIZES = "(min-width: 1024px) 25vw, (min-width: 768px) 34vw, 50vw";
 
-export default function Card({ produto, prioridade = false }: { produto: Produto; prioridade?: boolean }) {
+export default function Card({
+  produto,
+  prioridade = false,
+  selo = true,
+}: {
+  produto: Produto;
+  prioridade?: boolean;
+  selo?: boolean;
+}) {
   const precos = precosDe(produto);
 
   return (
@@ -41,7 +51,7 @@ export default function Card({ produto, prioridade = false }: { produto: Produto
             className="hidden object-cover object-[50%_40%] opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:block"
           />
         )}
-        {produto.prontaEntrega && (
+        {selo && produto.prontaEntrega && (
           <span className="absolute bottom-2 left-2 rounded bg-[#EDE7D9] px-2 py-1 text-[10px] uppercase leading-3 tracking-[0.12em] text-brand-gold-text">
             Pronta entrega
           </span>

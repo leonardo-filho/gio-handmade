@@ -3,7 +3,8 @@ import { Questrial, Archivo } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Providers from "@/components/Providers";
-import CartDrawer from "@/components/cart/CartDrawer";
+import Sacola from "@/components/v1/sacola/Sacola";
+import { GavetaTabela } from "@/components/v1/estado/TabelaMedidas";
 import GavetaNavegacao from "@/components/v3/estrutura/GavetaNavegacao";
 
 // EB Garamond: todas as variantes do manual oficial Gio Handmade.
@@ -69,7 +70,8 @@ export default function RootLayout({
           {children}
           {/* Gavetas fora do <main>: abertas, o <main> fica inerte e elas não. */}
           <GavetaNavegacao />
-          <CartDrawer />
+          <Sacola />
+          <GavetaTabela />
         </Providers>
       </body>
     </html>

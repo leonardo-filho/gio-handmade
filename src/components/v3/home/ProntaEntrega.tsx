@@ -28,7 +28,7 @@ export default function ProntaEntrega() {
       </h2>
       <Carrossel rotulo="Peças de pronta entrega">
         {PRONTA_ENTREGA.map((p) => (
-          <Card key={p.id} produto={p} />
+          <Card key={p.id} produto={p} selo={false} />
         ))}
       </Carrossel>
     </section>

@@ -28,11 +28,12 @@ export type Porta = {
   zoom: number;
 };
 
-// Quatro portas, cada uma um close do bordado de uma peça da categoria.
+// Quatro portas, cada uma um close do bordado de uma peça da categoria. O
+// Top Maya saiu da porta de Tops na versão 1: ele é a foto do bloco "De perto".
 // Vestidos tem 2 peças e fica no menu e na loja. Foco e zoom escolhidos para
 // o canto do rótulo cair num trecho escuro da foto (contraste AA do creme).
 export const PORTAS: Porta[] = [
-  { slug: "tops", rotulo: "Tops", foto: "/colecao/top-maya.jpg", foco: "50% 40%", zoom: 1 },
+  { slug: "tops", rotulo: "Tops", foto: "/colecao/top-golden.jpg", foco: "50% 46%", zoom: 1.15 },
   { slug: "conjuntos", rotulo: "Conjuntos", foto: "/colecao/conjunto-selene.jpg", foco: "65% 22%", zoom: 1.4 },
   { slug: "saias", rotulo: "Saias", foto: "/colecao/saia-sarah.jpg", foco: "50% 50%", zoom: 1 },
   { slug: "acessorios", rotulo: "Acessórios", foto: "/colecao/chocker-ouro-verde-3.jpg", foco: "70% 50%", zoom: 1.5 },

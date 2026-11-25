@@ -5,9 +5,11 @@ import Hero from "@/components/v3/home/Hero";
 import ProntaEntrega from "@/components/v3/home/ProntaEntrega";
 import Portas from "@/components/v3/home/Portas";
 import QuemFaz from "@/components/v3/home/QuemFaz";
+import DePerto from "@/components/v1/home/DePerto";
 
-// Home v3, enxuta: hero parado, pronta entrega, quatro portas de categoria e
-// quem faz, e o rodapé. Sem rolagem suave, sem 3D e sem entrada animada.
+// Home da versão 1, "Vitrine": cinco blocos enxutos (hero parado, pronta
+// entrega, quatro portas de categoria, o bordado de perto e quem faz) e o
+// rodapé. Sem rolagem suave, sem 3D e sem entrada animada.
 export default function Home() {
   return (
     <>
@@ -16,6 +18,7 @@ export default function Home() {
         <Hero />
         <ProntaEntrega />
         <Portas />
+        <DePerto />
         <QuemFaz />
       </main>
       <Footer />

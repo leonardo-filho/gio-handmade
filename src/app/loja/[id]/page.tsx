@@ -6,8 +6,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Card from "@/components/v3/Card";
 import { categoriaDe, relacionadas } from "@/components/v3/loja/vistas";
 import Carrossel from "@/components/v3/home/Carrossel";
-import Compra from "@/components/v3/produto/Compra";
-import Galeria from "@/components/v3/produto/Galeria";
+import Compra from "@/components/v1/produto/Compra";
+import Galeria from "@/components/v1/produto/Galeria";
 import { produtos } from "@/data/produtos";
 
 type Params = Promise<{ id: string }>;
@@ -42,11 +42,11 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-// Página da peça (no lugar da folha que abria por cima da loja). Desktop:
-// miniaturas, foto 3:4 e a coluna de compra de 480 px, que não acompanha a
-// rolagem. Tablet: foto e coluna lado a lado, sem miniaturas. Celular: foto
-// de borda a borda e a coluna logo abaixo. No fim, "Veja também" com até 8
-// peças da mesma categoria.
+// Página da peça no modelo da AL.TER. Computador: miniaturas, foto 3:4 com o
+// "Ver de perto" (a lupa segue o mouse) e a coluna de compra de 480 px.
+// Tablet: foto e coluna lado a lado. Celular: foto de borda a borda (tocar
+// abre o "Ver de perto" em tela cheia) e a coluna logo abaixo. No fim, "Veja
+// também" com até 8 peças da mesma categoria.
 export default async function ProdutoPage({ params }: { params: Params }) {
   const { id } = await params;
   const produto = produtoPorId.get(id);
@@ -58,10 +58,10 @@ export default async function ProdutoPage({ params }: { params: Params }) {
   return (
     <main className="min-h-screen overflow-x-clip bg-[#EDE7D9]">
       <Header />
-      <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[60px]">
+      <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[76px]">
         <Galeria fotos={fotosDe(produto)} nome={produto.nome} prontaEntrega={produto.prontaEntrega} />
         <div className="px-4 pb-4 pt-5 md:w-[340px] md:shrink-0 md:px-0 md:pt-6 lg:w-[400px] lg:pt-8 xl:w-[480px]">
-          <Compra produto={produto} categoria={categoria} />
+          <Compra produto={produto} categoria={categoria} deVestir={categoria.nome !== "Acessórios"} />
         </div>
       </div>
 
