@@ -21,7 +21,7 @@ export default function ComoEncomendar() {
 
       <div className="mx-auto max-w-[640px] px-4 pb-16 pt-4 md:pb-20 md:pt-8">
         <nav aria-label="Trilha" className="flex min-h-11 items-center text-[12px] text-brand-muted">
-          <Link href="/" className={`rounded-[4px] ${HOVER} ${FOCO}`}>
+          <Link href="/" className={`inline-flex min-h-11 items-center rounded-[4px] ${HOVER} ${FOCO}`}>
             Início
           </Link>
           <span aria-hidden className="px-1.5">

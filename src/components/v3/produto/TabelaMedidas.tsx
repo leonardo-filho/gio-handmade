@@ -73,7 +73,7 @@ export function SeletorMedidasSobMedida({
           type="button"
           onClick={() => setMostrarTabela((v) => !v)}
           aria-expanded={mostrarTabela}
-          className={`inline-flex min-h-9 items-center rounded-[4px] px-2 text-[12px] text-brand-muted underline underline-offset-4 ${HOVER} ${FOCO}`}
+          className={`inline-flex min-h-11 items-center rounded-[4px] px-2 text-[12px] text-brand-muted underline underline-offset-4 ${HOVER} ${FOCO}`}
         >
           {mostrarTabela ? "Ocultar tabela" : "Tabela de medidas (PP a GG)"}
         </button>
@@ -230,7 +230,25 @@ export default function TabelaMedidas({ destaque, aoEscolherLinha }: PropsTabela
                     ativa ? "bg-[#C8E1E4] font-medium text-[#1B4965]" : "text-[#1B4965]"
                   } ${aoEscolherLinha ? "cursor-pointer hover:bg-[#1B4965]/5" : ""}`}
                 >
-                  <td className="py-2 pr-2 font-serif text-[14px] font-medium">{linha.tamanho}</td>
+                  <td className="py-2 pr-2 font-serif text-[14px] font-medium">
+                    {aoEscolherLinha ? (
+                      // Botão para teclado e leitor de tela; o toque na linha inteira continua valendo.
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          aoEscolherLinha(linha);
+                        }}
+                        aria-label={`Usar as medidas do tamanho ${linha.tamanho}`}
+                        aria-pressed={ativa}
+                        className={`-my-2 min-h-9 min-w-8 rounded-[4px] text-left ${FOCO}`}
+                      >
+                        {linha.tamanho}
+                      </button>
+                    ) : (
+                      linha.tamanho
+                    )}
+                  </td>
                   <td className="px-2 py-2 text-brand-muted">{linha.numero}</td>
                   <td className="px-2 py-2">{formatarFaixa(linha.busto)}</td>
                   <td className="px-2 py-2">{formatarFaixa(linha.cintura)}</td>

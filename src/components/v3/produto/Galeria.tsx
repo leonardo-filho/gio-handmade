@@ -56,6 +56,19 @@ export default function Galeria({ fotos, nome, prontaEntrega, produto }: Props) 
     if (i !== indice) setIndice(i);
   }
 
+  // Ao voltar para as fotos (da lente ou do 3D), o trilho do celular nasce na
+  // 1a foto; aqui ele vai para a foto que estava sendo vista na lente.
+  function mudarModo(novo: ModoGaleria) {
+    setModo(novo);
+    if (novo !== "fotos") return;
+    requestAnimationFrame(() => {
+      const trilho = trilhoRef.current;
+      if (trilho && trilho.scrollWidth > trilho.clientWidth) {
+        trilho.scrollTo({ left: indice * trilho.clientWidth, behavior: "auto" });
+      }
+    });
+  }
+
   function escolherFoto(i: number) {
     setIndice(i);
     if (modo === "3d") setModo("fotos");
@@ -107,8 +120,8 @@ export default function Galeria({ fotos, nome, prontaEntrega, produto }: Props) 
               type="button"
               role="tab"
               aria-selected={modo === "fotos"}
-              onClick={() => setModo("fotos")}
-              className={`flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
+              onClick={() => mudarModo("fotos")}
+              className={`relative flex h-9 shrink-0 items-center after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] justify-center whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
                 modo === "fotos"
                   ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
                   : `border-[#1B4965]/35 text-[#1B4965] ${HOVER}`
@@ -120,8 +133,8 @@ export default function Galeria({ fotos, nome, prontaEntrega, produto }: Props) 
               type="button"
               role="tab"
               aria-selected={modo === "lente"}
-              onClick={() => setModo(modo === "lente" ? "fotos" : "lente")}
-              className={`flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
+              onClick={() => mudarModo(modo === "lente" ? "fotos" : "lente")}
+              className={`relative flex h-9 shrink-0 items-center after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] justify-center gap-1.5 whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
                 modo === "lente"
                   ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
                   : `border-[#1B4965]/35 bg-[#C8E1E4]/45 text-[#1B4965] ${HOVER}`
@@ -135,8 +148,8 @@ export default function Galeria({ fotos, nome, prontaEntrega, produto }: Props) 
                 type="button"
                 role="tab"
                 aria-selected={modo === "3d"}
-                onClick={() => setModo(modo === "3d" ? "fotos" : "3d")}
-                className={`flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
+                onClick={() => mudarModo(modo === "3d" ? "fotos" : "3d")}
+                className={`relative flex h-9 shrink-0 items-center after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] justify-center whitespace-nowrap rounded-[4px] border px-2.5 text-[11px] uppercase tracking-[0.11em] ${FOCO} ${
                   modo === "3d"
                     ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
                     : `border-[#1B4965] bg-[#C8E1E4] text-[#1B4965] ${HOVER}`

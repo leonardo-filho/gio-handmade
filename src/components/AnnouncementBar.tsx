@@ -10,7 +10,8 @@ const MENSAGEM = "Frete grátis acima de R$ 600";
 export default function AnnouncementBar() {
   return (
     <div className="flex h-7 w-full items-center justify-center bg-[#1B4965] px-4 text-center text-[11px] uppercase leading-none tracking-[0.12em] text-[#EDE7D9]">
-      <p className="truncate">{MENSAGEM}</p>
+      {/* leading-4: com leading-none o truncate cortava o acento do Á em caixa alta. */}
+      <p className="truncate leading-4">{MENSAGEM}</p>
     </div>
   );
 }

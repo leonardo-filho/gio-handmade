@@ -85,6 +85,14 @@ export default function FluxoCheckout() {
   const [codigoCupom, setCodigoCupom] = useState("");
   const [erroCupom, setErroCupom] = useState<string | null>(null);
 
+  // Troca de etapa sempre volta ao topo do checkout: no celular o botão de
+  // continuar fica no fim do formulário, e a etapa seguinte (ou a confirmação
+  // com o código) abria pela metade. Chamado só em evento, nunca no render.
+  function irParaEtapa(nova: Etapa) {
+    setEtapa(nova);
+    window.scrollTo({ top: 0 });
+  }
+
   const itens: ItemPedido[] = itensDoCarrinhoComMedidas(lines, mapaMedidas);
   const itensSobMedida = itens.filter((i) => i.opcao === "sob-medida");
   const faltamMedidas = itensSobMedida.filter((i) => !medidasCompletas(i));
@@ -169,7 +177,7 @@ export default function FluxoCheckout() {
     const erros = validarCliente(rascunho.cliente);
     setErrosCliente(erros);
     if (Object.keys(erros).length > 0) return;
-    setEtapa(2);
+    irParaEtapa(2);
   }
 
   function avancarDeEntrega(e: React.FormEvent) {
@@ -178,9 +186,9 @@ export default function FluxoCheckout() {
     setErrosEndereco(erros);
     if (Object.keys(erros).length > 0) return;
     if (itensSobMedida.length > 0) {
-      setEtapa(3);
+      irParaEtapa(3);
     } else {
-      setEtapa(4);
+      irParaEtapa(4);
     }
   }
 
@@ -195,24 +203,24 @@ export default function FluxoCheckout() {
       return;
     }
     setErroMedidas(null);
-    setEtapa(4);
+    irParaEtapa(4);
   }
 
   async function finalizarPagamento() {
     const errosC = validarCliente(rascunho.cliente);
     if (Object.keys(errosC).length > 0) {
       setErrosCliente(errosC);
-      setEtapa(1);
+      irParaEtapa(1);
       return;
     }
     const errosE = validarEndereco(rascunho.entrega);
     if (Object.keys(errosE).length > 0) {
       setErrosEndereco(errosE);
-      setEtapa(2);
+      irParaEtapa(2);
       return;
     }
     if (itensSobMedida.some((i) => !medidasCompletas(i))) {
-      setEtapa(3);
+      irParaEtapa(3);
       return;
     }
 
@@ -242,7 +250,7 @@ export default function FluxoCheckout() {
         valores,
       });
       clear();
-      setEtapa(5);
+      irParaEtapa(5);
     } catch {
       setPagando(false);
       setErroPagamento("Não foi possível concluir a demonstração. Tente novamente.");
@@ -285,7 +293,7 @@ export default function FluxoCheckout() {
                     navigator.clipboard?.writeText(resultado.pix?.copiaECola ?? "");
                     setCopiadoPix(true);
                   }}
-                  className={`flex min-h-9 items-center rounded-[4px] border border-[#1B4965] px-3 text-[11px] uppercase tracking-[0.12em] ${HOVER} ${FOCO}`}
+                  className={`flex min-h-11 items-center rounded-[4px] border border-[#1B4965] px-3 text-[11px] uppercase tracking-[0.12em] ${HOVER} ${FOCO}`}
                 >
                   {copiadoPix ? "Copiado" : "Copiar código"}
                 </button>
@@ -298,7 +306,7 @@ export default function FluxoCheckout() {
             href={urlWhats}
             target="_blank"
             rel="noopener noreferrer"
-            className={`mt-6 gap-2 ${BOTAO_PRINCIPAL}`}
+            className={`mt-6 gap-2 py-3 text-center leading-5 ${BOTAO_PRINCIPAL}`}
           >
             <IconeWhatsApp className="h-4 w-4 shrink-0" />
             Enviar o pedido para a Gio no WhatsApp
@@ -356,7 +364,7 @@ export default function FluxoCheckout() {
               {pedido.modalidade === "sinal" && v.temSobMedida && (
                 <>
                   <div className="flex justify-between text-[#1B4965]">
-                    <dt>Valor do sinal agora (50% do sob medida + frete)</dt>
+                    <dt>Agora, com o sinal de 50%</dt>
                     <dd className="nums-preco font-serif text-[17px] font-medium">{formatBRL(v.agora)}</dd>
                   </div>
                   <div className="flex justify-between text-brand-muted">
@@ -409,7 +417,10 @@ export default function FluxoCheckout() {
       {provedorAtual.demonstracao && (
         <div className="mb-5 flex flex-wrap items-center justify-between gap-2 rounded-[4px] border border-[#1B4965]/25 bg-[#C8E1E4]/40 px-3.5 py-2 text-[12px] text-[#1B4965]">
           <span>Modo demonstração: nenhum valor é cobrado.</span>
-          <Link href="/loja" className={`underline underline-offset-4 ${HOVER} ${FOCO}`}>
+          <Link
+            href="/loja"
+            className={`relative underline underline-offset-4 after:absolute after:-inset-x-2 after:-inset-y-3.5 after:content-[''] ${HOVER} ${FOCO}`}
+          >
             Continuar comprando
           </Link>
         </div>
@@ -428,10 +439,10 @@ export default function FluxoCheckout() {
                   type="button"
                   disabled={desabilitada && !ativa}
                   onClick={() => {
-                    if (item.numero < 5) setEtapa(item.numero);
+                    if (item.numero < 5) irParaEtapa(item.numero);
                   }}
                   aria-current={ativa ? "step" : undefined}
-                  className={`flex min-h-10 items-center rounded-[4px] border px-3 text-[11px] uppercase tracking-[0.13em] ${FOCO} ${
+                  className={`flex min-h-11 items-center rounded-[4px] border px-3 text-[11px] uppercase tracking-[0.13em] ${FOCO} ${
                     ativa
                       ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
                       : concluida
@@ -762,7 +773,7 @@ export default function FluxoCheckout() {
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button type="button" onClick={() => setEtapa(1)} className={BOTAO_CONTORNO}>
+                <button type="button" onClick={() => irParaEtapa(1)} className={BOTAO_CONTORNO}>
                   Voltar
                 </button>
                 <button type="submit" className={`flex-1 ${BOTAO_PRINCIPAL}`}>
@@ -806,7 +817,7 @@ export default function FluxoCheckout() {
                           <button
                             type="button"
                             onClick={() => setEditandoMedidaId(aberta && editandoMedidaId === item.id ? null : item.id)}
-                            className={`min-h-9 rounded px-2 text-[12px] underline underline-offset-4 ${HOVER} ${FOCO}`}
+                            className={`min-h-11 rounded px-2 text-[12px] underline underline-offset-4 ${HOVER} ${FOCO}`}
                           >
                             {aberta && editandoMedidaId === item.id ? "Fechar" : "Editar"}
                           </button>
@@ -851,7 +862,7 @@ export default function FluxoCheckout() {
               )}
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button type="button" onClick={() => setEtapa(2)} className={BOTAO_CONTORNO}>
+                <button type="button" onClick={() => irParaEtapa(2)} className={BOTAO_CONTORNO}>
                   Voltar
                 </button>
                 <button type="button" onClick={avancarDeMedidas} className={`flex-1 ${BOTAO_PRINCIPAL}`}>
@@ -974,7 +985,7 @@ export default function FluxoCheckout() {
                 <input
                   id="chk-obs"
                   type="text"
-                  placeholder="Ex.: cor desejada, ocasião ou data da viagem"
+                  placeholder="Ex.: cor, ocasião ou data"
                   value={rascunho.observacao}
                   onChange={(e) => atualizarRascunhoCheckout({ observacao: e.target.value })}
                   className={`mt-1 w-full ${CAMPO}`}
@@ -990,7 +1001,7 @@ export default function FluxoCheckout() {
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() => setEtapa(itensSobMedida.length > 0 ? 3 : 2)}
+                  onClick={() => irParaEtapa(itensSobMedida.length > 0 ? 3 : 2)}
                   disabled={pagando}
                   className={BOTAO_CONTORNO}
                 >
@@ -1050,7 +1061,7 @@ export default function FluxoCheckout() {
                 <button
                   type="button"
                   onClick={removerCupom}
-                  className={`underline underline-offset-4 text-brand-muted ${HOVER} ${FOCO}`}
+                  className={`-my-3 flex min-h-11 items-center px-1 text-brand-muted underline underline-offset-4 ${HOVER} ${FOCO}`}
                 >
                   Remover
                 </button>

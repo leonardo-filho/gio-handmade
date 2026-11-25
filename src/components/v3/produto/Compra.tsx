@@ -162,7 +162,7 @@ export default function Compra({ produto, categoria }: Props) {
             type="button"
             aria-expanded={medidasAberta}
             onClick={() => setMedidasAberta((a) => !a)}
-            className={`flex min-h-10 w-full items-center justify-between rounded-[4px] border px-3 text-left text-[12px] text-[#1B4965] ${LINHA} ${HOVER} ${FOCO}`}
+            className={`flex min-h-11 w-full items-center justify-between rounded-[4px] border px-3 text-left text-[12px] text-[#1B4965] ${LINHA} ${HOVER} ${FOCO}`}
           >
             <span className="truncate">
               {resumoSalvo ? `Medidas: ${resumoSalvo}` : "Informar medidas agora (opcional)"}

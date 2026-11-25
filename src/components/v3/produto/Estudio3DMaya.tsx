@@ -239,7 +239,7 @@ export default function Estudio3DMaya() {
               type="button"
               onClick={() => ctrlRef.current?.girarPasso(-1)}
               aria-label="Girar peça para a esquerda"
-              className={`flex h-9 w-9 items-center justify-center rounded bg-[#EDE7D9]/90 text-[13px] text-[#1B4965] ${HOVER} ${FOCO}`}
+              className={`flex h-11 w-11 items-center justify-center rounded bg-[#EDE7D9]/90 text-[13px] text-[#1B4965] ${HOVER} ${FOCO}`}
             >
               ↺
             </button>
@@ -247,7 +247,7 @@ export default function Estudio3DMaya() {
               type="button"
               onClick={() => ctrlRef.current?.girarPasso(1)}
               aria-label="Girar peça para a direita"
-              className={`flex h-9 w-9 items-center justify-center rounded bg-[#EDE7D9]/90 text-[13px] text-[#1B4965] ${HOVER} ${FOCO}`}
+              className={`flex h-11 w-11 items-center justify-center rounded bg-[#EDE7D9]/90 text-[13px] text-[#1B4965] ${HOVER} ${FOCO}`}
             >
               ↻
             </button>
@@ -269,7 +269,7 @@ export default function Estudio3DMaya() {
       {/* Controles de modo 3D e controle de costura ponto a ponto */}
       <div className="border-t border-[#1B4965]/15 bg-[#EDE7D9] px-3 py-2.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div role="group" aria-label="Vistas do modelo 3D" className="flex flex-wrap gap-1.5">
+          <div role="group" aria-label="Vistas do modelo 3D" className="flex flex-wrap gap-x-1.5 gap-y-2">
             {(
               [
                 ["relevo", "Peça em 3D"],
@@ -284,7 +284,7 @@ export default function Estudio3DMaya() {
                   type="button"
                   onClick={() => escolherModo(id)}
                   aria-pressed={ativo}
-                  className={`flex min-h-9 items-center rounded border px-2.5 text-[11px] uppercase tracking-[0.12em] ${FOCO} ${
+                  className={`relative flex min-h-9 items-center rounded border px-2.5 after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] text-[11px] uppercase tracking-[0.12em] ${FOCO} ${
                     ativo
                       ? "border-[#1B4965] bg-[#1B4965] text-[#EDE7D9]"
                       : `border-[#1B4965]/40 text-[#1B4965] ${HOVER}`
@@ -307,7 +307,7 @@ export default function Estudio3DMaya() {
               max={100}
               value={progressoCostura}
               onChange={(e) => aoMudarSliderCostura(Number(e.target.value))}
-              className="h-2 w-24 accent-[#1B4965]"
+              className="h-11 w-28 cursor-pointer accent-[#1B4965]"
             />
           </div>
         </div>

@@ -48,7 +48,7 @@ export default function VitrineRelevo() {
             className="pointer-events-none absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#EDE7D9]/75 shadow-[0_0_24px_rgba(255,235,190,0.4)] transition-all duration-300 motion-reduce:transition-none"
             style={{ left: `${foco.x}%`, top: `${foco.y}%` }}
           />
-          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
+          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-x-1.5 gap-y-2">
             {FOCOS_MACRO.map((item) => {
               const ativo = foco.id === item.id;
               return (
@@ -57,7 +57,7 @@ export default function VitrineRelevo() {
                   type="button"
                   onClick={() => setFoco(item)}
                   aria-pressed={ativo}
-                  className={`flex min-h-9 items-center rounded px-2.5 text-[10px] uppercase tracking-[0.13em] ${FOCO} ${
+                  className={`relative flex min-h-9 items-center rounded px-2.5 text-[10px] after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] uppercase tracking-[0.13em] ${FOCO} ${
                     ativo
                       ? "bg-[#EDE7D9] text-[#130209]"
                       : `bg-[#130209]/75 text-[#EDE7D9] border border-[#EDE7D9]/30 ${HOVER}`

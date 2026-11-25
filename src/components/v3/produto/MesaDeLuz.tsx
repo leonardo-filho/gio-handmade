@@ -27,14 +27,14 @@ const PONTOS_FOCO: PontoFoco[] = [
     rotulo: "Luz nos cristais",
     x: 38,
     y: 32,
-    nota: "Reflexo sob luz direta nas pedrarias e pérolas",
+    nota: "Reflexo da luz direta no bordado",
   },
   {
     id: "caimento",
     rotulo: "Fios e caimento",
     x: 52,
     y: 66,
-    nota: "Franjas, elos e acabamento manual de alta resistência",
+    nota: "Fios, franjas e acabamento feitos à mão",
   },
 ];
 
@@ -128,7 +128,7 @@ export default function MesaDeLuz({ produto, fotos, indiceFoto, aoMudarFoto }: P
           <button
             type="button"
             onClick={() => setLuzNoturna((v) => !v)}
-            className={`pointer-events-auto flex min-h-9 items-center rounded bg-[#EDE7D9] px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-[#1B4965] ${HOVER} ${FOCO}`}
+            className={`pointer-events-auto relative flex min-h-9 items-center rounded bg-[#EDE7D9] after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-[#1B4965] ${HOVER} ${FOCO}`}
           >
             {luzNoturna ? "Luz: Brilho noturno" : "Luz: Ateliê natural"}
           </button>
@@ -183,7 +183,7 @@ export default function MesaDeLuz({ produto, fotos, indiceFoto, aoMudarFoto }: P
                 type="button"
                 onClick={() => setZoom(z)}
                 aria-pressed={zoom === z}
-                className={`min-h-8 rounded px-2 text-[10px] uppercase tracking-[0.1em] ${FOCO} ${
+                className={`relative min-h-8 rounded px-2 text-[10px] after:absolute after:inset-x-0 after:-inset-y-1.5 after:content-[''] uppercase tracking-[0.1em] ${FOCO} ${
                   zoom === z ? "bg-[#EDE7D9] text-[#1B4965]" : "text-[#EDE7D9]"
                 }`}
               >
@@ -197,7 +197,7 @@ export default function MesaDeLuz({ produto, fotos, indiceFoto, aoMudarFoto }: P
       {/* Barra inferior da Mesa de Luz: 3 pontos focais de toque + troca de angulo */}
       <div className="border-t border-[#EDE7D9]/15 bg-[#1B4965] px-3 py-2.5 text-[#EDE7D9]">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div role="group" aria-label="Pontos de inspeção do bordado" className="flex flex-wrap gap-1.5">
+          <div role="group" aria-label="Pontos de inspeção do bordado" className="flex flex-wrap gap-x-1.5 gap-y-2">
             {PONTOS_FOCO.map((p) => {
               const ativo = pontoAtivo === p.id;
               return (
@@ -206,7 +206,7 @@ export default function MesaDeLuz({ produto, fotos, indiceFoto, aoMudarFoto }: P
                   type="button"
                   onClick={() => escolherPonto(p)}
                   aria-pressed={ativo}
-                  className={`flex min-h-9 items-center rounded px-2.5 text-[11px] uppercase tracking-[0.12em] ${FOCO} ${
+                  className={`relative flex min-h-9 items-center rounded px-2.5 text-[11px] uppercase tracking-[0.12em] after:absolute after:inset-x-0 after:-inset-y-1 after:content-[''] ${FOCO} ${
                     ativo
                       ? "bg-[#EDE7D9] text-[#1B4965]"
                       : `border border-[#EDE7D9]/35 text-[#EDE7D9] ${HOVER}`
@@ -226,7 +226,7 @@ export default function MesaDeLuz({ produto, fotos, indiceFoto, aoMudarFoto }: P
                   type="button"
                   onClick={() => aoMudarFoto(i)}
                   aria-label={`Inspecionar foto ${i + 1}`}
-                  className={`relative h-9 w-7 overflow-hidden rounded border ${FOCO} ${
+                  className={`relative h-11 w-8 overflow-hidden rounded border ${FOCO} ${
                     i === indiceFoto ? "border-[#EDE7D9]" : "border-transparent opacity-60"
                   }`}
                 >

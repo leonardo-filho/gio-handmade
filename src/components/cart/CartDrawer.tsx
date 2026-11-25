@@ -231,7 +231,15 @@ export default function CartDrawer() {
               {linhas.map(({ line, produto, totalLinha, resumoMedida }) => (
                 <li key={chaveDaLinha(line)} className={`flex gap-4 border-b py-4 ${LINHA}`}>
                   <span className="relative h-24 w-[72px] shrink-0 overflow-hidden bg-[#1B4965]/5">
-                    <FotoSuave src={produto?.foto ?? line.foto} alt="" fill sizes="72px" className="object-cover" />
+                    {/* Largura fixa em vez de fill + sizes: assim o src da miniatura não é o
+                        mesmo da foto grande da peça, e o next dev não confunde as duas no LCP. */}
+                    <FotoSuave
+                      src={produto?.foto ?? line.foto}
+                      alt=""
+                      width={72}
+                      height={96}
+                      className="h-full w-full object-cover"
+                    />
                   </span>
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="flex items-start justify-between gap-3">

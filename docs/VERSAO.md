@@ -1,9 +1,10 @@
-# Versão 3 (Argon): Ateliê de Luz e Relevo
+# Versão 3: Ateliê de Luz e Relevo
 
-Esta versão une a vitrine enxuta do padrão AL.TER a uma mesa de luz e relevo para o bordado artesanal. Na home e na peça, você mostra o brilho das miçangas e cristais de perto sem poluir a tela nem prender a rolagem.
+A loja segue o jeito enxuto das lojas que você admira: fundo liso, foto grande e pouco texto. A diferença está na página da peça, onde a cliente vê o bordado de perto, como no ateliê.
 
-## O que tem de diferente
+## O que ela tem de diferente
 
-- **Home Luz & Relevo:** tríptico atemporal (Top Maya, Top Aurora e macro) e janela interativa de luz em 16 palavras.
-- **Lente & Luz (52 peças) e Relevo 3D (Top Maya):** barra numa linha com lupa 2,6x ou 2.500 miçangas em 3D.
-- **Compra limpa e checkout:** medidas recolhidas ("Informar medidas agora, opcional"), tabela PP ao GG e sinal de 50%.
+- **Lente e luz:** em qualquer peça, uma lupa amplia o bordado e uma luz mostra o brilho das miçangas.
+- **Top Maya em 3D:** as 2.500 miçangas em relevo, para girar com o dedo.
+- **Medidas:** a cliente informa busto, cintura e quadril (ou manda vídeo depois) e vê o tamanho de referência.
+- **Pedido no site:** dados, CEP, sinal de 50% e o pedido enviado para o seu WhatsApp.

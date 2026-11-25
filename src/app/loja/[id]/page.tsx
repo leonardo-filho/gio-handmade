@@ -56,7 +56,7 @@ export default async function ProdutoPage({ params }: { params: Params }) {
   return (
     <main className="min-h-screen overflow-x-clip bg-[#EDE7D9]">
       <Header />
-      <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[60px]">
+      <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[76px]">
         <Galeria
           produto={produto}
           fotos={fotosDe(produto)}
@@ -81,9 +81,12 @@ export default async function ProdutoPage({ params }: { params: Params }) {
         </section>
       )}
       <Footer />
-      {/* No celular, a coluna ja tem o botao do WhatsApp e o flutuante
-          cobriria o preco; do md para cima ele segue. */}
-      <WhatsAppButton ocultarNoCelular />
+      {/* A coluna ja tem o botao do WhatsApp. Abaixo de 1280 px o flutuante
+          cairia sobre o COMPRAR, o preco ou as sanfonas da coluna, entao so
+          aparece no xl, onde o xl:pr-[76px] deixa a coluna livre dele. */}
+      <div className="hidden xl:block">
+        <WhatsAppButton />
+      </div>
     </main>
   );
 }
