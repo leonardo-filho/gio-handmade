@@ -136,7 +136,7 @@ Para ver quem ocupa a porta: no Windows, `netstat -ano | findstr :3001` e depois
 
 **Uma versão não subiu.** As outras continuam no ar. Leia as linhas marcadas com o nome dela (por exemplo `[v3 Ateliê de Luz e Relevo]`). Se for módulo faltando, rode com `--reinstalar`.
 
-**"A pasta ... já existe, mas não é uma cópia deste repositório".** Apague a pasta indicada dentro de `gio-apresentacao` e rode de novo.
+**"A pasta ... já existe, mas não é uma cópia deste repositório"** ou **"a branch mudou no GitHub de um jeito que não dá para só avançar".** Apague a pasta indicada dentro de `gio-apresentacao` e rode de novo: o script baixa aquela versão outra vez.
 
 **A página de comparação fica em "Esperando a versão".** O script não está rodando, ou subiu em outras portas (use o link que ele mostra, com `?porta=`).
 

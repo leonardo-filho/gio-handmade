@@ -166,6 +166,9 @@ function rodarNaTela(comando, args, cwd) {
 
 const git = (cwd, ...args) => rodar("git", args, cwd);
 
+// Linha só com código de terminal (o next dev manda "mostrar cursor" ao sair) não vai para a tela.
+const temTexto = (linha) => linha.replace(/\x1b\[[0-9;?]*[A-Za-z]/g, "").trim() !== "";
+
 /** Repete cada linha do processo filho com o prefixo da versão. */
 function repassar(fluxo, marca, destino) {
   let resto = "";
@@ -173,10 +176,10 @@ function repassar(fluxo, marca, destino) {
   fluxo.on("data", (pedaco) => {
     const linhas = (resto + pedaco).split(/\r\n|\r|\n/);
     resto = linhas.pop() ?? "";
-    for (const linha of linhas) if (linha.trim()) destino.write(`${marca} ${linha}\n`);
+    for (const linha of linhas) if (temTexto(linha)) destino.write(`${marca} ${linha}\n`);
   });
   fluxo.on("end", () => {
-    if (resto.trim()) destino.write(`${marca} ${resto}\n`);
+    if (temTexto(resto)) destino.write(`${marca} ${resto}\n`);
   });
 }
 
@@ -352,8 +355,19 @@ function prepararPasta(raiz, pastaMae, v) {
       falhar(`A pasta ${destino} está na branch "${branch}", e não em ${v.branch}. Apague essa pasta e rode de novo.`);
     }
     if (temRemota) {
+      const antes = git(destino, "rev-parse", "--short", "HEAD").saida;
       const atualizar = git(destino, "merge", "--ff-only", "--quiet", remota);
-      if (!atualizar.ok) aviso(`${rotulo(v)}: a pasta tem mudanças locais e não recebeu a última versão do GitHub. Sigo com o que está nela.`);
+      const depois = git(destino, "rev-parse", "--short", "HEAD").saida;
+      if (!atualizar.ok) {
+        const mexida = git(destino, "status", "--porcelain", "--untracked-files=no").saida !== "";
+        aviso(
+          mexida
+            ? `${rotulo(v)}: a pasta tem arquivos mexidos e não recebeu a última versão do GitHub. Sigo com o que está nela.`
+            : `${rotulo(v)}: a branch mudou no GitHub de um jeito que não dá para só avançar. Para pegar a versão nova, apague a pasta ${destino} e rode de novo. Sigo com o que está nela.`,
+        );
+      } else if (antes !== depois) {
+        ok(`${rotulo(v)}: atualizada com o GitHub (${antes} para ${depois})`);
+      }
     }
     ok(`${rotulo(v)}: pasta reaproveitada ${fraco(destino)}`);
     return destino;
