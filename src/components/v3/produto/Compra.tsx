@@ -2,40 +2,58 @@
 
 import { useState, useSyncExternalStore } from "react";
 import type { Produto } from "@/data/produtos";
+import { CUIDADOS, SINAL } from "@/data/conteudo-loja";
+import { sugerirTamanho, type Medidas } from "@/data/medidas";
 import { useCart } from "@/components/cart/CartProvider";
 import { WHATSAPP } from "@/components/home/textos";
 import { ORIGEM } from "@/lib/frete";
+import { resumoMedidasPeca, salvarMedidasPeca, useMapaMedidas } from "@/lib/pedido-v3";
 import { precosDe } from "../loja/precos";
 import Trilha from "../loja/Trilha";
 import { IconeWhatsApp } from "../estrutura/Icones";
-import { BOTAO_CONTORNO, BOTAO_PRINCIPAL } from "../estrutura/estilo";
+import { BOTAO_CONTORNO, BOTAO_PRINCIPAL, FOCO, HOVER, LINHA } from "../estrutura/estilo";
 import Sanfona from "./Sanfona";
+import TabelaMedidas, { SeletorMedidasSobMedida } from "./TabelaMedidas";
 
 type Opcao = "sob-medida" | "pronta-entrega";
 
 type Props = { produto: Produto; categoria: { nome: string; slug: string } };
 
-// Origem do site para o link da peça na mensagem do WhatsApp. No servidor e
-// na hidratação vem vazia (a mensagem sai sem link); logo depois, completa.
 const semAssinatura = () => () => {};
 const lerOrigem = () => window.location.origin;
 const origemServidor = () => "";
 
-// "no Top Maya", "na Saia Brisa".
 const FEMININOS = new Set(["Saia", "Regata", "Chocker", "Choker"]);
 const artigo = (nome: string) => (FEMININOS.has(nome.split(" ")[0]) ? "na" : "no");
 
-// Coluna de compra, na ordem da spec: trilha, nome, preço com parcelas, pix,
-// linha, TAMANHO (sob medida e, quando houver, pronta entrega), prazo que
-// muda com a escolha, COMPRAR (abre a sacola), WhatsApp com mensagem pronta,
-// a linha do sinal, a descrição e as três sanfonas fechadas.
+// Coluna de compra da pagina da peca (/loja/[id]):
+// Mantem a primeira dobra limpa como na spec (cerca de 55 palavras visiveis):
+// o bloco de medidas fica fechado por padrao ("Informar medidas agora, opcional"),
+// porque as medidas tambem sao pedidas no checkout.
 export default function Compra({ produto, categoria }: Props) {
   const { add, open } = useCart();
+  const mapaMedidas = useMapaMedidas();
+  const salvo = mapaMedidas[produto.id];
+
   const [opcao, setOpcao] = useState<Opcao>("sob-medida");
+  const [medidasAberta, setMedidasAberta] = useState(false);
+  const [medidasLocal, setMedidasLocal] = useState<Medidas>(() => salvo?.medidas ?? {});
+  const [porVideoLocal, setPorVideoLocal] = useState<boolean>(() => salvo?.medidasPorVideo ?? false);
+  const [refLocal, setRefLocal] = useState<string | undefined>(() => salvo?.tamanhoReferencia);
+
   const origem = useSyncExternalStore(semAssinatura, lerOrigem, origemServidor);
   const precos = precosDe(produto);
   const pronta = opcao === "pronta-entrega";
   const tamanho = produto.tamanho?.trim();
+
+  const medidasAtuais = salvo?.medidas ?? medidasLocal;
+  const porVideoAtual = salvo?.medidasPorVideo ?? porVideoLocal;
+  const refAtual = salvo?.tamanhoReferencia ?? refLocal ?? sugerirTamanho(medidasAtuais)?.tamanho;
+  const resumoSalvo = resumoMedidasPeca({
+    medidas: medidasAtuais,
+    tamanhoReferencia: refAtual,
+    medidasPorVideo: porVideoAtual,
+  });
 
   const opcoes: { id: Opcao; rotulo: string }[] = [{ id: "sob-medida", rotulo: "Sob medida" }];
   if (produto.prontaEntrega) {
@@ -49,7 +67,36 @@ export default function Compra({ produto, categoria }: Props) {
   const link = origem ? ` ${origem}/loja/${produto.id}` : "";
   const whatsapp = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem + link)}`;
 
+  function aoMudarMedidas(novas: Medidas, ref?: string) {
+    setMedidasLocal(novas);
+    setRefLocal(ref);
+    salvarMedidasPeca(produto.id, {
+      medidas: novas,
+      tamanhoReferencia: ref,
+      medidasPorVideo: false,
+    });
+  }
+
+  function aoMudarPorVideo(porVideo: boolean) {
+    setPorVideoLocal(porVideo);
+    salvarMedidasPeca(produto.id, {
+      medidas: medidasAtuais,
+      tamanhoReferencia: refAtual,
+      medidasPorVideo: porVideo,
+    });
+  }
+
   function comprar() {
+    if (opcao === "sob-medida") {
+      const temAlgumaMedida = Boolean(medidasAtuais.busto || medidasAtuais.cintura || medidasAtuais.quadril);
+      if (temAlgumaMedida || porVideoAtual) {
+        salvarMedidasPeca(produto.id, {
+          medidas: medidasAtuais,
+          tamanhoReferencia: refAtual,
+          medidasPorVideo: porVideoAtual,
+        });
+      }
+    }
     add({
       id: produto.id,
       nome: produto.nome,
@@ -108,6 +155,46 @@ export default function Compra({ produto, categoria }: Props) {
         )}
       </p>
 
+      {/* Bloco de medidas fechado por padrao para nao carregar a coluna antes do COMPRAR */}
+      {!pronta && (
+        <div className="mt-3">
+          <button
+            type="button"
+            aria-expanded={medidasAberta}
+            onClick={() => setMedidasAberta((a) => !a)}
+            className={`flex min-h-10 w-full items-center justify-between rounded-[4px] border px-3 text-left text-[12px] text-[#1B4965] ${LINHA} ${HOVER} ${FOCO}`}
+          >
+            <span className="truncate">
+              {resumoSalvo ? `Medidas: ${resumoSalvo}` : "Informar medidas agora (opcional)"}
+            </span>
+            <svg
+              aria-hidden
+              viewBox="0 0 12 12"
+              className={`ml-2 h-3 w-3 shrink-0 transition-transform duration-200 motion-reduce:transition-none ${
+                medidasAberta ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.2}
+            >
+              <path d="M2.5 4.5 6 8l3.5-3.5" />
+            </svg>
+          </button>
+
+          {medidasAberta && (
+            <div className="mt-2">
+              <SeletorMedidasSobMedida
+                medidas={medidasAtuais}
+                medidasPorVideo={porVideoAtual}
+                tamanhoReferencia={refAtual}
+                aoMudarMedidas={aoMudarMedidas}
+                aoMudarPorVideo={aoMudarPorVideo}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
       <button type="button" onClick={comprar} className={`mt-4 ${BOTAO_PRINCIPAL}`}>
         Comprar
       </button>
@@ -115,15 +202,34 @@ export default function Compra({ produto, categoria }: Props) {
         <IconeWhatsApp className="h-4 w-4 shrink-0" />
         {pronta ? "Confirmar pronta entrega" : "Tirar dúvida no WhatsApp"}
       </a>
-      {!pronta && <p className="mt-3 text-[12px] leading-4 text-brand-muted">Sinal de 50% e medidas por vídeo.</p>}
+      {!pronta && <p className="mt-3 text-[12px] leading-4 text-brand-muted">{SINAL}</p>}
 
       <p className="mt-5 text-[14px] leading-[22px]">{produto.detalhes}</p>
 
       <div className="mt-6 border-t border-[#1B4965]/15">
+        <Sanfona titulo="Tabela de medidas (PP a GG)">
+          <TabelaMedidas
+            destaque={refAtual}
+            aoEscolherLinha={(linha) => {
+              const m: Medidas = {
+                busto: Math.round((linha.busto.min + linha.busto.max) / 2),
+                cintura: Math.round((linha.cintura.min + linha.cintura.max) / 2),
+                quadril: Math.round((linha.quadril.min + linha.quadril.max) / 2),
+              };
+              setOpcao("sob-medida");
+              setMedidasAberta(true);
+              aoMudarPorVideo(false);
+              aoMudarMedidas(m, linha.tamanho);
+            }}
+          />
+        </Sanfona>
+        <Sanfona titulo="Cuidados com a peça">
+          <p>{CUIDADOS}</p>
+        </Sanfona>
         <Sanfona titulo="Como funciona a encomenda">
           <ul className="list-disc space-y-1.5 pl-4 marker:text-[#1B4965]/40">
             <li>A confecção começa com o sinal de 50% do valor. O sinal não é reembolsável em caso de desistência.</li>
-            <li>Depois do pedido, a Gio manda um vídeo para você tirar as medidas.</li>
+            <li>Depois do pedido, a Gio manda um vídeo para você tirar as medidas, se preferir não informar agora.</li>
             <li>O prazo de confecção conta a partir do sinal.</li>
             <li>
               O saldo vence em até 72 horas após a data combinada para envio ou retirada. Depois disso, a peça é
@@ -146,8 +252,8 @@ export default function Compra({ produto, categoria }: Props) {
           <ul className="space-y-1.5">
             {produto.prontaEntrega && <li>Pronta entrega: peça já finalizada, com envio imediato.</li>}
             <li>
-              O frete é calculado na sacola, pelo CEP. Enviamos de {ORIGEM.cidade}/{ORIGEM.uf}, e o valor final é
-              confirmado no WhatsApp.
+              O frete é calculado na sacola e no checkout, pelo CEP. Enviamos de {ORIGEM.cidade}/{ORIGEM.uf}, e o
+              valor final é confirmado no WhatsApp.
             </li>
           </ul>
         </Sanfona>

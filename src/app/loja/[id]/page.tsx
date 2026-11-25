@@ -17,8 +17,8 @@ const produtoPorId = new Map(produtos.map((p) => [p.id, p]));
 const fotosDe = (p: (typeof produtos)[number]) =>
   [p.foto, p.fotoHover, ...(p.fotosExtra ?? [])].filter((f): f is string => Boolean(f));
 
-// As 52 peças saem prontas no build. As pastas de protótipo (/loja/a, b,
-// editorial, desfile, atelie) são estáticas e têm prioridade sobre esta rota.
+// As 52 pecas saem prontas no build. As pastas de prototipo (/loja/a, b,
+// editorial, desfile, atelie) sao estaticas e tem prioridade sobre esta rota.
 export function generateStaticParams() {
   return produtos.map((p) => ({ id: p.id }));
 }
@@ -42,11 +42,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-// Página da peça (no lugar da folha que abria por cima da loja). Desktop:
-// miniaturas, foto 3:4 e a coluna de compra de 480 px, que não acompanha a
-// rolagem. Tablet: foto e coluna lado a lado, sem miniaturas. Celular: foto
-// de borda a borda e a coluna logo abaixo. No fim, "Veja também" com até 8
-// peças da mesma categoria.
+// Pagina da peca: galeria com a inovacao Mesa de Luz & Relevo 3D, coluna de
+// compra com sob medida/pronta entrega, campos e tabela de medidas, cuidados e
+// sanfonas de encomenda, pagamento e envio. No fim, "Veja tambem".
 export default async function ProdutoPage({ params }: { params: Params }) {
   const { id } = await params;
   const produto = produtoPorId.get(id);
@@ -59,7 +57,12 @@ export default async function ProdutoPage({ params }: { params: Params }) {
     <main className="min-h-screen overflow-x-clip bg-[#EDE7D9]">
       <Header />
       <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[60px]">
-        <Galeria fotos={fotosDe(produto)} nome={produto.nome} prontaEntrega={produto.prontaEntrega} />
+        <Galeria
+          produto={produto}
+          fotos={fotosDe(produto)}
+          nome={produto.nome}
+          prontaEntrega={produto.prontaEntrega}
+        />
         <div className="px-4 pb-4 pt-5 md:w-[340px] md:shrink-0 md:px-0 md:pt-6 lg:w-[400px] lg:pt-8 xl:w-[480px]">
           <Compra produto={produto} categoria={categoria} />
         </div>
@@ -78,8 +81,8 @@ export default async function ProdutoPage({ params }: { params: Params }) {
         </section>
       )}
       <Footer />
-      {/* No celular, a coluna já tem o botão do WhatsApp e o flutuante
-          cobriria o preço; do md para cima ele segue. */}
+      {/* No celular, a coluna ja tem o botao do WhatsApp e o flutuante
+          cobriria o preco; do md para cima ele segue. */}
       <WhatsAppButton ocultarNoCelular />
     </main>
   );

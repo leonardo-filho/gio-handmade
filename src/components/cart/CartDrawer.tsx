@@ -9,6 +9,12 @@ import { formatBRL, formatBRLPreco } from "@/lib/format";
 import { calcularDesconto } from "@/lib/cupons";
 import { calcularFrete, mascararCep, normalizarCep, ORIGEM, type FreteEstimado } from "@/lib/frete";
 import { labelParcelamento, parcelamentoCartao, type Parcelamento } from "@/lib/parcelas";
+import {
+  atualizarRascunhoCheckout,
+  resumoMedidasPeca,
+  useMapaMedidas,
+  useRascunhoCheckout,
+} from "@/lib/pedido-v3";
 import { produtos, type Produto } from "@/data/produtos";
 import { WHATSAPP } from "../home/textos";
 import Gaveta from "../v3/estrutura/Gaveta";
@@ -16,37 +22,30 @@ import FotoSuave from "../v3/estrutura/FotoSuave";
 import { IconeFechar, IconeSeta } from "../v3/estrutura/Icones";
 import { BOTAO_CONTORNO, BOTAO_PRINCIPAL, CAMPO, FOCO, HOVER, LINHA } from "../v3/estrutura/estilo";
 
-// Sacola v3 (spec, seção 2): gaveta pela direita, tela cheia no celular e
-// 420 px do md para cima. Vazia, um aviso e o caminho de volta para a loja.
-// Com peças: as linhas (peça + opção), Cartão ou Pix, as sanfonas de frete e
-// de cupom, o total, o FINALIZAR PELO WHATSAPP e a linha do sinal.
-//
-// O total muda com a forma de pagamento: no cartão, o valor de cartão de cada
-// peça; no pix, o menor valor. O cupom vale sobre o subtotal da forma
-// escolhida e o frete (estimativa pelo CEP) soma no fim.
+// Sacola v3 (Argon): gaveta pela direita, tela cheia no celular e 420 px do md
+// para cima. Vazia, mostra aviso e caminho para a loja. Com pecas: mostra as
+// linhas (peca + opcao + resumo das medidas quando informadas), escolha entre
+// Cartao e Pix, sanfonas de frete e cupom, total e o botao principal
+// "Finalizar compra" que leva ao checkout em etapas dentro do site (/checkout),
+// alem da alternativa para fechar direto no WhatsApp.
 
 type FreteStatus = "idle" | "loading" | "ok" | "erro";
 type FormaPagamento = "cartao" | "pix";
 
 const produtoPorId = new Map(produtos.map((p) => [p.id, p]));
 
-// Verde de "cupom aplicado" (5:1 no creme).
 const VERDE_TEXTO = "text-[#276a3b]";
 
-/** "Sob medida" ou "Pronta entrega · P" (o tamanho entra quando o catálogo tiver). */
 function rotuloOpcao(linha: CartLine, produto?: Produto) {
   if (linha.opcao !== "pronta-entrega") return "Sob medida";
   return produto?.tamanho ? `Pronta entrega · ${produto.tamanho}` : "Pronta entrega";
 }
 
-/** A mesma opção, para a mensagem do WhatsApp ("sob medida", "pronta entrega, tam. P"). */
 function opcaoNaMensagem(linha: CartLine, produto?: Produto) {
   if (linha.opcao !== "pronta-entrega") return "sob medida";
   return produto?.tamanho ? `pronta entrega, tam. ${produto.tamanho}` : "pronta entrega";
 }
 
-// Sacola do cabeçalho que está na tela: o foco volta para ela quando quem
-// abriu a sacola já saiu da tela.
 function sacolaDoCabecalho(): HTMLElement | null {
   const botoes = Array.from(document.querySelectorAll<HTMLElement>("[data-cart-button]"));
   return botoes.find((b) => b.getClientRects().length > 0) ?? null;
@@ -55,19 +54,22 @@ function sacolaDoCabecalho(): HTMLElement | null {
 export default function CartDrawer() {
   const pathname = usePathname();
   const { lines, isOpen, close, remove, setQty, cupom, aplicarCupom, removerCupom } = useCart();
+  const mapaMedidas = useMapaMedidas();
+  const rascunho = useRascunhoCheckout();
   const fecharRef = useRef<HTMLButtonElement>(null);
 
-  const [forma, setForma] = useState<FormaPagamento>("cartao");
-  const [cep, setCep] = useState("");
+  const forma: FormaPagamento = rascunho.forma;
+  const [cepLocal, setCepLocal] = useState("");
   const [freteStatus, setFreteStatus] = useState<FreteStatus>("idle");
-  const [frete, setFrete] = useState<FreteEstimado | null>(null);
+  const [freteLocal, setFreteLocal] = useState<FreteEstimado | null>(null);
   const [codigoCupom, setCodigoCupom] = useState("");
   const [cupomErro, setCupomErro] = useState<string | null>(null);
   const cupomInputRef = useRef<HTMLInputElement>(null);
   const cupomAplicadoRef = useRef<HTMLParagraphElement>(null);
 
-  // Preço de cada linha na forma escolhida. O preço vem do catálogo de hoje
-  // (se mudou depois que a peça entrou na sacola, vale o novo).
+  const cep = cepLocal || rascunho.entrega.cep;
+  const frete = freteLocal ?? rascunho.frete;
+
   const linhas = useMemo(
     () =>
       lines.map((line) => {
@@ -75,9 +77,10 @@ export default function CartDrawer() {
         const precoPix = produto?.preco ?? line.preco;
         const parcelamento: Parcelamento = parcelamentoCartao(produto ?? { preco: precoPix });
         const unitario = forma === "cartao" ? parcelamento.total : precoPix;
-        return { line, produto, parcelamento, unitario, totalLinha: unitario * line.qty };
+        const resumoMedida = line.opcao === "sob-medida" ? resumoMedidasPeca(mapaMedidas[line.id]) : null;
+        return { line, produto, parcelamento, unitario, totalLinha: unitario * line.qty, resumoMedida };
       }),
-    [forma, lines]
+    [forma, lines, mapaMedidas]
   );
 
   const subtotal = linhas.reduce((acc, l) => acc + l.totalLinha, 0);
@@ -85,8 +88,10 @@ export default function CartDrawer() {
   const total = subtotal - desconto + (frete?.valor ?? 0);
   const temSobMedida = lines.some((l) => l.opcao !== "pronta-entrega");
 
-  // "Ver a loja": já na loja, só fecha a sacola (a pessoa volta para onde
-  // estava). Ctrl ou Cmd + clique segue abrindo nova aba.
+  function definirForma(nova: FormaPagamento) {
+    atualizarRascunhoCheckout({ forma: nova });
+  }
+
   function verLoja(e: React.MouseEvent<HTMLAnchorElement>) {
     const simples = e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
     if (pathname === "/loja" && simples) e.preventDefault();
@@ -94,23 +99,37 @@ export default function CartDrawer() {
   }
 
   function aoMudarCep(v: string) {
-    setCep(mascararCep(v));
+    const mascarado = mascararCep(v);
+    setCepLocal(mascarado);
     if (freteStatus !== "idle") {
       setFreteStatus("idle");
-      setFrete(null);
+      setFreteLocal(null);
     }
   }
 
   async function aoCalcularFrete() {
     if (normalizarCep(cep).length !== 8) {
       setFreteStatus("erro");
-      setFrete(null);
+      setFreteLocal(null);
       return;
     }
     setFreteStatus("loading");
     const resultado = await calcularFrete(cep);
-    setFrete(resultado);
+    setFreteLocal(resultado);
     setFreteStatus(resultado ? "ok" : "erro");
+    if (resultado) {
+      atualizarRascunhoCheckout({
+        frete: resultado,
+        entrega: {
+          ...rascunho.entrega,
+          cep: resultado.endereco.cep,
+          rua: resultado.endereco.logradouro ?? rascunho.entrega.rua,
+          bairro: resultado.endereco.bairro ?? rascunho.entrega.bairro,
+          cidade: resultado.endereco.localidade || rascunho.entrega.cidade,
+          uf: resultado.endereco.uf || rascunho.entrega.uf,
+        },
+      });
+    }
   }
 
   function aoAplicarCupom() {
@@ -138,16 +157,17 @@ export default function CartDrawer() {
 
   function linkWhatsApp() {
     const itens = linhas
-      .map(({ line, produto, parcelamento, unitario, totalLinha }) => {
+      .map(({ line, produto, parcelamento, unitario, totalLinha, resumoMedida }) => {
         const opcao = opcaoNaMensagem(line, produto);
+        const medida = resumoMedida ? ` · ${resumoMedida}` : "";
         const porUnidade = line.qty > 1 ? ` (${formatBRL(unitario)} un.)` : "";
         const parcelas = forma === "cartao" ? ` · ${labelParcelamento(parcelamento)}` : "";
-        return `• ${line.qty}x ${line.nome} (${opcao}): ${formatBRL(totalLinha)}${porUnidade}${parcelas}`;
+        return `• ${line.qty}x ${line.nome} (${opcao}${medida}): ${formatBRL(totalLinha)}${porUnidade}${parcelas}`;
       })
       .join("\n");
 
     const texto = [
-      "Oi Gio! Quero fechar meu pedido feito pelo site ✨",
+      "Oi Gio! Quero fechar meu pedido feito pelo site",
       "",
       `Forma de pagamento: ${forma === "cartao" ? "Cartão de crédito" : "Pix à vista"}`,
       "",
@@ -183,7 +203,7 @@ export default function CartDrawer() {
       focoInicial={fecharRef}
       focoDeVolta={sacolaDoCabecalho}
     >
-      {/* Topo: SACOLA no centro, X à direita e a linha de 1 px. */}
+      {/* Topo: SACOLA no centro, X a direita e a linha de 1 px. */}
       <div className={`relative flex h-14 shrink-0 items-center justify-center border-b ${LINHA}`}>
         <h2 className="text-[11px] uppercase tracking-[0.16em]">Sacola</h2>
         <button
@@ -208,7 +228,7 @@ export default function CartDrawer() {
         <>
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-6 md:px-6">
             <ul>
-              {linhas.map(({ line, produto, totalLinha }) => (
+              {linhas.map(({ line, produto, totalLinha, resumoMedida }) => (
                 <li key={chaveDaLinha(line)} className={`flex gap-4 border-b py-4 ${LINHA}`}>
                   <span className="relative h-24 w-[72px] shrink-0 overflow-hidden bg-[#1B4965]/5">
                     <FotoSuave src={produto?.foto ?? line.foto} alt="" fill sizes="72px" className="object-cover" />
@@ -220,7 +240,10 @@ export default function CartDrawer() {
                         {formatBRLPreco(totalLinha)}
                       </p>
                     </div>
-                    <p className="mt-1 text-[12px] leading-[18px] text-brand-muted">{rotuloOpcao(line, produto)}</p>
+                    <p className="mt-1 text-[12px] leading-[18px] text-brand-muted">
+                      {rotuloOpcao(line, produto)}
+                      {resumoMedida ? ` · ${resumoMedida}` : ""}
+                    </p>
                     <div className="mt-auto flex items-center justify-between pt-3">
                       <Quantidade
                         nome={line.nome}
@@ -242,7 +265,7 @@ export default function CartDrawer() {
               ))}
             </ul>
 
-            {/* Forma de pagamento: o total muda com ela. Cartão primeiro, como nos preços da loja. */}
+            {/* Forma de pagamento: Cartao primeiro, como nos precos da loja. */}
             <div role="group" aria-label="Forma de pagamento" className="mt-5 grid grid-cols-2 gap-2">
               {(
                 [
@@ -254,8 +277,7 @@ export default function CartDrawer() {
                   key={valor}
                   type="button"
                   aria-pressed={forma === valor}
-                  onClick={() => setForma(valor)}
-                  // 40 px de altura, com 2 px a mais de toque em cima e embaixo.
+                  onClick={() => definirForma(valor)}
                   className={`relative flex h-10 items-center justify-center rounded-[4px] border border-[#1B4965] text-[12px] uppercase tracking-[0.16em] after:absolute after:-inset-y-0.5 after:inset-x-0 after:content-[''] ${FOCO} ${
                     forma === valor ? "bg-[#1B4965] text-[#EDE7D9]" : `text-[#1B4965] ${HOVER}`
                   }`}
@@ -291,7 +313,7 @@ export default function CartDrawer() {
                 </div>
                 <div id="sacola-cep-nota" aria-live="polite" className="mt-2 text-[12px] leading-[18px] text-brand-muted">
                   {freteStatus === "erro" && <p className="text-[#a33]">CEP não encontrado. Confira o número.</p>}
-                  {freteStatus === "ok" && frete && (
+                  {frete && (
                     <p className="text-[#1B4965]">
                       {frete.endereco.localidade}/{frete.endereco.uf}: {formatBRLPreco(frete.valor)}, de {frete.prazoMin} a{" "}
                       {frete.prazoMax} dias úteis
@@ -358,7 +380,7 @@ export default function CartDrawer() {
             </div>
           </div>
 
-          {/* Fim da sacola, sempre à vista: total, finalizar e o sinal. */}
+          {/* Fim da sacola: total, checkout no site, alternativa WhatsApp e nota do sinal. */}
           <div className={`shrink-0 border-t px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 md:px-6 ${LINHA}`}>
             {(desconto > 0 || frete) && (
               <dl className="mb-2 space-y-1 text-[12px] text-brand-muted">
@@ -386,11 +408,16 @@ export default function CartDrawer() {
                 {formatBRLPreco(total)}
               </p>
             </div>
-            <a href={linkWhatsApp()} target="_blank" rel="noopener noreferrer" className={`${BOTAO_PRINCIPAL} mt-3`}>
-              Finalizar pelo WhatsApp
+            <Link href="/checkout" onClick={close} className={`${BOTAO_PRINCIPAL} mt-3`}>
+              Finalizar pedido no site
+            </Link>
+            <a href={linkWhatsApp()} target="_blank" rel="noopener noreferrer" className={`${BOTAO_CONTORNO} mt-2 w-full`}>
+              Ou fechar pelo WhatsApp
             </a>
             {temSobMedida && (
-              <p className="mt-2 text-center text-[12px] leading-[18px] text-brand-muted">Sob medida começa com sinal de 50%.</p>
+              <p className="mt-2 text-center text-[12px] leading-[18px] text-brand-muted">
+                Sob medida começa com sinal de 50%.
+              </p>
             )}
           </div>
         </>
@@ -399,7 +426,6 @@ export default function CartDrawer() {
   );
 }
 
-// "− 1 +": caixas de 28 px, com 44 px de toque (a área passa 8 px para cada lado).
 function Quantidade({ nome, qty, menos, mais }: { nome: string; qty: number; menos: () => void; mais: () => void }) {
   const botao = `relative flex h-7 w-7 items-center justify-center rounded-[4px] after:absolute after:-inset-2 after:content-[''] ${HOVER} ${FOCO}`;
   return (
@@ -417,8 +443,6 @@ function Quantidade({ nome, qty, menos, mais }: { nome: string; qty: number; men
   );
 }
 
-// Sanfona fechada por padrão: abre em 0,2 s e o chevron gira. Fechada, o
-// conteúdo fica inerte (fora do Tab e do leitor de tela).
 function Sanfona({ titulo, children }: { titulo: string; children: ReactNode }) {
   const [aberta, setAberta] = useState(false);
   const id = useId();
@@ -444,7 +468,6 @@ function Sanfona({ titulo, children }: { titulo: string; children: ReactNode }) 
         }`}
       >
         <div className="overflow-hidden">
-          {/* Respiro de 4 px nas bordas para o anel de foco dos botões não ser cortado. */}
           <div className="px-1 pb-4 pt-1">{children}</div>
         </div>
       </div>
