@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Androgy — fonte oficial da logo Gio Handmade.
+ * Androgy: fonte oficial da logo Gio Handmade.
  * Ela NÃO contém glifos com acentos (ABNT2). Restrito a Basic Latin
  * para que ã, á, é, í, ó, ú, ç, etc. caiam automaticamente no fallback EB Garamond.
  */
@@ -15,7 +15,7 @@
 }
 
 /*
- * Joliet — fonte usada apenas no título da coleção "Solaris".
+ * Joliet: fonte usada apenas no título da coleção "Solaris".
  * Servida pelo próprio projeto (public/brand/fonts) para funcionar em qualquer
  * visitante, sem depender de a fonte estar instalada no computador de quem acessa.
  */
@@ -45,7 +45,7 @@
   --background: var(--brand-cream);
   --foreground: var(--brand-ink);
 
-  /* Stack da fonte oficial — Androgy cobre Basic Latin; acentos caem no serif */
+  /* Stack da fonte oficial: Androgy cobre Basic Latin; acentos caem no serif */
   --font-brand: "Androgy", "EB Garamond", Georgia, "Times New Roman", serif;
 }
 
@@ -94,7 +94,7 @@ section[id] {
   }
 }
 
-/* Letreiro de frete grátis — loop contínuo. Dois tracks idênticos deslizam -50%. */
+/* Letreiro de frete grátis, em loop contínuo. Dois tracks idênticos deslizam -50%. */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -140,4 +140,12 @@ section[id] {
    padrão, o que deixa o "5x" e os centavos pequenos e descendentes). */
 .nums-preco {
   font-feature-settings: "lnum" 1, "tnum" 1, "kern" 1;
+}
+
+/* Versão 2 (Provador): o manequim muda de forma com as medidas. Onde o
+   navegador anima o `d` do SVG, a troca desliza; com movimento reduzido, é seca. */
+@media (prefers-reduced-motion: no-preference) {
+  .silhueta-forma {
+    transition: d 0.35s cubic-bezier(0.22, 1, 0.36, 1), stroke-width 0.2s ease, stroke-opacity 0.2s ease;
+  }
 }

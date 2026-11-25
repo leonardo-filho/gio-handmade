@@ -16,6 +16,7 @@ import {
   type Cupom,
   type ResultadoCupom,
 } from "@/lib/cupons";
+import type { Medidas } from "@/data/medidas";
 
 /** Como a peça foi pedida: feita sob medida ou a peça pronta, com envio imediato. */
 export type OpcaoPeca = "sob-medida" | "pronta-entrega";
@@ -31,7 +32,16 @@ export type CartItem = {
    * Sem opção (ou com um valor fora desses dois), a linha vale como sob medida.
    */
   opcao?: OpcaoPeca | (string & {});
+  /** Versão 2 (provador): as medidas da cliente que seguem com a peça sob medida. */
+  medidas?: Medidas;
+  /** A cliente prefere mandar as medidas depois, por vídeo. */
+  medidasPorVideo?: boolean;
+  /** Tamanho de referência sugerido pela tabela (só referência). */
+  tamanhoReferencia?: string;
 };
+
+/** O que o provador grava numa linha da sacola. */
+export type MedidasDaLinha = Pick<CartItem, "medidas" | "medidasPorVideo" | "tamanhoReferencia">;
 
 /**
  * Linha da sacola. A linha é a peça MAIS a opção: o mesmo top em sob medida e
@@ -68,6 +78,8 @@ type CartContextValue = {
   remove: (id: string, opcao?: string) => void;
   /** Muda a quantidade da linha (0 ou menos tira a linha). Sem opção: sob medida. */
   setQty: (id: string, qty: number, opcao?: string) => void;
+  /** Troca as medidas da linha (peça + opção). */
+  definirMedidas: (id: string, opcao: string, dados: MedidasDaLinha) => void;
   clear: () => void;
   count: number;
   subtotal: number;
@@ -196,9 +208,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const prev = armazemLinhas.obter();
     const opcao = normalizarOpcao(item.opcao);
     const existente = prev.find((l) => l.id === item.id && l.opcao === opcao);
+    // Medidas novas valem sobre as antigas da mesma linha.
+    const novasMedidas: MedidasDaLinha | null =
+      item.medidas || item.medidasPorVideo
+        ? { medidas: item.medidas, medidasPorVideo: item.medidasPorVideo, tamanhoReferencia: item.tamanhoReferencia }
+        : null;
     armazemLinhas.definir(
       existente
-        ? prev.map((l) => (l === existente ? { ...l, qty: l.qty + qty } : l))
+        ? prev.map((l) => (l === existente ? { ...l, ...(novasMedidas ?? {}), qty: l.qty + qty } : l))
         : [...prev, { ...item, opcao, qty }]
     );
     vezAdicionado.current += 1;
@@ -222,6 +239,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const eh = (l: CartLine) => l.id === id && l.opcao === alvo;
     armazemLinhas.definir(
       qty <= 0 ? prev.filter((l) => !eh(l)) : prev.map((l) => (eh(l) ? { ...l, qty } : l))
+    );
+  }, []);
+
+  const definirMedidas = useCallback((id: string, opcao: string, dados: MedidasDaLinha) => {
+    const alvo = normalizarOpcao(opcao);
+    armazemLinhas.definir(
+      armazemLinhas.obter().map((l) =>
+        l.id === id && l.opcao === alvo
+          ? { ...l, medidas: dados.medidas, medidasPorVideo: dados.medidasPorVideo, tamanhoReferencia: dados.tamanhoReferencia }
+          : l
+      )
     );
   }, []);
 
@@ -266,6 +294,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add,
       remove,
       setQty,
+      definirMedidas,
       clear,
       count,
       subtotal,
@@ -285,6 +314,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       add,
       remove,
       setQty,
+      definirMedidas,
       clear,
       count,
       subtotal,

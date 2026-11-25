@@ -6,9 +6,11 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Card from "@/components/v3/Card";
 import { categoriaDe, relacionadas } from "@/components/v3/loja/vistas";
 import Carrossel from "@/components/v3/home/Carrossel";
-import Compra from "@/components/v3/produto/Compra";
-import Galeria from "@/components/v3/produto/Galeria";
+import ColunaPresa from "@/components/v2/produto/ColunaPresa";
+import Compra from "@/components/v2/produto/Compra";
+import GaleriaPeca from "@/components/v2/produto/GaleriaPeca";
 import { produtos } from "@/data/produtos";
+import { sugerirLook } from "@/lib/v2/look";
 
 type Params = Promise<{ id: string }>;
 
@@ -17,8 +19,8 @@ const produtoPorId = new Map(produtos.map((p) => [p.id, p]));
 const fotosDe = (p: (typeof produtos)[number]) =>
   [p.foto, p.fotoHover, ...(p.fotosExtra ?? [])].filter((f): f is string => Boolean(f));
 
-// As 52 peças saem prontas no build. As pastas de protótipo (/loja/a, b,
-// editorial, desfile, atelie) são estáticas e têm prioridade sobre esta rota.
+// As 52 peças saem prontas no build. As pastas de protótipo antigas (/loja/a,
+// b, editorial, desfile, atelie) são estáticas e têm prioridade sobre esta rota.
 export function generateStaticParams() {
   return produtos.map((p) => ({ id: p.id }));
 }
@@ -42,11 +44,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   };
 }
 
-// Página da peça (no lugar da folha que abria por cima da loja). Desktop:
-// miniaturas, foto 3:4 e a coluna de compra de 480 px, que não acompanha a
-// rolagem. Tablet: foto e coluna lado a lado, sem miniaturas. Celular: foto
-// de borda a borda e a coluna logo abaixo. No fim, "Veja também" com até 8
-// peças da mesma categoria.
+// Página da peça, versão 2 (Provador). A peça em foco: no celular, fotos
+// altas que trocam com o dedo; no computador, uma foto por tela, uma embaixo
+// da outra, com a coluna de compra ao lado. Na coluna, o provador de medidas
+// e o look. No fim, "Veja também".
 export default async function ProdutoPage({ params }: { params: Params }) {
   const { id } = await params;
   const produto = produtoPorId.get(id);
@@ -54,20 +55,23 @@ export default async function ProdutoPage({ params }: { params: Params }) {
 
   const categoria = categoriaDe(produto);
   const outras = relacionadas(produto);
+  const look = sugerirLook(produto);
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[#EDE7D9]">
       <Header />
-      <div className="mx-auto max-w-[1440px] md:flex md:items-start md:gap-8 md:pr-8 lg:gap-12 xl:pr-[60px]">
-        <Galeria fotos={fotosDe(produto)} nome={produto.nome} prontaEntrega={produto.prontaEntrega} />
-        <div className="px-4 pb-4 pt-5 md:w-[340px] md:shrink-0 md:px-0 md:pt-6 lg:w-[400px] lg:pt-8 xl:w-[480px]">
-          <Compra produto={produto} categoria={categoria} />
+      <div className="mx-auto max-w-[1440px] lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-10 lg:pr-10 xl:grid-cols-[minmax(0,1fr)_460px] xl:gap-14 xl:pr-[72px]">
+        <div className="min-w-0">
+          <GaleriaPeca fotos={fotosDe(produto)} nome={produto.nome} prontaEntrega={produto.prontaEntrega} />
         </div>
+        <ColunaPresa className="px-4 pb-6 pt-4 md:mx-auto md:max-w-[600px] md:px-8 lg:mx-0 lg:max-w-none lg:px-0 lg:pb-10 lg:pt-6">
+          <Compra produto={produto} categoria={categoria} look={look} />
+        </ColunaPresa>
       </div>
 
       {outras.length > 0 && (
-        <section aria-labelledby="veja-tambem" className="pb-14 pt-12 lg:pb-20 lg:pt-16">
-          <h2 id="veja-tambem" className="mb-4 text-center font-serif text-[20px] leading-7 text-[#1B4965]">
+        <section aria-labelledby="veja-tambem" className="pb-14 pt-10 lg:pb-20 lg:pt-12">
+          <h2 id="veja-tambem" className="mb-4 text-center font-[family-name:var(--font-serif)] text-[20px] leading-7 text-[#1B4965]">
             Veja também
           </h2>
           <Carrossel rotulo={`Outras peças de ${categoria.nome}`}>
@@ -79,7 +83,7 @@ export default async function ProdutoPage({ params }: { params: Params }) {
       )}
       <Footer />
       {/* No celular, a coluna já tem o botão do WhatsApp e o flutuante
-          cobriria o preço; do md para cima ele segue. */}
+          cobriria o preço e o provador; do md para cima ele segue. */}
       <WhatsAppButton ocultarNoCelular />
     </main>
   );

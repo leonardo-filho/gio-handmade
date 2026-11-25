@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Sem o selo "N" do modo de desenvolvimento: a apresentação roda no next dev
+  // e o selo cobria o provador no celular.
+  devIndicators: false,
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",

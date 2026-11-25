@@ -32,7 +32,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-[1344px] gap-y-6 md:grid-cols-3 md:gap-x-12">
         {/* Logo e Instagram (no desktop, o logo fica na coluna da direita). */}
         <div className="flex items-center justify-between md:hidden">
-          <Image src="/logo-navy.png" alt="Gio Handmade" width={1200} height={856} sizes="51px" className="h-9 w-auto" />
+          <Image src="/logo-navy.png" alt="Gio Handmade" width={1200} height={856} sizes="51px" loading="eager" className="h-9 w-auto" />
           <a
             href={INSTAGRAM}
             target="_blank"
@@ -91,6 +91,7 @@ export default function Footer() {
             width={1200}
             height={856}
             sizes="56px"
+            loading="eager"
             className="hidden h-10 w-auto md:mb-4 md:block"
           />
           <p className="text-[12px] text-brand-muted">Pix e cartão em até {MAX_PARCELAS}x sem juros</p>
