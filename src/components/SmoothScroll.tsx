@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { registrarLenis } from "@/lib/travaRolagem";
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -15,6 +16,8 @@ export default function SmoothScroll() {
       wheelMultiplier: 1,
       touchMultiplier: 1.2,
     });
+    // A trava de rolagem (modal, carrinho, menu) e o rolarAte usam esta instância.
+    registrarLenis(lenis);
 
     let rafId: number;
     function raf(time: number) {
@@ -45,8 +48,14 @@ export default function SmoothScroll() {
       const headerH = header ? Math.round(header.getBoundingClientRect().height) : 80;
       const lojaNav = document.querySelector("[data-loja-nav]");
       const navH = lojaNav ? Math.round(lojaNav.getBoundingClientRect().height) : 0;
-      lenis.scrollTo(el as HTMLElement, { offset: -(headerH + navH + 16), duration: 1.2 });
+      // O Lenis já desconta o scroll-margin-top do alvo; somado ao offset, o
+      // desconto entrava duas vezes e a seção parava longe da barra.
+      const margem = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+      lenis.scrollTo(el as HTMLElement, { offset: -(headerH + navH + 16) + margem, duration: 1.2 });
       window.history.pushState(null, "", url.hash);
+      // Como o link nativo, leva o foco ao alvo quando ele aceita foco (o
+      // "Pular para as peças" depende disso). Num alvo sem foco, não faz nada.
+      if (el instanceof HTMLElement) el.focus({ preventScroll: true });
     }
 
     document.addEventListener("click", handleAnchorClick);
@@ -54,6 +63,7 @@ export default function SmoothScroll() {
     return () => {
       cancelAnimationFrame(rafId);
       document.removeEventListener("click", handleAnchorClick);
+      registrarLenis(null);
       lenis.destroy();
     };
   }, []);

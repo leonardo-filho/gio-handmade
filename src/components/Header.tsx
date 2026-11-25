@@ -1,175 +1,79 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
 import AnnouncementBar from "./AnnouncementBar";
 import CartButton from "./cart/CartButton";
+import { useGavetas } from "./v3/estrutura/Gavetas";
+import { IconeLupa, IconeMenu } from "./v3/estrutura/Icones";
+import { FOCO, HOVER } from "./v3/estrutura/estilo";
 
+// Cabeçalho v3 (spec, seção 2): a faixa de aviso, que sai com a rolagem, e a
+// barra creme, presa ao rolar, sem encolher, sem linha e sem sombra (60 px no
+// celular e 76 px do md para cima).
+//
+// Toda a navegação fica atrás do hambúrguer, até no desktop: à esquerda o
+// menu e a lupa (os dois abrem a gaveta da esquerda), no centro o logo e à
+// direita só a sacola.
+//
+// Uso: a página põe <Header /> como filho direto do <main>, antes de tudo.
+// Ele entra no fluxo (não é fixed), então a página não precisa de espaço em
+// cima. O <main> não pode ter overflow hidden (overflow-x-clip serve), senão
+// a barra deixa de ficar presa.
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
-  // Na home usamos âncora relativa (#secao) para o smooth-scroll do Lenis;
-  // em outras páginas (ex.: /loja) usamos /#secao para voltar à home e rolar.
-  const anchor = (id: string) => (pathname === "/" ? `#${id}` : `/#${id}`);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Trava o scroll do fundo e permite fechar com Esc quando o menu mobile está aberto
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsMobileMenuOpen(false);
-    };
-    window.addEventListener("keydown", handleKey);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKey);
-    };
-  }, [isMobileMenuOpen]);
-
-  const navLinks = [
-    { name: "Início", href: anchor("inicio") },
-    { name: "Solaris", href: anchor("solaris") },
-    { name: "Loja", href: "/loja" },
-    { name: "Categorias", href: anchor("categorias") },
-    { name: "Processo", href: anchor("processo") },
-    { name: "Sobre", href: anchor("sobre") },
-  ];
+  const { aberta, modo, abrirMenu, abrirBusca } = useGavetas();
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
+    <>
       <AnnouncementBar />
-      <div
-        className={`w-full transition-all duration-500 ${
-          isScrolled
-            ? "bg-[#EDE7D9]/95 backdrop-blur-md shadow-sm py-2 border-b border-[#1B4965]/10"
-            : "bg-[#EDE7D9]/70 backdrop-blur-sm py-3 border-b border-transparent"
-        }`}
-      >
-      <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" aria-label="Gio Handmade" className="flex items-center">
-          <Image
-            src="/logo-navy.png"
-            alt="Gio Handmade"
-            width={1200}
-            height={856}
-            priority
-            className={`w-auto transition-all duration-500 ${
-              isScrolled ? "h-10 md:h-12" : "h-12 md:h-14"
-            }`}
-          />
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex gap-6 xl:gap-8 items-center">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-xs uppercase tracking-[0.2em] text-[#1B4965]/80 hover:text-[#1B4965] transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/40 focus-visible:ring-offset-4 focus-visible:ring-offset-[#EDE7D9]"
+      <header className="sticky top-0 z-40 w-full bg-[#EDE7D9] text-[#1B4965]">
+        <div className="relative flex h-[60px] items-center justify-between px-1.5 md:h-[76px] md:px-4 lg:px-6">
+          <div className="flex items-center">
+            <button
+              type="button"
+              onClick={abrirMenu}
+              aria-haspopup="dialog"
+              aria-expanded={aberta && modo === "menu"}
+              aria-label="Abrir menu"
+              className={`flex h-11 min-w-11 items-center justify-center gap-2 rounded-[4px] px-[11px] ${HOVER} ${FOCO}`}
             >
-              {link.name}
-            </Link>
-          ))}
+              <IconeMenu className="h-[22px] w-[22px] shrink-0" />
+              <span aria-hidden className="hidden text-[12px] leading-none md:inline">
+                Menu
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={abrirBusca}
+              aria-haspopup="dialog"
+              aria-expanded={aberta && modo === "busca"}
+              aria-label="Buscar peças"
+              className={`flex h-11 w-11 items-center justify-center rounded-[4px] ${HOVER} ${FOCO}`}
+            >
+              <IconeLupa className="h-5 w-5" />
+            </button>
+          </div>
+
           <Link
-            href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
-            className="text-xs uppercase tracking-[0.2em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-2 hover:bg-[#130209] transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
+            href="/"
+            aria-label="Gio Handmade, página inicial"
+            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center rounded-[4px] px-1 py-1 md:py-0 ${FOCO}`}
           >
-            Contato
+            <Image
+              src="/logo-navy.png"
+              alt="Gio Handmade"
+              width={1200}
+              height={856}
+              priority
+              // 36 px de altura no celular (50 px de largura) e 44 px do md para cima (62 px).
+              sizes="(min-width: 768px) 62px, 51px"
+              className="h-9 w-auto md:h-11"
+            />
           </Link>
-          <CartButton />
-        </nav>
 
-        {/* Cluster mobile: carrinho + menu */}
-        <div className="flex items-center gap-1 lg:hidden">
           <CartButton />
-          <button
-            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-            className="-mr-2 p-2.5 text-[#1B4965] rounded-md transition-colors hover:bg-[#1B4965]/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/50"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
         </div>
-      </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <>
-          {/* Scrim — toque fora fecha o menu */}
-          <button
-            type="button"
-            aria-label="Fechar menu"
-            tabIndex={-1}
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="absolute inset-x-0 top-full h-screen w-full cursor-default bg-[#130209]/20 lg:hidden"
-          />
-          <nav
-            id="mobile-menu"
-            aria-label="Menu principal"
-            className="absolute top-full left-0 w-full bg-[#EDE7D9]/98 backdrop-blur-md shadow-md py-4 px-6 flex flex-col lg:hidden border-t border-[#1B4965]/10"
-          >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="py-3 text-sm uppercase tracking-[0.25em] text-[#1B4965]/80 hover:text-[#1B4965] rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link
-              href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="mt-3 text-sm uppercase tracking-[0.25em] font-bold text-[#EDE7D9] bg-[#1B4965] px-4 py-3.5 text-center rounded-md hover:bg-[#130209] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9]"
-            >
-              Contato
-            </Link>
-          </nav>
-        </>
-      )}
-    </header>
+      </header>
+    </>
   );
 }

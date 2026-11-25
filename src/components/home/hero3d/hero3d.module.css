@@ -1,0 +1,632 @@
+/*
+ * Hero "Ponto a ponto".
+ *
+ * O CSS de base é a versão estática: título, a foto da peça na moldura em
+ * arco, nome, preço e botões, sem rolagem presa. É o que vale com movimento
+ * reduzido, sem WebGL, com economia de dados e sem JavaScript.
+ *
+ * A camada 3D (seção alta com o palco preso, canvas, textos que trocam com a
+ * rolagem) só vale com as três condições juntas: movimento liberado, o
+ * componente em modo "3d" (o servidor já manda assim; o navegador troca para
+ * "estatico" quando falta WebGL) e JavaScript ligado (sem ele, o <noscript>
+ * põe um marcador .semJs dentro da seção e o :has desliga a camada).
+ *
+ * Nada aqui fica em @layer, então vale por cima das classes do Tailwind.
+ */
+
+/* ------------------------------------------------------------- estático */
+
+.raiz {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --navy: #1b4965;
+  --creme: #ede7d9;
+  --ouro: #b8902a;
+  position: relative;
+  background: var(--creme);
+  color: var(--navy);
+}
+
+.palco {
+  position: relative;
+}
+
+.cena {
+  display: none;
+}
+
+.grade {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "cima"
+    "arco"
+    "nome"
+    "baixo";
+  row-gap: 18px;
+  padding: calc(var(--header-h-topo, 102px) + 18px) 16px 44px;
+}
+
+.bloco {
+  display: contents;
+}
+
+.cima {
+  grid-area: cima;
+  min-width: 0;
+}
+
+.baixo {
+  grid-area: baixo;
+  min-width: 0;
+}
+
+.nome {
+  grid-area: nome;
+}
+
+/* Fora do modo 3D só ficam o título da abertura e a peça do fim. */
+.so3d {
+  display: none;
+}
+
+.arco {
+  grid-area: arco;
+  position: relative;
+  height: min(66svh, 122vw);
+  min-height: 300px;
+  container-type: size;
+}
+
+.moldura {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Reserva para navegador sem unidade de contêiner. */
+  width: 72%;
+  width: min(100cqw, 75cqh);
+  aspect-ratio: 3 / 4;
+  transform: translate(-50%, -50%);
+}
+
+/* Arco: meia-volta em cima (o raio é metade da largura). */
+.janela {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 50% 50% 4px 4px / 37.5% 37.5% 4px 4px;
+  background: #e3dccb;
+}
+
+.foto {
+  position: absolute;
+  inset: 0;
+}
+
+.fotoAbertura {
+  display: none;
+}
+
+.fotoMiolo {
+  position: absolute;
+  inset: 0;
+}
+
+/* Costura dourada em volta do arco (o desenho é medido no navegador). */
+.contorno {
+  position: absolute;
+  inset: -9px;
+  width: calc(100% + 18px);
+  height: calc(100% + 18px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.contorno path {
+  fill: none;
+}
+
+/* Tipografia */
+.olho {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #7d611c;
+}
+
+.titulo {
+  margin-top: 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(42px, 12.6vw, 58px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+
+.linha {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.linha > span {
+  display: inline-block;
+}
+
+.frase {
+  margin-top: 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(28px, 8vw, 36px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--navy);
+}
+
+.nomePeca {
+  margin-top: 4px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(40px, 11vw, 52px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+}
+
+.texto {
+  max-width: 30rem;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #3f6178;
+}
+
+.dica {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12.5px;
+  color: #3f6178;
+}
+
+.ponto {
+  display: block;
+  height: 1.5px;
+  background-image: repeating-linear-gradient(90deg, var(--ouro) 0 7px, transparent 7px 12px);
+}
+
+.contador {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.numero {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(46px, 13vw, 60px);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--navy);
+}
+
+.precoLinha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+.preco {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--navy);
+}
+
+.botoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  /* No celular, o botão do WhatsApp fica no canto de baixo à direita. */
+  padding-right: 64px;
+}
+
+.botao {
+  display: inline-flex;
+  min-height: 48px;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  padding: 0 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    transform 0.3s var(--ease);
+}
+
+.botao:active {
+  transform: scale(0.97);
+}
+
+.botao:focus-visible {
+  outline: 2px solid var(--ouro);
+  outline-offset: 3px;
+}
+
+.botaoCheio {
+  background: var(--navy);
+  color: var(--creme);
+}
+
+/* Hover só onde existe mouse: no toque, o botão escuro ficava "aceso" depois
+   do toque (ao voltar da folha da peça, por exemplo). */
+@media (hover: hover) {
+  .botaoCheio:hover {
+    background: #130209;
+  }
+}
+
+/* No celular, "Ver a loja" é um link de texto ao lado do botão principal. */
+.botaoVazio {
+  flex: 0 0 auto;
+  padding: 0 12px;
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-color: rgba(184, 144, 42, 0.8);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+@media (hover: hover) {
+  .botaoVazio:hover {
+    text-decoration-color: var(--navy);
+  }
+}
+
+.seta {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s var(--ease);
+}
+
+@media (hover: hover) {
+  .botao:hover .seta {
+    transform: translateX(3px);
+  }
+}
+
+@media (min-width: 768px) {
+  .olho {
+    font-size: 11px;
+  }
+  .botoes {
+    max-width: 440px;
+    gap: 10px;
+    padding-right: 0;
+  }
+  .botaoVazio {
+    flex: 1 1 0;
+    padding: 0 20px;
+    text-decoration: none;
+    box-shadow: inset 0 0 0 1.5px rgba(27, 73, 101, 0.45);
+  }
+  .texto {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) and (hover: hover) {
+  .botaoVazio:hover {
+    box-shadow: inset 0 0 0 1.5px var(--navy);
+    background: rgba(27, 73, 101, 0.05);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grade {
+    min-height: 100svh;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* O texto fica no meio da altura do arco. */
+    grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-areas:
+      ". arco"
+      "cima arco"
+      "nome arco"
+      "baixo arco"
+      ". arco";
+    column-gap: clamp(40px, 5vw, 96px);
+    row-gap: 22px;
+    align-content: center;
+    padding: calc(var(--header-h-topo, 109px) + 32px) clamp(40px, 6vw, 112px) 56px;
+  }
+  .arco {
+    height: min(76vh, 760px);
+    min-height: 520px;
+  }
+  .titulo {
+    font-size: clamp(64px, 6.4vw, 108px);
+  }
+  .nomePeca {
+    font-size: clamp(44px, 4vw, 64px);
+  }
+}
+
+/* -------------------------------------------------------------- 3D */
+
+@media (prefers-reduced-motion: no-preference) {
+  .raiz[data-modo="3d"]:not(:has(.semJs)) {
+    /* A rolagem que conta a história: 3,3 telas além do palco. */
+    height: 430vh;
+    overflow: clip;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .palco {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100lvh;
+    overflow: hidden;
+    /* Arrasto vertical rola a página; o horizontal gira a peça. A pinça de
+       dois dedos continua dando zoom (baixa visão). */
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .palco[data-giravel] {
+    cursor: grab;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .palco[data-arrastando] {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cena {
+    display: block;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cena[data-pronta] {
+    opacity: 1;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cenaMiolo {
+    position: absolute;
+    inset: 0;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .grade {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 100vh;
+    height: 100svh;
+    grid-template-rows: var(--header-h-topo, 102px) auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "."
+      "cima"
+      "arco"
+      "baixo";
+    row-gap: 12px;
+    padding: 0 16px 18px;
+    pointer-events: none;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .so3d {
+    display: contents;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .soEstatico {
+    display: none;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .arco {
+    height: auto;
+    min-height: 0;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .nome {
+    grid-area: cima;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .janela {
+    background: transparent;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .fotoAbertura {
+    display: block;
+    background: #e3dccb;
+    transition: opacity 0.9s ease 0.12s;
+  }
+
+  .raiz[data-modo="3d"][data-intro]:not(:has(.semJs)) .fotoAbertura {
+    opacity: 0;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .fotoFinal {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  /* Textos: cada linha sobe de dentro da sua janela ao entrar e sai por
+     cima quando a rolagem passa; voltando, refaz o caminho. Terminada a
+     saída, a linha apaga: as pontas do p e do y (e o alto das maiúsculas)
+     passam da caixa da linha e ficariam aparecendo na beira da janela. */
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .linha > span {
+    transform: translate3d(0, 110%, 0);
+    opacity: 0;
+    transition:
+      transform 0.4s cubic-bezier(0.4, 0, 0.9, 0.5),
+      opacity 0s linear 0.4s;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="depois"] .linha > span {
+    transform: translate3d(0, -110%, 0);
+  }
+
+  /* Quem entra espera quem sai (0,45 s) para as frases não se cruzarem. */
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .linha > span {
+    transform: none;
+    opacity: 1;
+    transition:
+      transform 1.05s var(--ease) calc(var(--d, 0ms) + 380ms),
+      opacity 0s linear calc(var(--d, 0ms) + 380ms);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .surge {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+    transition:
+      opacity 0.25s ease,
+      transform 0.4s ease;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="depois"] .surge {
+    transform: translate3d(0, -12px, 0);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .surge {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.8s ease calc(var(--d, 0ms) + 380ms),
+      transform 1s var(--ease) calc(var(--d, 0ms) + 380ms);
+  }
+
+  /* Só o bloco ativo recebe toque (os botões do fim ficam clicáveis só
+     quando aparecem; pelo teclado, o foco leva a rolagem até eles). */
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .cima,
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .baixo,
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .nome {
+    pointer-events: auto;
+  }
+
+  /* Véu creme atrás do texto ativo: as miçangas que passam por trás dele
+     ficam mais claras e a frase continua fácil de ler. */
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cima {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cima::before {
+    content: "";
+    position: absolute;
+    inset: -14px -22px -12px -22px;
+    z-index: -1;
+    /* Retângulo creme de bordas borradas: cobre a frase inteira, sem aresta. */
+    background: rgba(237, 231, 217, 0.86);
+    filter: blur(18px);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .bloco[data-estado="ativo"] .cima::before {
+    opacity: 1;
+  }
+
+  /* Abertura: na primeira pintura o título já sobe, sem esperar o JS. */
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .abertura .linha > span {
+    animation: subir 1.1s var(--ease) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .abertura .surge {
+    animation: surgir 0.9s var(--ease) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .costurar {
+    animation: costurar 1.4s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1023.98px) {
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .grade {
+    padding: 0 32px 24px;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .titulo,
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .nomePeca {
+    font-size: 76px;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .frase {
+    font-size: 46px;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .numero {
+    font-size: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .grade {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+    grid-template-rows: var(--header-h-topo, 109px) minmax(0, 1fr) minmax(0, 1fr) 36px;
+    grid-template-areas:
+      ". ."
+      "cima arco"
+      "baixo arco"
+      ". .";
+    column-gap: clamp(40px, 5vw, 96px);
+    row-gap: 26px;
+    padding: 0 clamp(40px, 6vw, 112px);
+    align-content: stretch;
+    min-height: 0;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .cima {
+    align-self: end;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .baixo {
+    align-self: start;
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .frase {
+    font-size: clamp(40px, 3.9vw, 64px);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .nomePeca {
+    font-size: clamp(64px, 6.4vw, 108px);
+  }
+
+  .raiz[data-modo="3d"]:not(:has(.semJs)) .numero {
+    font-size: clamp(72px, 6.6vw, 112px);
+  }
+}
+
+@keyframes subir {
+  from {
+    transform: translate3d(0, 110%, 0);
+  }
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+
+@keyframes costurar {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* Marcador do <noscript> (só existe como elemento sem JavaScript). */
+.semJs {
+  display: none;
+}

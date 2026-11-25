@@ -20,7 +20,9 @@ export const metadata: Metadata = {
 
 export default function CatalogoPage() {
   return (
-    <main className="bg-[#EDE7D9] text-[#130209] pt-12 md:pt-14">
+    // overflow-x-clip: o traço curvo do Índice passa da borda da tela e criava
+    // rolagem lateral (clip corta só o que sai da tela e não cria área de rolagem).
+    <main className="overflow-x-clip bg-[#EDE7D9] text-[#130209] pt-12 md:pt-14">
       <SmoothScroll />
       <CatalogNav />
       <Cover />

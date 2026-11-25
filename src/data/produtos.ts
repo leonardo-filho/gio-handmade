@@ -12,8 +12,9 @@
 // Link direto de cada peça (para stories/bio): /loja?produto=<id>
 // (ex.: /loja?produto=top-lourdes — abre a vitrine já com o modal da peça).
 //
-// A "Coleção Solaris" (5 tops + 2 headpieces) é a nova coleção de verão e
-// aparece num bloco próprio na home e no topo da loja.
+// A "Coleção Solaris" (5 tops + 2 headpieces) foi a coleção de verão. Saiu do
+// destaque em 24/11/2026 (sem seção na home e sem bloco no topo da loja): as
+// peças seguem à venda e aparecem nas categorias delas via secaoVitrine.
 
 export type Produto = {
   id: string;

@@ -1,51 +1,105 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { produtos } from "@/data/produtos";
+import { parcelamentoCartao } from "@/lib/parcelas";
+import { INSTAGRAM, INSTAGRAM_ARROBA, WA_ORCAMENTO } from "./home/textos";
+import { IconeInstagram } from "./v3/estrutura/Icones";
+import { FOCO, HOVER, LINHA } from "./v3/estrutura/estilo";
+
+// Rodapé v3 (spec, seção 2): creme, linha de 1 px em cima, cerca de 30
+// palavras. No celular, o logo com o Instagram, os quatro links em duas
+// colunas (cada um com 44 px de toque), o pagamento e a origem. Do md para
+// cima, três colunas: links, contato, e o logo com o pagamento e o ©.
+// Sem newsletter, sem frase grande e sem contagem de peças.
+
+// O maior parcelamento sem juros do catálogo ("até 7x" hoje, por causa do Top Lourdes). Sai do mesmo
+// cálculo dos preços da loja, então acompanha o catálogo sozinho.
+const MAX_PARCELAS = Math.max(...produtos.map((p) => parcelamentoCartao(p).vezes));
+
+const LINKS_LOJA = [
+  { nome: "Loja", href: "/loja" },
+  { nome: "Pronta entrega", href: "/loja?ver=pronta-entrega" },
+  { nome: "Como encomendar", href: "/como-encomendar" },
+] as const;
+
+const link = `inline-flex min-h-11 items-center rounded-[4px] md:min-h-8 ${HOVER} ${FOCO}`;
 
 export default function Footer() {
-    const currentYear = new Date().getFullYear();
+  const ano = new Date().getFullYear();
 
-    return (
-        <footer className="bg-[#1B4965] text-[#EDE7D9] py-14">
-            <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+  return (
+    <footer className={`border-t bg-[#EDE7D9] px-4 py-10 text-[#1B4965] md:px-12 md:py-12 ${LINHA}`}>
+      <div className="mx-auto grid max-w-[1344px] gap-y-6 md:grid-cols-3 md:gap-x-12">
+        {/* Logo e Instagram (no desktop, o logo fica na coluna da direita). */}
+        <div className="flex items-center justify-between md:hidden">
+          <Image src="/logo-navy.png" alt="Gio Handmade" width={1200} height={856} sizes="51px" className="h-9 w-auto" />
+          <a
+            href={INSTAGRAM}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Instagram ${INSTAGRAM_ARROBA}`}
+            className={`-mr-3 flex h-11 w-11 items-center justify-center rounded-[4px] ${HOVER} ${FOCO}`}
+          >
+            <IconeInstagram className="h-5 w-5" />
+          </a>
+        </div>
 
-                {/* Brand */}
-                <div className="text-center md:text-left flex flex-col items-center md:items-start gap-2">
-                    <Image
-                        src="/logo-cream.png"
-                        alt="Gio Handmade"
-                        width={1200}
-                        height={856}
-                        className="h-16 w-auto"
-                    />
-                    <p className="text-xs text-[#C8E1E4] italic font-[family-name:var(--font-serif)] tracking-wide">
-                        Atemporal por natureza.
-                    </p>
-                </div>
+        <nav aria-label="Rodapé" className="text-[13px]">
+          <ul className="grid grid-cols-2 md:grid-cols-1">
+            {LINKS_LOJA.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className={link}>
+                  {l.nome}
+                </Link>
+              </li>
+            ))}
+            <li className="md:hidden">
+              <a href={WA_ORCAMENTO} target="_blank" rel="noopener noreferrer" className={link}>
+                WhatsApp
+              </a>
+            </li>
+          </ul>
+        </nav>
 
-                {/* Links */}
-                <div className="flex gap-8">
-                    <Link
-                        href="https://instagram.com/gio.handmade__"
-                        target="_blank"
-                        className="text-xs uppercase tracking-[0.25em] text-[#EDE7D9]/80 hover:text-[#C8E1E4] transition-colors"
-                    >
-                        Instagram
-                    </Link>
-                    <Link
-                        href="https://wa.me/559192982017?text=Ol%C3%A1%2C%20gostaria%20de%20realizar%20um%20or%C3%A7amento."
-                        target="_blank"
-                        className="text-xs uppercase tracking-[0.25em] text-[#EDE7D9]/80 hover:text-[#C8E1E4] transition-colors"
-                    >
-                        WhatsApp
-                    </Link>
-                </div>
+        {/* Contato (só do md para cima; no celular, o WhatsApp está nos links e o Instagram ao lado do logo). */}
+        <div className="hidden text-[13px] md:block">
+          <ul>
+            <li>
+              <a href={WA_ORCAMENTO} target="_blank" rel="noopener noreferrer" className={link}>
+                WhatsApp
+              </a>
+            </li>
+            <li>
+              <a
+                href={INSTAGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Instagram ${INSTAGRAM_ARROBA}`}
+                className={`-ml-3 flex h-11 w-11 items-center justify-center rounded-[4px] ${HOVER} ${FOCO}`}
+              >
+                <IconeInstagram className="h-5 w-5" />
+              </a>
+            </li>
+          </ul>
+        </div>
 
-                {/* Copyright */}
-                <div className="text-xs text-[#EDE7D9]/50 text-center md:text-right">
-                    &copy; {currentYear} Gio Handmade<br />
-                    <span className="text-[10px] tracking-widest">Belém · Pará</span>
-                </div>
-            </div>
-        </footer>
-    );
+        {/* Alinhada à esquerda: alinhada à direita, o © ficava sob o WhatsApp flutuante. */}
+        <div>
+          <Image
+            src="/logo-navy.png"
+            alt="Gio Handmade"
+            width={1200}
+            height={856}
+            sizes="56px"
+            className="hidden h-10 w-auto md:mb-4 md:block"
+          />
+          <p className="text-[12px] text-brand-muted">Pix e cartão em até {MAX_PARCELAS}x sem juros</p>
+          <p className="mt-3 text-[12px] leading-[18px] text-brand-muted">
+            Feito à mão em Belém, PA
+            <br />© {ano} Gio Handmade
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 }

@@ -54,7 +54,7 @@ export default function CollectionHighlights() {
         <StaggerGroup className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-5xl mx-auto">
           {categories.map((item) => (
             <StaggerItem key={item.id} className="w-[calc(50%-8px)] md:w-[calc(20%-20px)]">
-            <Link href={`/loja#${item.id}`} className="group block">
+            <Link href={`/loja?ver=${item.id}`} className="group block">
               <div className="flex flex-col h-full">
                 <div className="relative w-full aspect-[3/4] bg-[#EDE7D9] mb-4 overflow-hidden">
                   {item.src ? (

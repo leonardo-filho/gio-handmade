@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Questrial, Archivo, Pinyon_Script } from "next/font/google";
+import { Questrial, Archivo } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import { CartProvider } from "@/components/cart/CartProvider";
+import Providers from "@/components/Providers";
 import CartDrawer from "@/components/cart/CartDrawer";
+import GavetaNavegacao from "@/components/v3/estrutura/GavetaNavegacao";
 
-// EB Garamond — todas as variantes do manual oficial Gio Handmade
+// EB Garamond: todas as variantes do manual oficial Gio Handmade.
+// preload: false porque são 10 TTF (2,4 MB) e o preload baixava todos em toda
+// página. Sem ele, o navegador baixa só as faces que a página usa de fato.
 const ebGaramond = localFont({
   src: [
     { path: "../../public/brand/fonts/EBGaramond-Regular.ttf", weight: "400", style: "normal" },
@@ -21,6 +24,7 @@ const ebGaramond = localFont({
   ],
   variable: "--font-serif",
   display: "swap",
+  preload: false,
 });
 
 const questrial = Questrial({
@@ -30,17 +34,12 @@ const questrial = Questrial({
   display: "swap",
 });
 
+// Archivo fica só para o /catalogo e a /manutencao (o site v3 usa EB Garamond
+// e Questrial). A Pinyon Script saiu: o único uso era o "quem faz" antigo.
 const archivo = Archivo({
   weight: ["400", "500", "700", "800", "900"],
   subsets: ["latin"],
   variable: "--font-display",
-  display: "swap",
-});
-
-const pinyonScript = Pinyon_Script({
-  weight: ["400"],
-  subsets: ["latin"],
-  variable: "--font-script",
   display: "swap",
 });
 
@@ -62,12 +61,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
-      <body className={`${ebGaramond.variable} ${questrial.variable} ${archivo.variable} ${pinyonScript.variable} antialiased`}>
-        <CartProvider>
+    // data-scroll-behavior: o Next desliga o scroll suave do <html> durante a
+    // troca de página (a página nova abre no topo na hora, sem rolar animado).
+    <html lang="pt-br" data-scroll-behavior="smooth">
+      <body className={`${ebGaramond.variable} ${questrial.variable} ${archivo.variable} antialiased`}>
+        <Providers>
           {children}
+          {/* Gavetas fora do <main>: abertas, o <main> fica inerte e elas não. */}
+          <GavetaNavegacao />
           <CartDrawer />
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );

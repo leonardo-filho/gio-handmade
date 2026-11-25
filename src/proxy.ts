@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 // Liga/desliga o modo manutenção. Com true, qualquer página do site mostra
 // /manutencao. Para reabrir o site, trocar para false e publicar.
-const EM_MANUTENCAO = true;
+const EM_MANUTENCAO = process.env.NODE_ENV === "production";
 
 // Quem abrir o site com ?acesso=<CHAVE> ganha um cookie e passa a ver o site
 // normal nesse navegador (para conferir os preços antes de reabrir).

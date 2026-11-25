@@ -1,27 +1,25 @@
-import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Solaris from "@/components/Solaris";
-import CollectionHighlights from "@/components/CollectionHighlights";
-import ProcessSection from "@/components/ProcessSection";
-import ProductGrid from "@/components/ProductGrid";
-import AboutSection from "@/components/AboutSection";
-import SmoothScroll from "@/components/SmoothScroll";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import Hero from "@/components/v3/home/Hero";
+import ProntaEntrega from "@/components/v3/home/ProntaEntrega";
+import Portas from "@/components/v3/home/Portas";
+import QuemFaz from "@/components/v3/home/QuemFaz";
 
+// Home v3, enxuta: hero parado, pronta entrega, quatro portas de categoria e
+// quem faz, e o rodapé. Sem rolagem suave, sem 3D e sem entrada animada.
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      <SmoothScroll />
+    <>
       <Header />
-      <Hero />
-      <Solaris />
-      <CollectionHighlights />
-      <ProcessSection />
-      <ProductGrid />
-      <AboutSection />
+      <main className="bg-[#EDE7D9] text-[#1B4965]">
+        <Hero />
+        <ProntaEntrega />
+        <Portas />
+        <QuemFaz />
+      </main>
       <Footer />
       <WhatsAppButton />
-    </main>
+    </>
   );
 }

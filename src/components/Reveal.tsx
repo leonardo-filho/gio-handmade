@@ -12,6 +12,8 @@ type RevealProps = {
   y?: number;
   duration?: number;
   once?: boolean;
+  /** Primeira dobra: vem visível no HTML do servidor e não anima. */
+  imediato?: boolean;
 };
 
 export function Reveal({
@@ -21,16 +23,20 @@ export function Reveal({
   y = 24,
   duration = 1,
   once = true,
+  imediato = false,
 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: "-80px" });
   const reduce = useReducedMotion();
+  const oculto = { opacity: 0, y: reduce ? 0 : y };
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: reduce ? 0 : y }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: reduce ? 0 : y }}
+      // initial={false} começa no estado de "animate": com imediato, o conteúdo
+      // já sai visível do servidor (sem esperar o JS nem o useInView).
+      initial={imediato ? false : oculto}
+      animate={imediato || inView ? { opacity: 1, y: 0 } : oculto}
       transition={{ duration: reduce ? 0 : duration, delay, ease: EASE_OUT_EXPO }}
       className={className}
       suppressHydrationWarning
@@ -63,9 +69,11 @@ type StaggerProps = {
   children: ReactNode;
   className?: string;
   once?: boolean;
+  /** Primeira dobra: os itens vêm visíveis no HTML do servidor e não animam. */
+  imediato?: boolean;
 };
 
-export function StaggerGroup({ children, className, once = true }: StaggerProps) {
+export function StaggerGroup({ children, className, once = true, imediato = false }: StaggerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: "-80px" });
 
@@ -73,8 +81,9 @@ export function StaggerGroup({ children, className, once = true }: StaggerProps)
     <motion.div
       ref={ref}
       variants={staggerContainer}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
+      // Os StaggerItem herdam o initial={false} e já nascem no estado "visible".
+      initial={imediato ? false : "hidden"}
+      animate={imediato || inView ? "visible" : "hidden"}
       className={className}
       suppressHydrationWarning
     >

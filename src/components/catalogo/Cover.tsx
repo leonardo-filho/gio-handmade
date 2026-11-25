@@ -9,12 +9,14 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export default function Cover() {
   const reduce = useReducedMotion();
   const base = reduce ? 0 : 1;
+  // initial igual no servidor e no navegador (ver Hero.tsx): o MotionConfig do
+  // Providers cuida do deslocamento para quem reduz movimento.
 
   return (
     <CatalogFrame page="MAI · 2026" tone="cream" full id="capa">
       <div className="max-w-7xl mx-auto w-full text-center">
         <motion.p
-          initial={{ opacity: 0, y: reduce ? 0 : 14 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 * base, ease: EASE, delay: 0.05 * base }}
           className="text-[11px] md:text-sm tracking-[0.5em] uppercase font-[family-name:var(--font-display)] text-[#130209]/70"
@@ -23,7 +25,7 @@ export default function Cover() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: reduce ? 0 : 18 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2 * base, ease: EASE, delay: 0.18 * base }}
           className="mt-10 md:mt-14 flex justify-center"
@@ -39,7 +41,7 @@ export default function Cover() {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, y: reduce ? 0 : 16 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2 * base, ease: EASE, delay: 0.4 * base }}
           className="mt-10 md:mt-14 font-brand text-[#1B4965] lowercase italic text-[clamp(2rem,6vw,4.2rem)] leading-[1] tracking-[-0.01em]"
@@ -59,7 +61,7 @@ export default function Cover() {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, y: reduce ? 0 : 14 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 * base, ease: EASE, delay: 0.65 * base }}
           className="mt-6 md:mt-8 text-[11px] md:text-sm tracking-[0.5em] uppercase font-[family-name:var(--font-display)] text-[#130209]/65"

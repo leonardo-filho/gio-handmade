@@ -1,87 +1,105 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-type Item = { id: string; label: string };
+export type ChipLoja = { id: string; rotulo: string };
 
-// Barra fixa de categorias da loja: navegação rápida entre seções (PC e mobile).
-// Os links são âncoras (#id) — o smooth-scroll do Lenis (SmoothScroll.tsx) já
-// rola com o offset do header + desta própria barra.
-export default function LojaNav({ items }: { items: Item[] }) {
-  const [active, setActive] = useState(items[0]?.id ?? "");
-  const barRef = useRef<HTMLDivElement>(null);
+type Props = {
+  itens: ChipLoja[];
+  /** id do chip ativo (o filtro atual). */
+  ativo: string;
+  onEscolher: (id: string) => void;
+};
 
-  // Scroll spy: seção atual = última cujo topo passou a linha (header + barra).
+// Barra fixa da loja: filtro da vitrine. Cada chip é um botão de alternância
+// (aria-pressed); o estado fica na URL (?ver=) e quem decide o que aparece é a
+// Vitrine. A barra cola logo abaixo do header, usando a altura que o Header
+// publica em --header-h (o fallback é a altura dele no topo da página).
+export default function LojaNav({ itens, ativo, onEscolher }: Props) {
+  const listaRef = useRef<HTMLDivElement>(null);
+  const primeiraVez = useRef(true);
+
+  // Mantém o chip ativo à vista na barra (scroll horizontal no celular). Rola
+  // só a barra, nunca a página.
   useEffect(() => {
-    const linha = () => {
-      const header = document.querySelector("header");
-      const headerH = header ? header.getBoundingClientRect().height : 84;
-      const barH = barRef.current ? barRef.current.getBoundingClientRect().height : 48;
-      return headerH + barH + 24;
+    const lista = listaRef.current;
+    const chip = lista?.querySelector<HTMLElement>(`[data-chip="${ativo}"]`);
+    if (!lista || !chip || lista.scrollWidth <= lista.clientWidth) return;
+    const esquerda = chip.offsetLeft - (lista.clientWidth - chip.offsetWidth) / 2;
+    const reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    lista.scrollTo({ left: esquerda, behavior: primeiraVez.current || reduz ? "auto" : "smooth" });
+    primeiraVez.current = false;
+  }, [ativo]);
+
+  // Quando a barra rola (celular e tablet), um degradê na borda avisa que há
+  // mais chips daquele lado; ele some na ponta em que a lista acaba. Em 360 px,
+  // sem isso, os três primeiros chips enchiam a tela e pareciam ser todos.
+  // Marca direto no DOM (atributos que o React não controla), sem estado.
+  useEffect(() => {
+    const lista = listaRef.current;
+    if (!lista) return;
+    const marcar = () => {
+      const resto = lista.scrollWidth - lista.clientWidth - lista.scrollLeft;
+      lista.toggleAttribute("data-mais-esq", lista.scrollLeft > 1);
+      lista.toggleAttribute("data-mais-dir", resto > 1);
     };
-    const onScroll = () => {
-      // Adiciona uma tolerância (1/3 da tela) para a seção ativar antes de bater exatamente no topo
-      const y = linha() + window.innerHeight / 3;
-      let atual = items[0]?.id ?? "";
-      for (const it of items) {
-        const el = document.getElementById(it.id);
-        if (el && el.getBoundingClientRect().top <= y) atual = it.id;
-      }
-      setActive(atual);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    marcar();
+    lista.addEventListener("scroll", marcar, { passive: true });
+    // A largura dos chips muda quando a fonte carrega: observa a lista e os chips.
+    const observador = new ResizeObserver(marcar);
+    observador.observe(lista);
+    Array.from(lista.children).forEach((chip) => observador.observe(chip));
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      lista.removeEventListener("scroll", marcar);
+      observador.disconnect();
     };
-  }, [items]);
-
-  // Mantém o chip ativo visível na barra (scroll horizontal no mobile).
-  useEffect(() => {
-    const el = barRef.current?.querySelector(`[data-chip="${active}"]`) as HTMLElement | null;
-    el?.scrollIntoView({ inline: "center", block: "nearest" });
-  }, [active]);
+  }, []);
 
   return (
     <div
       data-loja-nav
-      ref={barRef}
-      className="sticky top-[80px] z-40 border-y border-[#1B4965]/10 bg-[#EDE7D9]/95 backdrop-blur-md md:top-[92px]"
+      className="sticky top-[var(--header-h,102px)] z-40 border-y border-[#1B4965]/10 bg-[#EDE7D9]/95 backdrop-blur-md md:top-[var(--header-h,109px)]"
     >
-      <nav
-        aria-label="Categorias da loja"
-        className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2.5 [scrollbar-width:none] md:flex-wrap md:justify-center [&::-webkit-scrollbar]:hidden"
+      <motion.div
+        ref={listaRef}
+        layoutScroll
+        role="group"
+        aria-label="Filtrar peças"
+        // Uma linha só até 1024 px (rola de lado, centralizada quando cabe);
+        // do lg para cima os chips cabem centralizados.
+        className="relative mx-auto flex max-w-6xl justify-center-safe gap-2 overflow-x-auto px-4 py-2.5 [--fade-dir:0px] [--fade-esq:0px] [scrollbar-width:none] data-mais-dir:[--fade-dir:2rem] data-mais-esq:[--fade-esq:2rem] data-mais-dir:[mask-image:linear-gradient(to_right,transparent,#000_var(--fade-esq),#000_calc(100%_-_var(--fade-dir)),transparent)] data-mais-esq:[mask-image:linear-gradient(to_right,transparent,#000_var(--fade-esq),#000_calc(100%_-_var(--fade-dir)),transparent)] lg:flex-wrap [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((it) => {
-          const on = active === it.id;
+        {itens.map((it) => {
+          const on = it.id === ativo;
           return (
-            <a
+            <button
               key={it.id}
-              href={`#${it.id}`}
+              type="button"
               data-chip={it.id}
-              onClick={() => setActive(it.id)}
-              aria-current={on ? "true" : undefined}
-              className={`relative shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors ${
+              aria-pressed={on}
+              onClick={() => onEscolher(it.id)}
+              // O after estende a área de toque para 47 px de altura sem
+              // engordar a barra (cabe no padding vertical dela).
+              className={`relative shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors after:absolute after:inset-x-0 after:-inset-y-2 after:content-[''] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1B4965] focus-visible:ring-offset-2 focus-visible:ring-offset-[#EDE7D9] ${
                 on
                   ? "border-transparent text-[#EDE7D9]"
-                  : "border-[#1B4965]/25 text-[#1B4965]/70 hover:border-[#1B4965] hover:text-[#1B4965]"
+                  : "border-[#1B4965]/25 text-brand-muted hover:border-[#1B4965] hover:text-[#1B4965]"
               }`}
             >
               {on && (
-                <motion.div
-                  layoutId="lojanav-active-chip"
+                <motion.span
+                  layoutId="lojanav-chip-ativo"
+                  aria-hidden
                   className="absolute inset-0 rounded-full bg-[#1B4965]"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <span className="relative z-10">{it.label}</span>
-            </a>
+              <span className="relative z-10">{it.rotulo}</span>
+            </button>
           );
         })}
-      </nav>
+      </motion.div>
     </div>
   );
 }
